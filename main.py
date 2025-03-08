@@ -94,12 +94,16 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 
 # Add course to user
 @app.post("/courses/add")
-async def add_course(course_string: str = Form(...), 
+async def add_course(course_string: str = Form(...), term: Optional[str] = Form(None),
                     current_user: User = Depends(get_current_active_user),
                     db: Session = Depends(get_db)):
     try:
         # Parse course from string
         course_create = parse_course_from_string(course_string)
+        
+        # Add term if provided
+        if term:
+            course_create.term = term
         
         # Get or create course
         course = get_or_create_course(db, course_create)
@@ -163,10 +167,25 @@ async def recommend_me(current_user: User = Depends(get_current_active_user),
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
-# Root endpoint
+# Root endpoint (Login/Register page)
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("pages/auth.html", {"request": request})
+
+# Dashboard page
+@app.get("/dashboard", response_class=HTMLResponse)
+def dashboard(request: Request):
+    return templates.TemplateResponse("pages/dashboard.html", {"request": request})
+
+# Class Management page
+@app.get("/classes", response_class=HTMLResponse)
+def classes(request: Request):
+    return templates.TemplateResponse("pages/classes.html", {"request": request})
+
+# Advising Chat page
+@app.get("/advising", response_class=HTMLResponse)
+def advising(request: Request):
+    return templates.TemplateResponse("pages/advising.html", {"request": request})
 
 # Define the recommendation endpoint (for backward compatibility)
 @app.post("/recommend/")

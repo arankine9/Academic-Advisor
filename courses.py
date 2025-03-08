@@ -44,6 +44,12 @@ def create_course(db: Session, course: CourseCreate):
 def get_or_create_course(db: Session, course: CourseCreate):
     db_course = get_course_by_code(db, course.course_code)
     if db_course:
+        # Update course name and term if provided
+        if course.course_name and not db_course.course_name:
+            db_course.course_name = course.course_name
+        if course.term and not db_course.term:
+            db_course.term = course.term
+        db.commit()
         return db_course
     return create_course(db, course)
 
@@ -55,6 +61,10 @@ def add_course_to_user(db: Session, user_id: int, course_id: int):
     if not user or not course:
         return None
     
+    # Check if user already has this course
+    if course in user.courses:
+        return course
+    
     user.courses.append(course)
     db.commit()
     return course
@@ -65,6 +75,9 @@ def remove_course_from_user(db: Session, user_id: int, course_id: int):
     course = db.query(Course).filter(Course.id == course_id).first()
     
     if not user or not course:
+        return None
+    
+    if course not in user.courses:
         return None
     
     user.courses.remove(course)

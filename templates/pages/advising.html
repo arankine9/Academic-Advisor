@@ -1,0 +1,398 @@
+{% extends "base.html" %}
+
+{% block title %}Advising Chat - Academic Advisor{% endblock %}
+
+{% block content %}
+<div id="notification" class="notification"></div>
+
+<div class="navbar">
+    <div class="navbar-left">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/classes">Class Management</a>
+        <a href="/advising" class="active">Advising Chat</a>
+    </div>
+    <div class="navbar-right">
+        <span class="navbar-username" id="username-display"></span>
+        <button id="logout-btn">Logout</button>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Academic Advising Chat</h2>
+    <p>Major: <span id="major-display"></span></p>
+    
+    <div id="chat-section">
+        <div class="chat-container" id="chat-messages">
+            <!-- Initial advisor message -->
+            <div class="chat-message advisor-message">
+                <p>Hello! I'm your academic advisor. I can help you plan your courses based on your academic history.</p>
+                <p>You can ask me questions like "What classes should I take next?" or "What are the prerequisites for CS 310?"</p>
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" id="chat-input-field" placeholder="Ask a question...">
+            <button id="send-message-btn">Send</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+    .chat-container {
+        height: 400px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .chat-message {
+        margin-bottom: 10px;
+        padding: 12px 15px;
+        border-radius: 8px;
+        max-width: 80%;
+    }
+    
+    .user-message {
+        background-color: #e8f4fc;
+        align-self: flex-end;
+        margin-left: auto;
+    }
+    
+    .advisor-message {
+        background-color: #f1f1f1;
+        align-self: flex-start;
+    }
+    
+    .chat-input {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .chat-input input {
+        flex-grow: 1;
+        padding: 10px;
+    }
+    
+    .chat-input button {
+        margin-top: 0;
+        padding: 10px 20px;
+    }
+    
+    .typing-indicator {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background-color: #f1f1f1;
+        align-self: flex-start;
+        width: fit-content;
+    }
+    
+    .typing-indicator span {
+        height: 8px;
+        width: 8px;
+        margin: 0 1px;
+        background-color: #999;
+        border-radius: 50%;
+        display: inline-block;
+        animation: typing 1.4s infinite ease-in-out both;
+    }
+    
+    .typing-indicator span:nth-child(1) {
+        animation-delay: 0s;
+    }
+    
+    .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    
+    .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    
+    @keyframes typing {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.5);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Global variables
+    let token = localStorage.getItem('token');
+    let currentUser = null;
+    let chatHistory = [];
+    
+    // Check if user is logged in on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!token) {
+            // Redirect to login if not logged in
+            window.location.href = '/';
+            return;
+        }
+        
+        // Fetch user data
+        fetchUserData();
+        
+        // Set up event listeners
+        document.getElementById('logout-btn').addEventListener('click', logout);
+        document.getElementById('send-message-btn').addEventListener('click', sendMessage);
+        document.getElementById('chat-input-field').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Load chat history from localStorage
+        loadChatHistory();
+    });
+    
+    // Fetch user data
+    async function fetchUserData() {
+        try {
+            const response = await fetch('/users/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (response.ok) {
+                currentUser = await response.json();
+                
+                // Display user info
+                document.getElementById('username-display').textContent = currentUser.username;
+                document.getElementById('major-display').textContent = currentUser.major;
+            } else {
+                // Token might be expired or invalid
+                logout();
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            logout();
+        }
+    }
+    
+    // Load chat history from localStorage
+    function loadChatHistory() {
+        const savedHistory = localStorage.getItem(`chat_history_${currentUser?.username}`);
+        if (savedHistory) {
+            try {
+                chatHistory = JSON.parse(savedHistory);
+                
+                // Display chat history
+                const chatContainer = document.getElementById('chat-messages');
+                chatContainer.innerHTML = ''; // Clear initial message
+                
+                chatHistory.forEach(message => {
+                    const messageElement = document.createElement('div');
+                    messageElement.className = `chat-message ${message.sender}-message`;
+                    messageElement.innerHTML = `<p>${message.text}</p>`;
+                    chatContainer.appendChild(messageElement);
+                });
+                
+                // Scroll to bottom
+                scrollToBottom();
+            } catch (error) {
+                console.error('Error loading chat history:', error);
+                // If there's an error, just start with a fresh chat
+                chatHistory = [];
+            }
+        }
+    }
+    
+    // Save chat history to localStorage
+    function saveChatHistory() {
+        if (currentUser?.username) {
+            localStorage.setItem(`chat_history_${currentUser.username}`, JSON.stringify(chatHistory));
+        }
+    }
+    
+    // Send message
+    async function sendMessage() {
+        const inputField = document.getElementById('chat-input-field');
+        const message = inputField.value.trim();
+        
+        if (!message) return;
+        
+        // Clear input field
+        inputField.value = '';
+        
+        // Add user message to chat
+        addMessageToChat(message, 'user');
+        
+        // Add message to history
+        chatHistory.push({
+            sender: 'user',
+            text: message
+        });
+        
+        // Save chat history
+        saveChatHistory();
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        // Process the message
+        if (message.toLowerCase().includes('what classes should i take') || 
+            message.toLowerCase().includes('recommend') || 
+            message.toLowerCase().includes('suggest')) {
+            // Get course recommendations
+            await getRecommendations();
+        } else {
+            // Generic response for other questions
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = "I'm currently trained to help with course recommendations. Try asking 'What classes should I take next?' for personalized suggestions based on your completed courses.";
+                addMessageToChat(response, 'advisor');
+                
+                // Add response to history
+                chatHistory.push({
+                    sender: 'advisor',
+                    text: response
+                });
+                
+                // Save chat history
+                saveChatHistory();
+            }, 1000);
+        }
+    }
+    
+    // Add message to chat
+    function addMessageToChat(message, sender) {
+        const chatContainer = document.getElementById('chat-messages');
+        const messageElement = document.createElement('div');
+        messageElement.className = `chat-message ${sender}-message`;
+        messageElement.innerHTML = `<p>${message}</p>`;
+        chatContainer.appendChild(messageElement);
+        
+        // Scroll to bottom
+        scrollToBottom();
+    }
+    
+    // Show typing indicator
+    function showTypingIndicator() {
+        const chatContainer = document.getElementById('chat-messages');
+        const typingIndicator = document.createElement('div');
+        typingIndicator.id = 'typing-indicator';
+        typingIndicator.className = 'typing-indicator';
+        typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+        chatContainer.appendChild(typingIndicator);
+        
+        // Scroll to bottom
+        scrollToBottom();
+    }
+    
+    // Hide typing indicator
+    function hideTypingIndicator() {
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+    }
+    
+    // Scroll chat to bottom
+    function scrollToBottom() {
+        const chatContainer = document.getElementById('chat-messages');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    // Get recommendations
+    async function getRecommendations() {
+        try {
+            const response = await fetch('/recommend/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                
+                // Hide typing indicator
+                hideTypingIndicator();
+                
+                // Add recommendation to chat
+                addMessageToChat(data.recommendations, 'advisor');
+                
+                // Add response to history
+                chatHistory.push({
+                    sender: 'advisor',
+                    text: data.recommendations
+                });
+                
+                // Save chat history
+                saveChatHistory();
+            } else {
+                // Hide typing indicator
+                hideTypingIndicator();
+                
+                // Add error message to chat
+                const errorMessage = "I'm sorry, I couldn't generate recommendations at this time. Please try again later.";
+                addMessageToChat(errorMessage, 'advisor');
+                
+                // Add response to history
+                chatHistory.push({
+                    sender: 'advisor',
+                    text: errorMessage
+                });
+                
+                // Save chat history
+                saveChatHistory();
+            }
+        } catch (error) {
+            console.error('Error getting recommendations:', error);
+            
+            // Hide typing indicator
+            hideTypingIndicator();
+            
+            // Add error message to chat
+            const errorMessage = "I'm sorry, an error occurred while getting recommendations. Please try again later.";
+            addMessageToChat(errorMessage, 'advisor');
+            
+            // Add response to history
+            chatHistory.push({
+                sender: 'advisor',
+                text: errorMessage
+            });
+            
+            // Save chat history
+            saveChatHistory();
+        }
+    }
+    
+    // Logout function
+    function logout() {
+        token = null;
+        currentUser = null;
+        localStorage.removeItem('token');
+        window.location.href = '/';
+    }
+    
+    // Show notification
+    function showNotification(message, isSuccess = true) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.style.backgroundColor = isSuccess ? '#27ae60' : '#e74c3c';
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+</script>
+{% endblock %} 

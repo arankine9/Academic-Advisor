@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}Login/Register - Academic Advisor{% endblock %}
+
+{% block content %}
+<div id="auth-section" class="container">
+    <div class="tab">
+        <button class="tablinks active" onclick="openTab(event, 'login')">Login</button>
+        <button class="tablinks" onclick="openTab(event, 'register')">Register</button>
+    </div>
+    
+    <!-- Login Tab -->
+    <div id="login" class="tabcontent" style="display: block;">
+        <h3>Login to Your Account</h3>
+        <form id="login-form">
+            <label for="login-username">Username:</label>
+            <input type="text" id="login-username" name="username" required>
+            
+            <label for="login-password">Password:</label>
+            <input type="password" id="login-password" name="password" required>
+            
+            <button type="submit">Login</button>
+            <p id="login-error" class="error-message"></p>
+        </form>
+    </div>
+    
+    <!-- Register Tab -->
+    <div id="register" class="tabcontent">
+        <h3>Create a New Account</h3>
+        <form id="register-form">
+            <label for="register-username">Username:</label>
+            <input type="text" id="register-username" name="username" required>
+            
+            <label for="register-email">Email:</label>
+            <input type="email" id="register-email" name="email" required>
+            
+            <label for="register-password">Password:</label>
+            <input type="password" id="register-password" name="password" required>
+            
+            <label for="register-major">Major:</label>
+            <select id="register-major" name="major" required>
+                <option value="Computer Science">Computer Science</option>
+                <!-- Add more majors as needed -->
+            </select>
+            
+            <button type="submit">Register</button>
+            <p id="register-error" class="error-message"></p>
+            <p id="register-success" class="success-message"></p>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Global variables
+    let token = localStorage.getItem('token');
+    
+    // Check if user is logged in on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        if (token) {
+            // Redirect to dashboard if already logged in
+            window.location.href = '/dashboard';
+        }
+        
+        // Set up event listeners
+        setupEventListeners();
+    });
+    
+    // Set up event listeners
+    function setupEventListeners() {
+        // Login form
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            login();
+        });
+        
+        // Register form
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            register();
+        });
+    }
+    
+    // Tab functionality
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+    
+    // Login function
+    async function login() {
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+        
+        try {
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('password', password);
+            
+            const response = await fetch('/token', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                // Store token and redirect to dashboard
+                token = data.access_token;
+                localStorage.setItem('token', token);
+                window.location.href = '/dashboard';
+            } else {
+                document.getElementById('login-error').textContent = data.detail || 'Login failed';
+            }
+        } catch (error) {
+            document.getElementById('login-error').textContent = 'An error occurred during login';
+            console.error('Login error:', error);
+        }
+    }
+    
+    // Register function
+    async function register() {
+        const username = document.getElementById('register-username').value;
+        const email = document.getElementById('register-email').value;
+        const password = document.getElementById('register-password').value;
+        const major = document.getElementById('register-major').value;
+        
+        try {
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('major', major);
+            
+            const response = await fetch('/register', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                // Show success message and switch to login tab
+                document.getElementById('register-success').textContent = 'Registration successful! You can now login.';
+                document.getElementById('register-error').textContent = '';
+                
+                // Clear form
+                document.getElementById('register-form').reset();
+                
+                // Switch to login tab after 2 seconds
+                setTimeout(() => {
+                    document.querySelector('.tablinks[onclick*="login"]').click();
+                }, 2000);
+            } else {
+                document.getElementById('register-error').textContent = data.detail || 'Registration failed';
+                document.getElementById('register-success').textContent = '';
+            }
+        } catch (error) {
+            document.getElementById('register-error').textContent = 'An error occurred during registration';
+            document.getElementById('register-success').textContent = '';
+            console.error('Registration error:', error);
+        }
+    }
+</script>
+{% endblock %} 
