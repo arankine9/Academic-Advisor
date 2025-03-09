@@ -2,51 +2,80 @@
 
 {% block title %}Login/Register - Academic Advisor{% endblock %}
 
+{% block head %}{% endblock %}
+
 {% block content %}
-<div id="auth-section" class="container">
-    <div class="tab">
-        <button class="tablinks active" onclick="openTab(event, 'login')">Login</button>
-        <button class="tablinks" onclick="openTab(event, 'register')">Register</button>
-    </div>
-    
-    <!-- Login Tab -->
-    <div id="login" class="tabcontent" style="display: block;">
-        <h3>Login to Your Account</h3>
-        <form id="login-form">
-            <label for="login-username">Username:</label>
-            <input type="text" id="login-username" name="username" required>
-            
-            <label for="login-password">Password:</label>
-            <input type="password" id="login-password" name="password" required>
-            
-            <button type="submit">Login</button>
-            <p id="login-error" class="error-message"></p>
-        </form>
-    </div>
-    
-    <!-- Register Tab -->
-    <div id="register" class="tabcontent">
-        <h3>Create a New Account</h3>
-        <form id="register-form">
-            <label for="register-username">Username:</label>
-            <input type="text" id="register-username" name="username" required>
-            
-            <label for="register-email">Email:</label>
-            <input type="email" id="register-email" name="email" required>
-            
-            <label for="register-password">Password:</label>
-            <input type="password" id="register-password" name="password" required>
-            
-            <label for="register-major">Major:</label>
-            <select id="register-major" name="major" required>
-                <option value="Computer Science">Computer Science</option>
-                <!-- Add more majors as needed -->
-            </select>
-            
-            <button type="submit">Register</button>
-            <p id="register-error" class="error-message"></p>
-            <p id="register-success" class="success-message"></p>
-        </form>
+<div class="auth-wrapper">
+    <div id="auth-section" class="container">
+        <div class="logo-container">
+            <h1>Academic Advisor</h1>
+            <p class="form-subtitle">Your academic journey starts here</p>
+        </div>
+        
+        <!-- Login Form -->
+        <div id="login-section" class="auth-form">
+            <h3 class="form-title">Welcome Back</h3>
+            <form id="login-form">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user input-icon"></i>
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" name="username" required>
+                </div>
+                
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                
+                <button type="submit">Login</button>
+                <p id="login-error" class="error-message"></p>
+                
+                <div class="form-footer">
+                    <p>New user? <a href="#" class="form-link" onclick="switchForm('register')"><span>Sign up</span></a></p>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Register Form -->
+        <div id="register-section" class="auth-form hidden">
+            <h3 class="form-title">Create Account</h3>
+            <form id="register-form">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user input-icon"></i>
+                    <label for="register-username">Username</label>
+                    <input type="text" id="register-username" name="username" required>
+                </div>
+                
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" name="email" required>
+                </div>
+                
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" name="password" required>
+                </div>
+                
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-graduation-cap input-icon"></i>
+                    <label for="register-major">Major</label>
+                    <select id="register-major" name="major" required>
+                        <option value="Computer Science">Computer Science</option>
+                    </select>
+                </div>
+                
+                <button type="submit">Create Account</button>
+                <p id="register-error" class="error-message"></p>
+                <p id="register-success" class="success-message"></p>
+                
+                <div class="form-footer">
+                    <p>Already have an account? <a href="#" class="form-link" onclick="switchForm('login')"><span>Log in</span></a></p>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -82,19 +111,15 @@
         });
     }
     
-    // Tab functionality
-    function openTab(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
+    // Switch between login and register forms
+    function switchForm(formType) {
+        if (formType === 'login') {
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('register-section').classList.add('hidden');
+        } else {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('register-section').classList.remove('hidden');
         }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
     }
     
     // Login function
@@ -150,16 +175,16 @@
             const data = await response.json();
             
             if (response.ok) {
-                // Show success message and switch to login tab
+                // Show success message and switch to login
                 document.getElementById('register-success').textContent = 'Registration successful! You can now login.';
                 document.getElementById('register-error').textContent = '';
                 
                 // Clear form
                 document.getElementById('register-form').reset();
                 
-                // Switch to login tab after 2 seconds
+                // Switch to login after 2 seconds
                 setTimeout(() => {
-                    document.querySelector('.tablinks[onclick*="login"]').click();
+                    switchForm('login');
                 }, 2000);
             } else {
                 document.getElementById('register-error').textContent = data.detail || 'Registration failed';
