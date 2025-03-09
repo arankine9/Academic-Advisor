@@ -22,20 +22,27 @@
     <p>Major: <span id="major-display"></span></p>
     
     <div class="dashboard-summary">
-        <h3>Your Academic Summary</h3>
-        <p>You have completed <span id="course-count">0</span> courses.</p>
-        <p>Use the navigation bar above to:</p>
-        <ul>
-            <li><strong>Class Management:</strong> Add, edit, or remove your completed courses</li>
-            <li><strong>Advising Chat:</strong> Get personalized course recommendations based on your academic history</li>
-        </ul>
+        <h3>Your Academic Progress</h3>
+        <span class="stats-number" id="course-count">0</span>
+        <p style="text-align: center;">Courses Completed</p>
+        
+        <div style="margin-top: 20px;">
+            <p>Track your academic journey and get personalized recommendations.</p>
+            <p>Keep your course list updated to receive the most accurate guidance for your degree path.</p>
+        </div>
     </div>
     
     <div class="dashboard-actions">
         <h3>Quick Actions</h3>
         <div class="action-buttons">
-            <button onclick="window.location.href='/classes'">Manage My Classes</button>
-            <button onclick="window.location.href='/advising'">Get Course Recommendations</button>
+            <button onclick="window.location.href='/classes'">
+                <i class="fa-solid fa-book-open" style="margin-right: 8px;"></i>
+                Manage My Classes
+            </button>
+            <button onclick="window.location.href='/advising'">
+                <i class="fa-solid fa-comments" style="margin-right: 8px;"></i>
+                Get Course Recommendations
+            </button>
         </div>
     </div>
 </div>
@@ -102,6 +109,17 @@
             if (response.ok) {
                 const courses = await response.json();
                 document.getElementById('course-count').textContent = courses.length;
+                
+                // Add animation to the count
+                const countElement = document.getElementById('course-count');
+                countElement.style.opacity = '0';
+                countElement.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    countElement.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    countElement.style.opacity = '1';
+                    countElement.style.transform = 'translateY(0)';
+                }, 300);
             }
         } catch (error) {
             console.error('Error fetching courses:', error);
@@ -120,7 +138,7 @@
     function showNotification(message, isSuccess = true) {
         const notification = document.getElementById('notification');
         notification.textContent = message;
-        notification.style.backgroundColor = isSuccess ? '#27ae60' : '#e74c3c';
+        notification.style.backgroundColor = isSuccess ? 'rgba(39, 174, 96, 0.9)' : 'rgba(231, 76, 60, 0.9)';
         notification.classList.add('show');
         
         setTimeout(() => {
