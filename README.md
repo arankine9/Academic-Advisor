@@ -65,7 +65,7 @@ Start the FastAPI server:
 python main.py
 ```
 
-The application will be available at http://localhost:8000
+The application will be available at http://127.0.0.1:8000
 
 ## Usage
 
