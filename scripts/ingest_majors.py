@@ -1,5 +1,11 @@
+
+
 import os
 import json
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from langchain_openai import OpenAIEmbeddings
 from pinecone import Pinecone, ServerlessSpec
 from dotenv import load_dotenv
@@ -31,8 +37,11 @@ print(f"Created new index '{index_name}'")
 # Connect to the Pinecone index
 index = pc.Index(index_name)
 
+# IMPORTANT: Updated file path
+json_path = os.path.join("data", "majors.json")
+
 # Load the major requirements from JSON
-with open("majors.json", "r") as f:
+with open(json_path, "r") as f:
     majors_data = json.load(f)
 
 # Initialize the embedding model

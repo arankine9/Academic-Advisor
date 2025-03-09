@@ -1,17 +1,21 @@
+# Copy from original init_db.py with these import changes:
 import os
 import sys
 import traceback
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
-from database import create_tables
-from courses import initialize_courses_from_json
-from database import get_db
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# IMPORTANT: Updated imports
+from backend.core.database import get_db, create_tables
+from backend.services.courses import initialize_courses_from_json
 
 # Load environment variables
 load_dotenv()
 
 # Hardcode the correct connection string
-DATABASE_URL = "postgresql://alexanderrankine@localhost/academic_advisor"
+DATABASE_URL = os.getenv("DATABASE_URL")
 print(f"Using database URL: {DATABASE_URL}")
 
 def init_db():
@@ -64,4 +68,4 @@ def init_db():
         sys.exit(1)
 
 if __name__ == "__main__":
-    init_db() 
+    init_db()

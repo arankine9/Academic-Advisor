@@ -1,3 +1,4 @@
+# Copy from original query_engine.py with these import changes:
 import os
 from langchain_pinecone import Pinecone
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI

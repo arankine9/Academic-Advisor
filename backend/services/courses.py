@@ -1,27 +1,12 @@
+# Copy from original courses.py with these import changes:
 from sqlalchemy.orm import Session
-from database import Course, User
 from typing import List, Optional
-from pydantic import BaseModel
 import json
 import os
 
-# Course model for API
-class CourseBase(BaseModel):
-    course_code: str
-    course_name: str
-    credit_hours: Optional[int] = None
-    term: Optional[str] = None
-
-# Course model for creation
-class CourseCreate(CourseBase):
-    pass
-
-# Course model for response
-class CourseResponse(CourseBase):
-    id: int
-
-    class Config:
-        from_attributes = True
+# IMPORTANT: Updated imports
+from backend.core.database import Course, User
+from backend.models.schemas import CourseBase, CourseCreate, CourseResponse
 
 # Get course by code
 def get_course_by_code(db: Session, course_code: str):
@@ -112,10 +97,13 @@ def parse_course_from_string(course_string: str) -> CourseCreate:
 
 # Initialize courses from majors.json
 def initialize_courses_from_json(db: Session):
-    if not os.path.exists("majors.json"):
+    # IMPORTANT: Updated file path
+    json_path = os.path.join("data", "majors.json")
+    
+    if not os.path.exists(json_path):
         return
     
-    with open("majors.json", "r") as f:
+    with open(json_path, "r") as f:
         majors_data = json.load(f)
     
     for major_name, major_info in majors_data.items():
@@ -136,4 +124,4 @@ def initialize_courses_from_json(db: Session):
                                 credit_hours=None,
                                 term=None
                             )
-                            get_or_create_course(db, course) 
+                            get_or_create_course(db, course)
