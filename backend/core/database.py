@@ -1,3 +1,4 @@
+# Copy from original database.py with these changes:
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Table, Boolean, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
@@ -9,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Hardcode the correct connection string
-DATABASE_URL = "postgresql://alexanderrankine@localhost/academic_advisor"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Create SQLAlchemy engine with PostgreSQL-specific settings
 engine = create_engine(
@@ -73,4 +74,4 @@ def get_db():
 
 # Create all tables in the database
 def create_tables():
-    Base.metadata.create_all(bind=engine) 
+    Base.metadata.create_all(bind=engine)

@@ -1,3 +1,4 @@
+# Copy from original auth.py with these import changes:
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
@@ -5,11 +6,12 @@ from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
 
-from database import get_db, User
+# IMPORTANT: Updated imports
+from backend.core.database import get_db, User
+from backend.models.schemas import TokenData, Token, UserAuth, UserCreate
 
 # Load environment variables
 load_dotenv()
@@ -24,25 +26,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # OAuth2 password bearer for token authentication
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-# Token model
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-# Token data model
-class TokenData(BaseModel):
-    username: Optional[str] = None
-
-# User model for authentication
-class UserAuth(BaseModel):
-    username: str
-    email: Optional[str] = None
-    major: Optional[str] = None
-
-# User creation model
-class UserCreate(UserAuth):
-    password: str
 
 # Verify password
 def verify_password(plain_password, hashed_password):
@@ -114,4 +97,4 @@ def create_user(db: Session, user: UserCreate):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    return db_user 
+    return db_user

@@ -29,13 +29,13 @@ cd <repository-directory>
 
 2. Create a virtual environment:
 ```bash
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
 3. Install dependencies:
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 4. Set up environment variables:
@@ -50,19 +50,19 @@ SECRET_KEY=your_secret_key_for_jwt_tokens
 
 5. Initialize the database:
 ```bash
-python init_db.py
+python3 init_db.py
 ```
 
 6. Ingest major data into Pinecone:
 ```bash
-python ingest_majors.py
+python3 ingest_majors.py
 ```
 
 ### Running the Application
 
 Start the FastAPI server:
 ```bash
-python main.py
+python3 main.py
 ```
 
 The application will be available at http://127.0.0.1:8000
