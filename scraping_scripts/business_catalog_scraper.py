@@ -307,7 +307,7 @@ for title, url in program_links:
             category = os.path.join("undergraduate", "minors")
         elif "Certificate" in title:
             category = os.path.join("undergraduate", "certificates")
-        elif "MBA" in title or "MS" in title:
+        elif any(keyword in title for keyword in ["MBA", "MS", "MACC", "MActg", "(MAcctg)", "MAcc", "Master of Accounting"]):
             category = "masters"
         else:
             category = os.path.join("undergraduate", "majors")
