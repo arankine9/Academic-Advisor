@@ -165,3 +165,28 @@ def advising(request: Request):
 @router.post("/recommend/")
 def recommend(courses: list, major: str):
     return {"recommendations": get_advice(courses, major)}
+
+@router.post("/advising")
+async def advising_chat(
+    request: dict, 
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    try:
+        # Extract message from request
+        message = request.get("message", "")
+        if not message:
+            raise HTTPException(status_code=400, detail="Message cannot be empty")
+        
+        # Get user courses
+        courses = get_user_courses(db, current_user.id)
+        
+        # Format courses for recommendation
+        course_strings = [f"{course.course_code} - {course.course_name}" for course in courses]
+        
+        # Get advice based on the message and user courses
+        response = get_advice(course_strings, current_user.major)
+        
+        return {"response": response}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")

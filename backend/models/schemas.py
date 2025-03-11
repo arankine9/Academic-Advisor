@@ -35,6 +35,9 @@ class CourseBase(BaseModel):
     credit_hours: Optional[int] = None
     term: Optional[str] = None
 
+class ChatMessage(BaseModel):
+    message: str
+
 class CourseCreate(CourseBase):
     pass
 
