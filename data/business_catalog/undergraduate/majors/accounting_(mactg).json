@@ -1,0 +1,218 @@
+{
+  "program": "Accounting (MActg)",
+  "description": "http://business.uoregon.edu/master-accounting\nFor more information, contactlcbmacc1@uoregon.edu.\nAt the University of Oregon's Master of Accounting program at the Lundquist College of Business, students develop a mindset that goes beyond learning new accounting methods and tax laws. They hone their ability to work in a constructive and respectful way. They learn how to communicate attention to detail through precise and engaging presentations. And they bring it all together to achieve true professional success to land a great job.\nThe Master of Accounting program is designed for students whose undergraduate major is accounting or the equivalent. The program is constructed so that it can be completed in three terms (one academic year) of full-time study. The curriculum is designed to sharpen written and oral communication, leadership, critical thinking, and analytical skills that are needed to excel in the accounting profession.",
+  "pre_major_requirements": "",
+  "additional_program_info": "The plan of study for the electives outside of accounting is determined by the student and the program director.",
+  "courses": [
+    {
+      "code": "ACTG 617",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20617",
+      "title": "Taxation of Business",
+      "description": "Taxation of business entities (C corporations, partnerships, S corporations, and limited liability companies) as they form, operate, and dissolve.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 618",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20618",
+      "title": "Taxes and Business Strategy",
+      "description": "How to use economic analysis as a tax planning tool, thereby incorporating tax factors in economic decisions.",
+      "requisites": "ACTG 617.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 630",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20630",
+      "title": "Accounting Measurement and Disclosure",
+      "description": "Recent Financial Accounting Standings Board decisions; current measurement and disclosure conflicts facing the accounting profession. Includes exposure to governmental and not-for-profit accounting issues.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 631",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20631",
+      "title": "Financial Statement Analysis and Valuation",
+      "description": "Examines the role of accounting information in financial decisions. Highlights valuation's relationship to accounting earnings and book value.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 662",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20662",
+      "title": "Strategic Cost Management",
+      "description": "Theory and application of management accounting techniques to decisions made under uncertainty in complex business environments.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 608",
+      "credits": "2",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20608",
+      "title": "Workshop: [Topic]",
+      "description": "Repeatable.Repeatable 99 times",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 580",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20580",
+      "title": "Accounting Data Analytics I",
+      "description": "Focuses on the increased use of data analytics within the accounting profession, including an understanding of data analytic thinking, terminology and application.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 610",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20610",
+      "title": "Experimental Course: [Topic]",
+      "description": "Recent topics include Developing the Business Professional, International Accounting, Tax Pass-Through Entities. Repeatable when the topic changes.Repeatable 99 times",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 642",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20642",
+      "title": "Advanced Assurance Services",
+      "description": "Knowledge and application of generally accepted accounting principles and generally accepted auditing standards systems, design and flow charting, work paper preparation and review, oral and written presentation, and application of judgment.",
+      "requisites": "ACTG 540.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 681",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20681",
+      "title": "Accounting Data & Analytics II",
+      "description": "Leveraging skills and knowledge developed in ACTG 580, this course focuses on enabling students to successfully engage with an iterative process to more effectively perform and communicate analytics across increasingly complex scenarios, producing actionable results that consider risks related to data quality, privacy and misinterpretation.",
+      "requisites": "ACTG 580.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    }
+  ],
+  "degree_path": [
+    {
+      "section": "Accounting Major Requirements",
+      "subsections": [
+        {
+          "subsection": "Core Accounting Courses",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "ACTG 617"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 618"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 630"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 631"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 662"
+                ],
+                "credits": "4"
+              }
+            ]
+          ]
+        },
+        {
+          "subsection": "Core Elective Courses - select two from the following:",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "ACTG 608"
+                ],
+                "credits": "2"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 580"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 610"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 642"
+                ],
+                "credits": ""
+              }
+            ]
+          ]
+        },
+        {
+          "subsection": "Elective Courses",
+          "requirements": [
+            {
+              "options": [
+                "ACTG 681"
+              ],
+              "credits": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

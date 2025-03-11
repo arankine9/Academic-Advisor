@@ -1,0 +1,289 @@
+{
+  "program": "Sports Business Minor",
+  "description": "http://business.uoregon.edu/ug/minors/sports-business\nThe minor in sports business is intended to provide baseline business skills and knowledge to students who are not intending to pursue a sports business career per se, but rather are pursuing sports-related professional paths in which business acumen is a supporting skill (e.g., sports journalist, sports psychologist, sportswear designer). The sports business minor develops skills in teamwork, writing, and oral communications with an emphasis on providing core business competencies to those pursuing sports industry–related careers.\nThe minor in sports business is open to students from all majors except pre-business, business administration, or accounting. For general social sciences majors with a concentration in applied economics, business, and society, students must adhere to the GSS double-dipping policy. See theGSS websitefor more information. Completing the minor requires 24 credits of course work, which can be completed in one academic year.\nIt is possible to earn more than one minor within the Lundquist College of Business. However, for students earning more than one business-related minor, no more than three courses can be used to satisfy multiple business minors.\nStudents may declare a minor in sports business online on the college’s website, where a checklist of requirements can be found. Advising assistance is available in the Office of Undergraduate Advising.",
+  "pre_major_requirements": "The sports business minor develops skills in teamwork, writing, and oral communications with an emphasis on providing core business competencies to those pursuing sports industry–related careers. The minor is intended to provide baseline business skills and knowledge to students who are not intending to pursue a sports business career per se, but rather are pursuing sports-related professional paths in which business acumen is a supporting skill (e.g., sports journalist, sports psychologist, sportswear designer). The minor in sports business is open to students from all majors except business administration, accounting, and general social science with a concentration in applied economics, business, and society. Completing the minor requires 24 credits of course work, which can be completed in one academic year.\nStudents may declare a minor in sports business online at the college’swebsite, where a checklist of requirements can be found. Advising assistance is available in the Office of Undergraduate Advising.\nTwelve upper-division credits must be taken in the Lundquist College of Business. Upper-division business courses must be taken for letter grades. Students must earn a C– or better in all courses taken for a letter grade to fulfill minor requirements. When minor requirements have been completed and notification of application for a degree has been received from the Office of the Registrar, the student is cleared for the minor.",
+  "additional_program_info": "Must be taken before the other required minor courses.",
+  "courses": [
+    {
+      "code": "BA 101Z",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20101Z",
+      "title": "Introduction to Business",
+      "description": "Presents an integrated view of both established and entrepreneurial businesses by studying their common characteristics and processes in a global context. Introduces theory and develops basic skills in the areas of accounting, finance, management, and marketing, with an emphasis on social responsibility and ethical practices. Explores how businesses can create value for themselves and society by addressing environmental and social challenges.",
+      "requisites": "",
+      "equivalent_to": "BA 101",
+      "additional_info": "Social Science Area",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 316",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20316",
+      "title": "Management: Creating Value through People",
+      "description": "Management systems for planning, controlling, organizing, and leading; how they influence human behavior in organizations. Selecting, training, retaining, and motivating the human resource in organization.",
+      "requisites": "BA 101Z.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 317",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20317",
+      "title": "Marketing: Creating Value for Customers",
+      "description": "Market analysis, target customer identification, and development of marketing-mix strategies to deliver superior customer value and contribute to the performance of the organization.",
+      "requisites": "BA 101Z.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 250",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20250",
+      "title": "Sports Business and Society",
+      "description": "This course provides an interdisciplinary treatment of the intersection of sports business and society. It reviews the broader sociology of sport and the critical role sport has played on issues of gender and race both domestically and globally.",
+      "requisites": "BA 101Z.",
+      "equivalent_to": "SBUS 250N",
+      "additional_info": "Social Science AreaCultural Literacy: Global Perspectives",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 456",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20456",
+      "title": "Sports Brand Management",
+      "description": "An integrative course that supports skills development for success in managing sports-related businesses and brands. It utilizes critical thinking, creative imagining and professional writing in developing capabilities used in businesses aligned with or in sports.",
+      "requisites": "BA 101Z.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ARTD 250",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ARTD%20250",
+      "title": "Print Media Digital Arts",
+      "description": "Examines application of print media in contemporary visual culture; explores its use in a fine art context. Introduces digital drawing, digital photo editing, and typographic layout to visually communicate expressive concepts. Laboratories, lectures. Repeatable once for 8 maximum credits.Repeatable 1 time for a maximum of 8 credits",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 318",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20318",
+      "title": "Finance: Creating Value through Capital",
+      "description": "Financial statement analysis, pro forma statements and capital budgeting, time value of money, net present-value analysis, risk and cost of capital.",
+      "requisites": "BA 101Z; BA 211Z or BA 215.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 281",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20281",
+      "title": "Personal Finance",
+      "description": "Overview of lifetime personal financial strategies. Topics include financial goals and building net worth, major purchasing decisions, credit use, tax planning, retirement, and estate planning.Requisites:Not open to LCB majors, prebusiness majors with junior standing or above.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=J%20320",
+      "title": "",
+      "description": "No course description found.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "GEOG 281",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=GEOG%20281",
+      "title": "The World and Big Data",
+      "description": "Explores technical foundations and social and economic applications of big data along the “5V” dimensions of volume, variety, velocity, veracity, and visualization.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 335",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20335",
+      "title": "Launching New Ventures",
+      "description": "Skills, behaviors, and knowledge necessary for creating and growing new ventures. Evaluating opportunities, developing growth strategies, obtaining venture financing, intellectual property, and building a management team.",
+      "requisites": "BA 101Z.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "PD 101",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=PD%20101",
+      "title": "Introduction to Product Design",
+      "description": "This course is an introduction to the Product Design profession and its cultural relevance. Lectures, reading and projects convey theory (critical thinking), designers (history), design methods (CAD, drawing, building), and storytelling (documentation / presentation) to give a foundation in product innovation, creation, and portfolio generation.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 255",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20255",
+      "title": "The Business of the Olympic Games",
+      "description": "An introduction to the contemporary global business model of the Olympic Games including finance  economic impact, sales, sponsorship, media  technology, government relations, sustainability  regional impact, socio-political context, diversity  inclusion.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SOC 317",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SOC%20317",
+      "title": "Sociology of the Mass Media",
+      "description": "Analysis of media events: advertisements, news broadcasts, documentaries, popular music, and television. Perspectives include content analysis, semiotics, functionalist and structuralist paradigms, and power system analysis.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "Social Science Area",
+      "extra_info": ""
+    }
+  ],
+  "degree_path": [
+    {
+      "section": "Sports Business Minor",
+      "subsections": [
+        {
+          "subsection": "Core Courses",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "BA 101Z"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 316"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 317"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "SBUS 250"
+                ],
+                "credits": "4"
+              }
+            ]
+          ]
+        },
+        {
+          "subsection": "Elective Course",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "SBUS 456"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ARTD 250"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 318"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "FIN 281"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "J 320"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "GEOG 281"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 335"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "PD 101"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "SBUS 255"
+                ],
+                "credits": ""
+              }
+            ],
+            {
+              "options": [
+                "SOC 317"
+              ],
+              "credits": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

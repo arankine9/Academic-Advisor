@@ -1,0 +1,887 @@
+{
+  "program": "General Business (MBA)",
+  "description": "http://business.uoregon.edu/mba\nfor more information, contactmbainfo@uoregon.edu.\nThe Oregon MBA degree embodies the college’s emphasis on interdisciplinary study, experiential learning, research excellence, and a supportive learning environment. No other program inspires individual distinction and deep and practical experience like the Oregon MBA. Earn an MBA with a specialization in one of four select areas: finance and securities analysis, innovation and entrepreneurship, sports business, and sustainable business practices. The four specializations of the MBA curriculum are aligned with the college’s centers of excellence—the Lundquist Center for Entrepreneurship, the Cameron Center for Finance and Securities Analysis, the Center for Sustainable Business Practices, and the James H. Warsaw Sports Center. The centers promote research collaboration among faculty members from different departments, facilitate student interactions with industry professionals, and provide practical, real-world learning opportunities.\nStrong faculty involvement and the state-of-the art facilities of the Lillis Business Complex create an ideal learning environment. An emphasis on group work ensures that students get to know one another and their instructors well. In addition, a strong cohort model aids in developing solid working relationships and strong friendships. Finally, students enhance their education by participating in global and domestic experiential learning trips and co-curricular opportunities offered through the college’s Professional Edge Program.\nTwo years of full-time study are needed to earn the minimum of 76 credits required for the degree. See thewebsitefor more information and admission requirements.\nThe accelerated master’s degree program is intensive, allowing outstanding undergraduate majors in business from an accredited institution to earn an MBA degree in 15 months by taking a minimum of 49 credits over four terms. Applicants should have a strong overall academic record and significant full-time work experience. Students choose one of the four specializations listed above. See thewebsitefor more information.",
+  "pre_major_requirements": "",
+  "additional_program_info": "If Finance 671 used to satisfy MBA core requirement then minimum of 9 specialization elective credits required.\nBE 625, MGMT 615, MGMT 623, MGMT 640 may not count toward both MBA core requirement and specialization elective requirement.\nSBUS 653 will substitute for BE 625 MBA core requirement for students in SBUS specialization.",
+  "courses": [
+    {
+      "code": "ACTG 612",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20612",
+      "title": "Financial Accounting",
+      "description": "Introduces the accounting model and financial statements for external users.  Emphasizes the use of accounting information in valuation and performance evaluation.",
+      "requisites": "BA 211Z or equivalent.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 661",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20661",
+      "title": "Oregon Advanced Strategy",
+      "description": "Examines advanced strategic analysis in corporate setting and integrates multidisciplinary values such as sustainability, product-service excellence, cultural values, financial strength, advanced marketing, entrepreneurial thinking, customer relationship management, big data analytics. This course is taught through the C-level practitioner’s perspective.",
+      "requisites": "MGMT 614.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 680",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20680",
+      "title": "Data Visualization and Communication in Business",
+      "description": "Focuses on how to organize and understand data, present visual information to varied audiences, and tell logical and persuasive data stories in order to make data more understandable in business contexts, focusing on clarity rather than complexity.",
+      "requisites": "OBA 612.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 721",
+      "credits": "1",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20721",
+      "title": "Business Writing",
+      "description": "Reviews the theory and practice of writing effectively for U.S. and international business audiences, addressing the use of rhetorical, cultural, and organizational analysis to create persuasive business documents.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BE 625",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BE%20625",
+      "title": "Business Law and Ethics",
+      "description": "Examines the legal and ethical facets of real-life business cases and develops the core knowledge and critical thinking skills around law and ethics for today's successful business leaders.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 612",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20612",
+      "title": "Fundamentals of Finance",
+      "description": "Covers the fundamental theories and tools of financial analysis.  Topics include valuation, capital budgeting, risk and return, market efficiency, and financial policies.  Sequence with FIN 613.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 613",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20613",
+      "title": "Managerial Economics",
+      "description": "Covers the fundamental theories and tools of economic and strategic analysis. Topics include demand and supply, pricing strategies, and perfect and imperfect competition. Sequence with FIN 612.",
+      "requisites": "FIN 612.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 612",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20612",
+      "title": "Managing Individuals and Organizations",
+      "description": "Design of high-performance organizations and internal systems. Analysis of team dynamics and group decision-making. Study of individual cognitive and leadership styles.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 614",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20614",
+      "title": "Strategic Management",
+      "description": "Analysis of industries and companies, development of competitive and cooperative strategies, analysis of the special demands of alternative social, technological, and international contexts.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 615",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20615",
+      "title": "Leadership",
+      "description": "Development of skills managers need to be effective leaders in organizations, including communicating, problem-solving, influencing, motivating, delegating, and resolving conflict.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 623",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20623",
+      "title": "Negotiation",
+      "description": "Negotiation theory including distributive and integrative bargaining techniques, economic complements, game theory, and alternative dispute resolution. Extensive in-class negotiation simulations.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 640",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20640",
+      "title": "Sustainable Business Development",
+      "description": "Focuses on corporate environmental management, drawing on economic and policy models, strategic analysis, and use of business cases. Issues facing small and mid-sized companies stressed.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 612",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20612",
+      "title": "Marketing Management",
+      "description": "Marketing Management addresses market analysis and segmentation, targeting, and positioning. Emphasis is on marketing strategies designed to deliver superior customer value and achieve organizational objectives.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 612",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20612",
+      "title": "Quantitative Methods for Managers",
+      "description": "Concepts and techniques of analytic decision making, sampling and statistical inference, and regression analysis.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 613",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20613",
+      "title": "Operations Management",
+      "description": "Overview of the managerial issues associated with production and delivery of goods and services. Includes the use of quantitative modeling and several case studies in operations.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 580",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20580",
+      "title": "Accounting Data Analytics I",
+      "description": "Focuses on the increased use of data analytics within the accounting profession, including an understanding of data analytic thinking, terminology and application.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 618",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20618",
+      "title": "Taxes and Business Strategy",
+      "description": "How to use economic analysis as a tax planning tool, thereby incorporating tax factors in economic decisions.",
+      "requisites": "ACTG 617.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 631",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20631",
+      "title": "Financial Statement Analysis and Valuation",
+      "description": "Examines the role of accounting information in financial decisions. Highlights valuation's relationship to accounting earnings and book value.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 662",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20662",
+      "title": "Strategic Cost Management",
+      "description": "Theory and application of management accounting techniques to decisions made under uncertainty in complex business environments.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 671",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20671",
+      "title": "Corporate Finance and Valuation",
+      "description": "Application of financial principles  to problems of valuation, capital budgeting, and financial policy.",
+      "requisites": "FIN 612.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 673",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20673",
+      "title": "Advanced Topics in Corporate Finance",
+      "description": "Cases dealing with financial analysis, working-capital management, valuation, and firm investment and financing decisions.",
+      "requisites": "completion of first-year M.B.A. core.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 685",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20685",
+      "title": "Alternative Investments",
+      "description": "Covers alternative asset classes such as venture capital, private equity (LBO), commercial real estate, and cryptoassets. Focus on valuation methodologies, fund structures, and investment strategies.",
+      "requisites": "FIN 612.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 543",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20543",
+      "title": "Life Cycle Assessment",
+      "description": "Build foundations in technical sustainability analysis serving business strategy and operations. Learn tools and skills for firm- and product-level analysis.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 641",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20641",
+      "title": "Industrial Ecology",
+      "description": "Takes a systems approach to the design and manufacture of products and delivery of services with minimized ecological impact.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 566",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20566",
+      "title": "Project and Operations Management Models",
+      "description": "Frameworks and solutions for managing complex projects and operations; implementing optimal strategies for producing profitable new products and services in the competitive global business environment.",
+      "requisites": "all MBA core courses.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 577",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20577",
+      "title": "Supply-Chain Operations and Information",
+      "description": "Strategic and tactical issues pertaining to the distribution and delivery of products and services. Methodologies and systems for designing, tracking, and managing complex global operations.",
+      "requisites": "all MBA core courses.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 555",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20555",
+      "title": "Data Driven Predictive Modeling",
+      "description": "Introduction to basics of programming and fundamentals of predictive modeling.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 660",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20660",
+      "title": "Marketing Research",
+      "description": "Marketing research as a tool for decision-making. Planning research projects; design, measurement, experimental and nonexperimental techniques, analysis and interpretation of data; reporting research results.",
+      "requisites": "completion of first-year MBA core.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 665",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20665",
+      "title": "Marketing Strategy",
+      "description": "Relationship between marketing and other functional areas of a business. Emphasis on case analysis as a means of acquiring both planning and operational skills.",
+      "requisites": "completion of first-year MBA core.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 668",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20668",
+      "title": "Strategic Brand Management",
+      "description": "This course will explore a range of issues related to the strategic management of brands. After building a fundamental understanding of the importance of brands and their core characteristics, we will focus on four key aspects of brand management – building/managing brands, leveraging brands, identifying brands / measuring their equity, and protecting brands.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 510",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20510",
+      "title": "Experimental Course: [Topic]",
+      "description": "Repeatable when the topic changes. Recent topics include Strategic Environmental Management, Technology and Innovation Management.Repeatable 99 times",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 620",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20620",
+      "title": "Managing Global Business",
+      "description": "Focuses on the problems of operating across multiple political and cultural boundaries. Possible topics include corporate strategy, the role of multinational corporations, and international joint ventures.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 625",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20625",
+      "title": "New Venture Planning",
+      "description": "Students identify and research a business opportunity; develop and present a professional start-up business plan that includes market, competitor, cash flow, and financial analyses.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 635",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20635",
+      "title": "Opportunity Recognition",
+      "description": "Introduces the fundamentals of entrepreneurship, providing the tools necessary to successfully identify a true opportunity and to start and develop a new organization. Open only to MBA and MActg majors.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 606",
+      "credits": "6",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20606",
+      "title": "Practicum: [Topic]",
+      "description": "Repeatable.Repeatable 99 times",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 683",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20683",
+      "title": "Concepts of Investments",
+      "description": "Securities markets; risk-return characteristics of investment media; concepts of security analysis; investment and portfolio strategies of individual and institutional investors.",
+      "requisites": "completion of first-year M.B.A. core.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 562",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20562",
+      "title": "Derivative Markets and Financial Institutions",
+      "description": "Valuation of financial derivatives, methodologies for identifying firms' risk exposures, the role of risk management and financial derivatives in corporate strategy, and analysis of financial institutions.",
+      "requisites": "FIN 380 or FIN 612.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 675",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20675",
+      "title": "Fixed Income Securities",
+      "description": "Theoretical, empirical, and institutional aspects of fixed-income securities and their derivatives; application of these tools to managerial decisions in other contexts.",
+      "requisites": "completion of first-year MBA core.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 617",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20617",
+      "title": "Taxation of Business",
+      "description": "Taxation of business entities (C corporations, partnerships, S corporations, and limited liability companies) as they form, operate, and dissolve.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 619",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20619",
+      "title": "Taxation of Pass Through Entities",
+      "description": "Designed for accountants, managers, and entrepreneurs, covers basics of taxation of partnerships, S corporations and their shareholders, and trusts and their beneficiaries. Also covers taxation of exempt entities. Students cannot receive credit for both ACTG 619 and LAW 681.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 564",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20564",
+      "title": "Commercial Banking",
+      "description": "Operation and pricing policies of a commercial bank, concentrating on management of institutions that take deposits and make loans and investments through the use of computer-simulated banking operations.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 610",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20610",
+      "title": "Experimental Course: [Topic]",
+      "description": "Repeatable when the topic changes.Repeatable 99 times",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 687",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20687",
+      "title": "Hedge Funds",
+      "description": "Institutional features and trading strategies of the hedge fund industry; developing trading ideas, evaluating based on historical data or financial statements, and analyzing risk-return tradeoff.",
+      "requisites": "FIN 683.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 645",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20645",
+      "title": "New Venture Scaling",
+      "description": "New Venture Scaling covers concepts and systems related to financial and operational challenges of scaling staff, activities, and sales and marketing efforts for rapid growth.",
+      "requisites": "MGMT 625, MGMT 635.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 655",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20655",
+      "title": "New Venture Execution",
+      "description": "This course guides students as they build and execute on their entrepreneurial ideas.Repeatable 1 time for a maximum of 8 credits",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BIOE 610",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BIOE%20610",
+      "title": "Experimental Course: [Topic]",
+      "description": "Repeatable.Repeatable 99 times",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=J%20548",
+      "title": "",
+      "description": "No course description found.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "LAW 610",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=LAW%20610",
+      "title": "Experimental Course: [Topic]",
+      "description": "Repeatable.Repeatable 99 times",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "LAW 633",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=LAW%20633",
+      "title": "Business Planning",
+      "description": "Study of business life cycle from its initial organization and operation to its eventual sale and dissolution. Students draft documents for use in hypothetical transactions, compare the way partnerships and corporations deal with similar problems, and analyze the impact taxes have on business decisions.",
+      "requisites": "LAW 620, LAW 680.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "LAW 673",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=LAW%20673",
+      "title": "Patent Law and Policy",
+      "description": "Developments in patent law including patentable subject matter; requirements for patentability and infringement; the process of obtaining and enforcing a patent; and contemporary controversies in patent law, such as ethical and economic objections to biotechnology and software patents.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 510",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20510",
+      "title": "Experimental Course: [Topic]",
+      "description": "Repeatable when the topic changes. Recent topics include Service Operations, Business Analytics, Analyzing Big Data.Repeatable 99 times",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 544",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20544",
+      "title": "Business Database Management Systems",
+      "description": "Techniques for structuring and storing business data; primary focus on relational database theory, with applied skills for business users, including data warehouses, reporting, and normalization.",
+      "requisites": "all MBA core courses.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "PPPM 581",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=PPPM%20581",
+      "title": "Fundraising for Nonprofit Organizations",
+      "description": "Introduction to fundraising for nonprofit organizations. Annual giving, major gifts, planned giving, and campaigns.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "PPPM 685",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=PPPM%20685",
+      "title": "Social Enterprise",
+      "description": "Introduction to social enterprises and their ecosystem. Earned revenue and social business models, social performance management, balancing financial and social objectives, funding landscape, policy environment, and taking social enterprises to scale.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 645",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20645",
+      "title": "Sports Product",
+      "description": "Examines the companies and organizations of the international sports product industry: manufacturing innovation, company management, branding, retail and wholesale.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SPD 650",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SPD%20650",
+      "title": "Sports Product Materials and Manufacturing",
+      "description": "Explores the materials science, manufacturing, and sustainability theories applied in sports product design.",
+      "requisites": "SPD 684.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 650",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20650",
+      "title": "Marketing Sports Properties",
+      "description": "Examines essentials of effective sports marketing. Includes product or property development, legal aspects, segmentation, pricing, and communication channels (e.g., broadcast media).",
+      "requisites": "completion of first-year M.B.A. core.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 652",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20652",
+      "title": "Sports Sponsorship Alliances",
+      "description": "Detailed consideration of the relation between sports, law, and corporate sponsorship programs. Focuses on alignment marketing issues, strategic communication through sponsorship, sponsor value, and sponsorship valuation.",
+      "requisites": "completion of first-year MBA core.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 655",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20655",
+      "title": "Economic Aspects of Sports",
+      "description": "Comprehensive coverage of traditional and innovative revenue methods available to sports organizations from public and private sources. Detailed consideration of venue-based income sources (e.g., premium seating, permanent seat licenses).",
+      "requisites": "completion of first-year MBA core.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 653",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20653",
+      "title": "Legal Aspects of Sports Business",
+      "description": "Examines social responsibility and legal concepts in sports management including constitutional regulatory powers, individual participation rights, drug testing, antitrust, labor rights, intellectual property rights, sponsorships, product and event liability.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 606",
+      "credits": "6",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20606",
+      "title": "Practicum: [Topic]",
+      "description": "Repeatable three times for a maximum of 16 credits.Repeatable 3 times for a maximum of 16 credits",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 565",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20565",
+      "title": "Sports Analytics",
+      "description": "The course is intended for students interested in general management, operations, marketing or consulting in sports. The course leverages students’ core-course data management skills relating to spreadsheets and databases. Students will work on integrating those data management skills with statistics-based sports data-analytics methods, and thus be able to make rigorous data-driven decisions, as well as effectively communicate the rationale supporting those decisions.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 515",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20515",
+      "title": "Marketing Analytics",
+      "description": "Covers three pillars of analytics—descriptive, predictive, prescriptive—within the marketing context. Linear and logistic regression, clustering, customer choice, conjoint, natural language processing, and machine learning methods to drive marketing decisions.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "JCOM 557",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=JCOM%20557",
+      "title": "Sports Brand Strategy",
+      "description": "Bridges concepts of business and creative strategy to understand the process of building compelling brands in the context of sport. Representing a multi-billion-dollar industry, sport provides a unique platform to study how strong brands are developed, positioned, and brought to life in creative ways.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 606",
+      "credits": "6",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20606",
+      "title": "Practicum: [Topic]",
+      "description": "Repeatable.Repeatable 99 times",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 608",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20608",
+      "title": "Workshop: [Topic]",
+      "description": "Repeatable.Repeatable 99 times",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 610",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20610",
+      "title": "Experimental Course: [Topic]",
+      "description": "Repeatable when the topic changes. A recent topic is Sustainable Business Development.Repeatable 99 times",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 568",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20568",
+      "title": "Marketing, Sustainability, and Ethics",
+      "description": "This course focuses on sustainable marketing, broadly defined. We will define sustainability as any Environmental, Societal, or Governance (ESG) issue that affects the long-term outcomes of consumers, employees, the planet, and/or society. Students in this course will learn to develop sustainable marketing strategies in the process of evaluating firm behavior and predicting consumer and company behaviors that may serve as barrier to sustainable consumption.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    }
+  ],
+  "degree_path": [
+    {
+      "section": "Accelerated Program",
+      "subsections": [
+        {
+          "subsection": "Core Courses",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "ACTG 612"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 661",
+                  "FIN 671"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 680"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 721"
+                ],
+                "credits": "1"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BE 625"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "FIN 612"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "FIN 613"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 612"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 614"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 615"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 623"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 640"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MKTG 612"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "OBA 612"
+                ],
+                "credits": "3"
+              }
+            ],
+            {
+              "options": [
+                "OBA 613"
+              ],
+              "credits": "3"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
