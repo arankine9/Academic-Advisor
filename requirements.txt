@@ -17,3 +17,4 @@ python-jose[cryptography]
 python-dotenv
 pydantic[email]
 sqlalchemy-utils
+beautifulsoup4
