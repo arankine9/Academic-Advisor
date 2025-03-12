@@ -184,8 +184,8 @@ async def advising_chat(
         # Format courses for recommendation
         course_strings = [f"{course.course_code} - {course.course_name}" for course in courses]
         
-        # Get advice based on the message and user courses
-        response = get_advice(course_strings, current_user.major)
+        # Use the enhanced query engine with the user's message
+        response = get_advice(course_strings, current_user.major, query=message)
         
         return {"response": response}
     except Exception as e:

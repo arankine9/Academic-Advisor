@@ -1,11 +1,21 @@
-# Copy from original query_engine.py with these import changes:
+"""
+Enhanced Query Engine for Academic Advisor
+Implements intent classification, multi-step reasoning, and RAG-based query refinement.
+"""
+
 import os
+import logging
+from typing import List, Dict, Any, Optional
 from langchain_pinecone import Pinecone
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
+from langchain.schema import Document
 from pinecone import Pinecone as PineconeClient
 from dotenv import load_dotenv
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
@@ -13,21 +23,21 @@ PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Define Pinecone index name
-index_name = "academic-advisor"
+INDEX_NAME = "academic-advisor"
 
 # Initialize Pinecone client
 pc = PineconeClient(api_key=PINECONE_API_KEY)
 
 # Ensure index exists
-if index_name not in pc.list_indexes().names():
-    raise ValueError(f"Pinecone index '{index_name}' does not exist. Run `ingest_majors.py` first to create it.")
+if INDEX_NAME not in pc.list_indexes().names():
+    raise ValueError(f"Pinecone index '{INDEX_NAME}' does not exist. Run `ingest_majors.py` first to create it.")
 
 # Initialize OpenAI embeddings
 embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
 
 # Initialize Pinecone vector store with proper text key
 vectorstore = Pinecone.from_existing_index(
-    index_name=index_name,
+    index_name=INDEX_NAME,
     embedding=embeddings,
     text_key="text"  # Specify the text key to match our document structure
 )
@@ -38,74 +48,304 @@ retriever = vectorstore.as_retriever(
     search_kwargs={"k": 5}  # Retrieve top 5 most relevant documents
 )
 
-# Define an improved prompt template
-template = """
-You are an academic advisor helping a student plan their course schedule.
+# Initialize LLM models
+intent_classifier = ChatOpenAI(
+    model="gpt-4o-mini",  # Faster model for intent classification
+    openai_api_key=OPENAI_API_KEY,
+    temperature=0.2
+)
 
-The student has completed the following courses:
-{completed_courses}
+reasoning_model = ChatOpenAI(
+    model="o1-mini",  # More powerful model for reasoning
+    openai_api_key=OPENAI_API_KEY,
+)
 
-They are majoring in {major}.
+response_model = ChatOpenAI(
+    model="gpt-4o",  # Efficient model for responses
+    openai_api_key=OPENAI_API_KEY,
+    temperature=0.7  # Higher temperature for more natural responses
+)
 
-Based on the major requirements and the courses they've already taken, recommend what courses they should take next term. 
-Consider prerequisites, course sequences, and graduation requirements.
+# Intent Classification Prompt
+INTENT_CLASSIFICATION_PROMPT = """
+You are an academic advising system assistant. Determine if the student's query is:
+1. Course-related: About what courses to take, prerequisites, degree requirements, etc.
+2. General conversation: Greetings, personal questions, or topics not directly related to course selection.
 
-Provide a clear explanation for your recommendations, including how they fit into the student's degree plan.
+Student query: {query}
+
+Respond with exactly "COURSE" if the query is course-related, or "GENERAL" for general conversation.
 """
 
-prompt = PromptTemplate(input_variables=["completed_courses", "major"], template=template)
+# Reasoning Prompt
+REASONING_PROMPT = """
+You are an academic advisor helping a student plan their academic journey. Think step by step to answer their question effectively.
 
-# Use ChatOpenAI with a more capable model
-chat_llm = ChatOpenAI(
-    model="gpt-4o",
-    openai_api_key=OPENAI_API_KEY,
-    temperature=0.2  # Lower temperature for more consistent advice
-)
+Student information:
+- Major: {major}
+- Completed courses:
+{completed_courses}
 
-# Create the retrieval-based QA chain
-chain = RetrievalQA.from_chain_type(
-    llm=chat_llm,
-    chain_type="stuff",
-    retriever=retriever,
-    return_source_documents=True,
-    chain_type_kwargs={
-        "prompt": PromptTemplate(
-            template="""
-            You are an academic advisor helping a student plan their course schedule.
-            
-            Use the following pieces of context to answer the question at the end.
-            If you don't know the answer, just say that you don't know, don't try to make up an answer.
-            
-            {context}
-            
-            Question: {question}
-            
-            Helpful Answer:""",
-            input_variables=["context", "question"],
-        ),
-    }
-)
+Student query: {query}
 
-def get_advice(completed_courses, major):
-    # Format the completed courses as a readable list
-    if isinstance(completed_courses, list):
-        formatted_courses = "\n".join([f"- {course}" for course in completed_courses])
-    else:
-        formatted_courses = completed_courses
+Your task:
+1. Analyze what specific information you need to properly answer this query
+2. Determine what specific searches would retrieve the most relevant information
+3. Formulate up to 3 specific, focused search queries that would help answer the student's question
+
+For each search query, explain why you're searching for this information and how it relates to the student's question.
+
+Format your reasoning as:
+ANALYSIS: [Your analysis of the student's needs]
+
+SEARCH QUERIES:
+1. [First specific search query]
+2. [Second specific search query, if needed]
+3. [Third specific search query, if needed]
+
+REASONING: [Brief explanation of your search strategy]
+"""
+
+# Final Response Prompt
+FINAL_RESPONSE_PROMPT = """
+You are a friendly, helpful academic advisor. Based on the student's query and retrieved information, provide a personalized response.
+
+Student information:
+- Major: {major}
+- Completed courses:
+{completed_courses}
+
+Student query: {query}
+
+Retrieved information:
+{retrieved_info}
+
+Respond directly to the student in a warm, supportive tone. Focus on giving clear advice and actionable recommendations. 
+Do not mention the search process or "retrieved information" - 
+just provide the advice naturally as if you already knew this information.
+
+Include specific course recommendations when appropriate, explaining how they fit into the student's academic path.
+"""
+
+def classify_intent(query: str) -> str:
+    """
+    Classify if the query is course-related or general conversation.
     
-    # Create the query
-    formatted_prompt = prompt.format(completed_courses=formatted_courses, major=major)
-    
+    Args:
+        query: The student's query
+        
+    Returns:
+        String indicating "COURSE" or "GENERAL"
+    """
     try:
-        # Invoke the chain
-        response = chain.invoke({"query": formatted_prompt})
-        return response["result"]
+        prompt = INTENT_CLASSIFICATION_PROMPT.format(query=query)
+        response = intent_classifier.invoke(prompt)
+        
+        # Extract the response and normalize
+        intent = response.content.strip().upper()
+        
+        # Handle edge cases
+        if "COURSE" in intent:
+            return "COURSE"
+        else:
+            return "GENERAL"
     except Exception as e:
-        print(f"Error in get_advice: {e}")
-        return "I'm sorry, I encountered an error while generating recommendations. Please try again."
+        logger.error(f"Error in intent classification: {e}")
+        # Default to COURSE in case of errors
+        return "COURSE"
 
-# Test the retrieval engine
+def process_general_query(query: str) -> str:
+    """
+    Process general conversation queries with a friendly response.
+    
+    Args:
+        query: The student's general query
+        
+    Returns:
+        A friendly response
+    """
+    prompt = f"""
+    You are a friendly academic advisor chatbot. The student has asked a general question (not specifically about courses).
+    Respond in a friendly, helpful way. Keep your response concise and natural.
+    
+    Student query: {query}
+    """
+    
+    response = response_model.invoke(prompt)
+    return response.content.strip()
+
+def extract_search_queries(reasoning_output: str) -> List[str]:
+    """
+    Extract search queries from the reasoning model's output.
+    
+    Args:
+        reasoning_output: The output from the reasoning model
+        
+    Returns:
+        List of search queries
+    """
+    queries = []
+    
+    # Look for the SEARCH QUERIES section
+    if "SEARCH QUERIES:" in reasoning_output:
+        # Extract the section after SEARCH QUERIES:
+        search_section = reasoning_output.split("SEARCH QUERIES:")[1].split("REASONING:")[0].strip()
+        
+        # Parse numbered queries
+        lines = search_section.split("\n")
+        for line in lines:
+            line = line.strip()
+            if line and (line[0].isdigit() and line[1:3] in [". ", ") "]):
+                query = line[line.index(" ")+1:].strip()
+                if query:
+                    queries.append(query)
+    
+    # If no queries found with the structured format, try to extract any lines that look like queries
+    if not queries:
+        lines = reasoning_output.split("\n")
+        for line in lines:
+            line = line.strip()
+            if line.startswith("Query:") or line.startswith("Search for:"):
+                query = line.split(":", 1)[1].strip()
+                queries.append(query)
+    
+    # Fallback: if still no queries, use parts of the reasoning text
+    if not queries and len(reasoning_output) > 30:
+        # Just use the first paragraph as a query
+        first_para = reasoning_output[:200].replace("\n", " ")
+        queries.append(first_para)
+    
+    return queries[:3]  # Limit to 3 queries
+
+def execute_rag_query(search_query: str) -> List[Document]:
+    """
+    Execute a RAG query to retrieve relevant documents.
+    
+    Args:
+        search_query: The search query for the retriever
+        
+    Returns:
+        List of retrieved documents
+    """
+    try:
+        docs = retriever.get_relevant_documents(search_query)
+        return docs
+    except Exception as e:
+        logger.error(f"Error in RAG query execution: {e}")
+        return []
+
+def process_course_query(query: str, completed_courses: List[str], major: str) -> str:
+    """
+    Process course-related queries using multi-step reasoning and RAG.
+    
+    Args:
+        query: The student's query
+        completed_courses: List of courses the student has completed
+        major: The student's major
+        
+    Returns:
+        A formatted response with course recommendations
+    """
+    # Format completed courses for the prompt
+    formatted_courses = "\n".join([f"- {course}" for course in completed_courses])
+    
+    # Step 1: Generate reasoning about how to approach the query
+    reasoning_prompt = REASONING_PROMPT.format(
+        query=query,
+        major=major,
+        completed_courses=formatted_courses
+    )
+    
+    reasoning_response = reasoning_model.invoke(reasoning_prompt)
+    reasoning_output = reasoning_response.content.strip()
+    logger.info(f"Reasoning output: {reasoning_output[:100]}...")
+    
+    # Step 2: Extract search queries from reasoning
+    search_queries = extract_search_queries(reasoning_output)
+    
+    if not search_queries:
+        # Fallback: use the original query
+        search_queries = [query]
+    
+    logger.info(f"Search queries: {search_queries}")
+    
+    # Step 3: Execute RAG queries and collect results
+    all_results = []
+    for search_query in search_queries:
+        retrieved_docs = execute_rag_query(search_query)
+        all_results.extend(retrieved_docs)
+    
+    # Deduplicate results
+    seen_content = set()
+    unique_results = []
+    for doc in all_results:
+        if doc.page_content not in seen_content:
+            seen_content.add(doc.page_content)
+            unique_results.append(doc)
+    
+    # Format retrieved information
+    retrieved_info = "\n\n".join([doc.page_content for doc in unique_results[:5]])
+    
+    # If no information was retrieved, provide a graceful fallback
+    if not retrieved_info:
+        retrieved_info = "No specific course information found. Provide general guidance based on the student's major and completed courses."
+    
+    # Step 4: Generate final response
+    response_prompt = FINAL_RESPONSE_PROMPT.format(
+        query=query,
+        major=major,
+        completed_courses=formatted_courses,
+        retrieved_info=retrieved_info
+    )
+    
+    final_response = response_model.invoke(response_prompt)
+    return final_response.content.strip()
+
+def get_advice(completed_courses, major, query=None):
+    """
+    Main function that orchestrates the entire query processing pipeline.
+    
+    Args:
+        completed_courses: List of courses the student has completed
+        major: The student's major
+        query: The student's query (optional)
+        
+    Returns:
+        A formatted response
+    """
+    try:
+        # Format completed courses if needed
+        if not isinstance(completed_courses, list):
+            # Handle the case where completed_courses might be a string
+            if isinstance(completed_courses, str):
+                formatted_courses = [completed_courses]
+            else:
+                formatted_courses = []
+        else:
+            formatted_courses = completed_courses
+        
+        # If no query is provided, use a default recommendation prompt
+        if not query:
+            default_query = f"What courses should I take next as a {major} major?"
+            return process_course_query(default_query, formatted_courses, major)
+        
+        # Classify the intent of the query
+        intent = classify_intent(query)
+        logger.info(f"Classified intent: {intent}")
+        
+        # Process based on intent
+        if intent == "COURSE":
+            return process_course_query(query, formatted_courses, major)
+        else:
+            return process_general_query(query)
+            
+    except Exception as e:
+        logger.error(f"Error in get_advice: {e}")
+        return "I'm sorry, I encountered an error while generating recommendations. Please try again later or try rephrasing your question."
+
+# Test the retrieval engine (only runs when script is executed directly)
 if __name__ == "__main__":
     test_courses = ["CS 210 - Introduction to Computer Science I", "CS 211 - Introduction to Computer Science II"]
     test_major = "Computer Science"
-    print(get_advice(test_courses, test_major))
+    test_query = "What math courses should I take next?"
+    print(get_advice(test_courses, test_major, test_query))
