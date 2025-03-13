@@ -23,7 +23,8 @@ PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Define Pinecone index name
-INDEX_NAME = "academic-advisor"
+#INDEX_NAME = "academic-advisor"
+INDEX_NAME = "duckweb-spring24"
 
 # Initialize Pinecone client
 pc = PineconeClient(api_key=PINECONE_API_KEY)
@@ -33,19 +34,20 @@ if INDEX_NAME not in pc.list_indexes().names():
     raise ValueError(f"Pinecone index '{INDEX_NAME}' does not exist. Run `ingest_majors.py` first to create it.")
 
 # Initialize OpenAI embeddings
-embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
+embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY, model="text-embedding-3-small")
 
 # Initialize Pinecone vector store with proper text key
 vectorstore = Pinecone.from_existing_index(
     index_name=INDEX_NAME,
     embedding=embeddings,
-    text_key="text"  # Specify the text key to match our document structure
+    text_key="class_code",  # Specify the text key to match our document structure
+    #metadata_key="metadata"
 )
 
 # Create a retriever with search parameters
 retriever = vectorstore.as_retriever(
     search_type="similarity",
-    search_kwargs={"k": 5}  # Retrieve top 5 most relevant documents
+    search_kwargs={"k": 5}  # Keep only the top 5 results
 )
 
 # Initialize LLM models
@@ -123,8 +125,13 @@ Retrieved information:
 Respond directly to the student in a warm, supportive tone. Focus on giving clear advice and actionable recommendations. 
 Do not mention the search process or "retrieved information" - 
 just provide the advice naturally as if you already knew this information.
+mention things like:
+- Course descriptions and prerequisites
+- Current availability and scheduling
+
 
 Include specific course recommendations when appropriate, explaining how they fit into the student's academic path.
+Provide practical advice that considers both academic requirements and logistical factors like class timing and seat availability.
 """
 
 def classify_intent(query: str) -> str:
@@ -225,10 +232,28 @@ def execute_rag_query(search_query: str) -> List[Document]:
         search_query: The search query for the retriever
         
     Returns:
-        List of retrieved documents
+        List of retrieved documents including all fields
     """
     try:
         docs = retriever.get_relevant_documents(search_query)
+        # Add debug logging
+        logger.info(f"Retrieved document metadata example: {docs[0].metadata if docs else 'No documents found'}")
+        
+        # Format each document to include all available fields
+        for doc in docs:
+            # All fields are available directly in doc.metadata
+            formatted_content = f"""
+            Course: {doc.metadata.get('class_code')}
+            Credits: {doc.metadata.get('credits')}
+            Description: {doc.metadata.get('description')}
+            Prerequisites: {doc.metadata.get('prerequisites')}
+            Instructor: {doc.metadata.get('instructor')}
+            Schedule: {doc.metadata.get('days')} at {doc.metadata.get('time')}
+            Location: {doc.metadata.get('classroom')}
+            Seats Available: {doc.metadata.get('available_seats')}/{doc.metadata.get('total_seats')}
+            CRN: {doc.metadata.get('crn')}
+            """
+            doc.page_content = formatted_content.strip()
         return docs
     except Exception as e:
         logger.error(f"Error in RAG query execution: {e}")
