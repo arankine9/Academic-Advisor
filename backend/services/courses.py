@@ -4,6 +4,17 @@ from typing import List, Optional
 import json
 import os
 
+"""
+This file handles the users saved courses. It will add the course to the database if it doesn't exist, and it will also remove the course from the database if the user wants to.
+
+add_course_to_user: Associates courses with specific user accounts
+
+remove_course_from_user: Removes courses from user accounts
+
+get_user_courses: Retrieves all courses for a specific user
+"""
+
+
 # IMPORTANT: Updated imports
 from backend.core.database import Course, User
 from backend.models.schemas import CourseBase, CourseCreate, CourseResponse
@@ -94,6 +105,11 @@ def parse_course_from_string(course_string: str) -> CourseCreate:
         credit_hours=None,
         term=None
     )
+
+#========================================================================
+# This section is a bit unrelated, it serves to initialize the courses from the majors.json file 
+# which are used to 'autocomplete' the courses in the frontend
+# TODO Either move this to a separate file or remove this sort of fuctionality, majors only works for CS so not very useful
 
 # Initialize courses from majors.json
 def initialize_courses_from_json(db: Session):
