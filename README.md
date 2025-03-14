@@ -9,6 +9,7 @@ This application uses Retrieval-Augmented Generation (RAG) to provide personaliz
 - Personalized course recommendations
 - PostgreSQL database for persistent storage
 - RAG-based recommendations using Pinecone and OpenAI
+- React-based modern frontend
 
 ## Setup
 
@@ -18,6 +19,7 @@ This application uses Retrieval-Augmented Generation (RAG) to provide personaliz
 - PostgreSQL
 - Pinecone account
 - OpenAI API key
+- Node.js and npm (installed automatically if missing)
 
 ### Installation
 
@@ -46,6 +48,7 @@ OPENAI_API_KEY=your_openai_api_key
 PINECONE_API_KEY=your_pinecone_api_key
 DATABASE_URL=postgresql://username:password@localhost/academic_advisor
 SECRET_KEY=your_secret_key_for_jwt_tokens
+DEVELOPMENT_MODE=true  # Set to true during development, false in production
 ```
 
 5. Initialize the database:
@@ -65,7 +68,35 @@ Start the FastAPI server:
 python3 main.py
 ```
 
-The application will be available at http://127.0.0.1:8000
+The application will handle both frontend and backend setup automatically:
+- In development mode (`DEVELOPMENT_MODE=true`), it will set up React and start the development server
+- In production mode (`DEVELOPMENT_MODE=false`), it will build the React app and serve it directly
+
+The application will be available at:
+- Development: http://localhost:5173 (React dev server) with API at http://localhost:8000
+- Production: http://localhost:8000 (Both frontend and API)
+
+## Development
+
+### Backend Development
+The backend is built with FastAPI and follows a modular structure:
+- `backend/api/routes.py`: API routes and endpoints
+- `backend/core/`: Core functionality (auth, database)
+- `backend/services/`: Business logic and services
+- `backend/models/`: Database models and schemas
+
+### Frontend Development
+The frontend is built with React and follows a modern component structure:
+- `/frontend/src/components/`: Reusable UI components
+- `/frontend/src/pages/`: Page components
+- `/frontend/src/services/`: API service modules
+- `/frontend/src/context/`: React context providers
+
+To run the frontend separately during development:
+```bash
+cd frontend
+npm run dev
+```
 
 ## Usage
 
@@ -82,9 +113,12 @@ The application will be available at http://127.0.0.1:8000
 - **Pinecone**: Vector database for RAG
 - **OpenAI**: LLM for generating recommendations
 - **JWT**: Authentication mechanism
+- **React**: Frontend framework
+- **Axios**: HTTP client for API requests
+- **React Router**: Frontend routing
 
 ## Database Schema
 
 - **users**: Stores user information (id, email, username, hashed_password, major)
 - **courses**: Stores course information (id, course_code, course_name, credit_hours, term)
-- **user_courses**: Junction table for the many-to-many relationship between users and courses 
+- **user_courses**: Junction table for the many-to-many relationship between users and courses

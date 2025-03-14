@@ -1,5 +1,8 @@
-/* Import Kokoro font */
 @import url('https://fonts.googleapis.com/css2?family=Kokoro&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Base styles */
 body {
@@ -243,251 +246,6 @@ button:hover {
     transform: translateY(0);
 }
 
-/* Dashboard specific */
-.dashboard-summary {
-    background-color: rgba(52, 152, 219, 0.2);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 25px;
-    border: 1px solid rgba(52, 152, 219, 0.3);
-}
-
-.dashboard-actions {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 20px;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.action-buttons button {
-    flex: 1;
-    min-width: 200px;
-    text-align: center;
-}
-
-.stats-number {
-    font-size: 2.5rem;
-    font-weight: 300;
-    color: rgba(52, 152, 219, 0.9);
-    display: block;
-    text-align: center;
-    margin: 10px 0;
-}
-
-/* Class Management specific */
-.form-row {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.form-group {
-    flex: 1;
-    min-width: 200px;
-}
-
-.course-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.05);
-    padding: 15px 20px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    border-left: 4px solid rgba(52, 152, 219, 0.8);
-    transition: all 0.3s ease;
-}
-
-.course-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.course-info {
-    flex-grow: 1;
-}
-
-.course-code {
-    font-weight: 500;
-    font-size: 1.1rem;
-    margin-bottom: 3px;
-}
-
-.course-name {
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 3px;
-}
-
-.course-term {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.course-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.edit-btn, .remove-btn {
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    margin: 0;
-    width: auto;
-    font-size: 0.9rem;
-}
-
-.edit-btn {
-    background-color: rgba(243, 156, 18, 0.7);
-}
-
-.edit-btn:hover {
-    background-color: rgba(243, 156, 18, 0.9);
-}
-
-.remove-btn {
-    background-color: rgba(231, 76, 60, 0.7);
-}
-
-.remove-btn:hover {
-    background-color: rgba(231, 76, 60, 0.9);
-}
-
-.edit-mode {
-    background-color: rgba(52, 152, 219, 0.2);
-    border-left: 4px solid rgba(243, 156, 18, 0.8);
-}
-
-.no-courses-message {
-    text-align: center;
-    padding: 30px;
-    font-style: italic;
-    color: rgba(255, 255, 255, 0.5);
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    margin: 20px 0;
-}
-
-/* Advising Chat specific */
-.chat-container {
-    height: 500px;
-    overflow-y: auto;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
-.chat-message {
-    margin-bottom: 15px;
-    padding: 15px;
-    border-radius: 12px;
-    max-width: 80%;
-    line-height: 1.5;
-    position: relative;
-    animation: messageIn 0.3s ease-out;
-}
-
-@keyframes messageIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.user-message {
-    background-color: rgba(52, 152, 219, 0.7);
-    align-self: flex-end;
-    margin-left: auto;
-    color: white;
-    border-bottom-right-radius: 0;
-}
-
-.advisor-message {
-    background-color: rgba(255, 255, 255, 0.1);
-    align-self: flex-start;
-    border-bottom-left-radius: 0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.chat-input {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.chat-input input {
-    flex-grow: 1;
-    padding-left: 15px;
-}
-
-.chat-input button {
-    width: auto;
-    margin: 0;
-    min-width: 120px;
-}
-
-.typing-indicator {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    padding: 10px 15px;
-    border-radius: 12px;
-    background-color: rgba(255, 255, 255, 0.05);
-    align-self: flex-start;
-    width: fit-content;
-    border-bottom-left-radius: 0;
-}
-
-.typing-indicator span {
-    height: 8px;
-    width: 8px;
-    margin: 0 2px;
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    display: inline-block;
-    animation: typing 1.4s infinite ease-in-out both;
-}
-
-.typing-indicator span:nth-child(1) {
-    animation-delay: 0s;
-}
-
-.typing-indicator span:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.typing-indicator span:nth-child(3) {
-    animation-delay: 0.4s;
-}
-
-@keyframes typing {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.5);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
 /* Auth specific styles */
 #auth-section.container {
     max-width: 400px;
@@ -554,6 +312,42 @@ button:hover {
 .logo-container {
     text-align: center;
     margin-bottom: 30px;
+}
+
+/* Dashboard specific */
+.dashboard-summary {
+    background-color: rgba(52, 152, 219, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+.dashboard-actions {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.action-buttons button {
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+}
+
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: rgba(52, 152, 219, 0.9);
+    display: block;
+    text-align: center;
+    margin: 10px 0;
 }
 
 @media (max-width: 768px) {
