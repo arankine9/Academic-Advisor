@@ -86,7 +86,7 @@ app.include_router(api_router, prefix="/api")
 # Mount static files
 if os.path.exists(FRONTEND_DIST_DIR):
     app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIST_DIR, "assets")), name="assets")
-    app.mount("/static", StaticFiles(directory=os.path.join("frontend", "static")), name="static", exists_ok=False)
+    app.mount("/static", StaticFiles(directory=os.path.join("frontend", "static")))
 
 # Root route handler - serves the React app
 @app.get("/")
