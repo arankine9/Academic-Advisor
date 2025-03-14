@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Kokoro&display=swap');
 
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,11 +12,6 @@ body {
     padding: 0;
     line-height: 1.6;
     min-height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/static/img/old_main.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
     position: relative;
     overflow-x: hidden;
     color: white;

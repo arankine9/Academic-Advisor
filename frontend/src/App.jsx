@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Notification from './components/Notification';
 import ClassManagement from './components/ClassManagement';
 import AdvisingChat from './components/AdvisingChat';
+import AppBackground from './components/AppBackground';
 
 // Import pages
 import Login from './pages/Login';
@@ -19,40 +20,42 @@ const App = () => {
     <Router>
       <NotificationProvider>
         <AuthProvider>
-          <Notification />
-          <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<Login />} />
-            
-            {/* Protected routes */}
-            <Route 
-              path="/dashboard" 
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/classes" 
-              element={
-                <ProtectedRoute>
-                  <ClassManagement />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/advising" 
-              element={
-                <ProtectedRoute>
-                  <AdvisingChat />
-                </ProtectedRoute>
-              } 
-            />
-            
-            {/* Redirect to dashboard if path is unknown */}
-            <Route path="*" element={<Navigate to="/dashboard" />} />
-          </Routes>
+          <AppBackground>
+            <Notification />
+            <Routes>
+              {/* Public routes */}
+              <Route path="/" element={<Login />} />
+              
+              {/* Protected routes */}
+              <Route 
+                path="/dashboard" 
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/classes" 
+                element={
+                  <ProtectedRoute>
+                    <ClassManagement />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/advising" 
+                element={
+                  <ProtectedRoute>
+                    <AdvisingChat />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              {/* Redirect to dashboard if path is unknown */}
+              <Route path="*" element={<Navigate to="/dashboard" />} />
+            </Routes>
+          </AppBackground>
         </AuthProvider>
       </NotificationProvider>
     </Router>

@@ -85,8 +85,15 @@ app.include_router(api_router, prefix="/api")
 
 # Mount static files
 if os.path.exists(FRONTEND_DIST_DIR):
-    app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIST_DIR, "assets")), name="assets")
-    app.mount("/static", StaticFiles(directory=os.path.join("frontend", "static")))
+    # Mount only the assets from dist directory
+    assets_dir = os.path.join(FRONTEND_DIST_DIR, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+        logger.info(f"Mounted assets directory: {assets_dir}")
+    else:
+        logger.warning(f"Assets directory not found: {assets_dir}")
+    
+    # Static directory mounting removed since we're now using React's asset system
 
 # Root route handler - serves the React app
 @app.get("/")
