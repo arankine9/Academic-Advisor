@@ -1,5 +1,3 @@
-
-
 import api from './authService';
 
 // Send message to advisor

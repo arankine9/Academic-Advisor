@@ -6,7 +6,9 @@ import { resolve } from 'path';
 export default defineConfig({
   plugins: [react()],
   
-  // Explicitly specify the entry point
+  // Use relative paths for assets
+  base: './',
+  
   build: {
     outDir: 'dist',
     emptyOutDir: true,
@@ -16,7 +18,6 @@ export default defineConfig({
     }
   },
   
-  // Fix the loader configuration
   optimizeDeps: {
     esbuildOptions: {
       loader: {
