@@ -56,42 +56,10 @@ async def register(
     return {"access_token": access_token, "token_type": "bearer"}
 
 # User endpoints
-@router.get("/users/me", response_model=dict)
+@router.get("/users/me", response_model=User)
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
-    return {
-        "username": current_user.username,
-        "email": current_user.email,
-        "major": current_user.major
-    }
+    return current_user
 
-# Course endpoints
-@router.post("/courses/add")
-async def add_course(
-    course_string: str = Form(...),
-    term: Optional[str] = Form(None),
-    current_user: User = Depends(get_current_active_user),
-    db: Session = Depends(get_db)
-):
-    try:
-        # Parse course from string
-        course_create = parse_course_from_string(course_string)
-        
-        # Add term if provided
-        if term:
-            course_create.term = term
-        
-        # Get or create course
-        course = get_or_create_course(db, course_create)
-        
-        # Add course to user
-        result = add_course_to_user(db, current_user.id, course.id)
-        
-        if not result:
-            raise HTTPException(status_code=400, detail="Failed to add course to user")
-        
-        return {"status": "success", "message": f"Course {course.course_code} added successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 # JSON version for React frontend
 @router.post("/courses")
