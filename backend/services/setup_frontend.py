@@ -9,7 +9,7 @@ It's a simplified version that only handles production builds.
 """
 
 # Get the current directory
-FRONTEND_DIR = Path(__file__).parent.absolute()
+FRONTEND_DIR = Path(__file__).parent.parent.parent / "frontend"
 
 def check_npm_installed():
     """Check if npm is installed."""
@@ -34,7 +34,10 @@ def build_frontend():
     """Build the React frontend for production."""
     print("Building React frontend...")
     try:
-        subprocess.run(['npm', 'run', 'build'], cwd=FRONTEND_DIR, check=True)
+        # Use 'npx vite build' which directly calls the vite CLI
+        subprocess.run(['npx', 'vite', 'build'], cwd=FRONTEND_DIR, check=True)
+        # OR if you prefer npm
+        # subprocess.run(['npm', 'run', 'build'], cwd=FRONTEND_DIR, check=True)
         print("Frontend built successfully.")
         return True
     except subprocess.CalledProcessError as e:

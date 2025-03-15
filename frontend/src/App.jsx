@@ -6,7 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Notification from './components/Notification';
 import ClassManagement from './components/ClassManagement';
 import AdvisingChat from './components/AdvisingChat';
-import AppBackground from './components/AppBackground';
+import AppBackground from './components/background';
 
 // Import pages
 import Login from './pages/Login';
