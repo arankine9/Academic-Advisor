@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse
 import os
 import logging
 from pathlib import Path
+from backend.api.routes import router
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -41,7 +42,7 @@ app.add_middleware(
 )
 
 # API routes here if needed
-# app.include_router(api_router, prefix="/api")
+app.include_router(router, prefix="/api")
 
 # Explicitly serve the production index.html for the root path
 @app.get("/")

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import List, Optional
 
-from backend.core.database import get_db
+from backend.core.database import get_db, Course
 from backend.core.auth import authenticate_user, create_access_token, get_current_active_user, ACCESS_TOKEN_EXPIRE_MINUTES, create_user
 from backend.models.schemas import Token, UserCreate, User, CourseResponse, ChatMessage
 from backend.services.courses import get_or_create_course, add_course_to_user, remove_course_from_user, get_user_courses, parse_course_from_string
