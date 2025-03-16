@@ -6,7 +6,8 @@ from typing import List, Optional
 
 from backend.core.database import get_db, Course
 from backend.core.auth import authenticate_user, create_access_token, get_current_active_user, ACCESS_TOKEN_EXPIRE_MINUTES, create_user
-from backend.models.schemas import Token, UserCreate, User, CourseResponse, ChatMessage
+from backend.core.database import User as UserModel
+from backend.models.schemas import Token, UserCreate, CourseResponse, ChatMessage, User as UserSchema
 from backend.services.courses import get_or_create_course, add_course_to_user, remove_course_from_user, get_user_courses, parse_course_from_string
 from backend.services.query_engine import get_advice
 
@@ -38,7 +39,7 @@ async def register(
     db: Session = Depends(get_db)
 ):
     # Check if username already exists
-    user = db.query(User).filter(User.username == username).first()
+    user = db.query(UserModel).filter(UserModel.username == username).first()
     if user:
         raise HTTPException(status_code=400, detail="Username already registered")
     
@@ -56,8 +57,8 @@ async def register(
     return {"access_token": access_token, "token_type": "bearer"}
 
 # User endpoints
-@router.get("/users/me", response_model=User)
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
+@router.get("/users/me", response_model=UserSchema)
+async def read_users_me(current_user: UserModel = Depends(get_current_active_user)):
     return current_user
 
 
@@ -65,7 +66,7 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 @router.post("/courses")
 async def add_course_json(
     course_data: dict = Body(...),
-    current_user: User = Depends(get_current_active_user),
+    current_user: UserModel = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     try:
@@ -108,7 +109,7 @@ async def add_course_json(
 @router.delete("/courses/{course_id}")
 async def remove_course(
     course_id: int, 
-    current_user: User = Depends(get_current_active_user),
+    current_user: UserModel = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     try:
@@ -128,12 +129,12 @@ async def remove_course(
 async def update_course(
     course_id: int,
     course_data: dict = Body(...),
-    current_user: User = Depends(get_current_active_user),
+    current_user: UserModel = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     try:
         # Check if course exists and belongs to user
-        user = db.query(User).filter(User.id == current_user.id).first()
+        user = db.query(UserModel).filter(UserModel.id == current_user.id).first()
         course = db.query(Course).filter(Course.id == course_id).first()
         
         if not course or not user or course not in user.courses:
@@ -167,7 +168,7 @@ async def update_course(
 
 @router.get("/courses/me", response_model=List[CourseResponse])
 async def get_my_courses(
-    current_user: User = Depends(get_current_active_user),
+    current_user: UserModel = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     try:
@@ -179,7 +180,7 @@ async def get_my_courses(
 # Recommendation endpoints
 @router.get("/recommend/me")
 async def recommend_me(
-    current_user: User = Depends(get_current_active_user),
+    current_user: UserModel = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     try:
@@ -202,7 +203,7 @@ async def recommend_me(
 @router.post("/advising")
 async def advising_chat(
     message: ChatMessage,
-    current_user: User = Depends(get_current_active_user),
+    current_user: UserModel = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     try:
