@@ -190,11 +190,8 @@ async def recommend_me(
         if not courses:
             return {"recommendations": "You haven't added any courses yet. Please add your completed courses to get recommendations."}
         
-        # Format courses for recommendation
-        course_strings = [f"{course.course_code} - {course.course_name}" for course in courses]
-        
-        # Get recommendations
-        recommendations = get_advice(course_strings, current_user.major)
+        # Get recommendations using the new function signature
+        recommendations = get_advice(db, current_user.id)
         
         return {"recommendations": recommendations}
     except Exception as e:
@@ -212,14 +209,8 @@ async def advising_chat(
         if not message_text:
             raise HTTPException(status_code=400, detail="Message cannot be empty")
         
-        # Get user courses
-        courses = get_user_courses(db, current_user.id)
-        
-        # Format courses for recommendation
-        course_strings = [f"{course.course_code} - {course.course_name}" for course in courses]
-        
-        # Use the enhanced query engine with the user's message
-        response = get_advice(course_strings, current_user.major, query=message_text)
+        # Use the enhanced query engine with the user's message (new function signature)
+        response = get_advice(db, current_user.id, query=message_text)
         
         return {"response": response}
     except Exception as e:

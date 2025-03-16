@@ -13,6 +13,9 @@ from langchain.schema import Document
 from pinecone import Pinecone as PineconeClient
 from dotenv import load_dotenv
 
+# Import our services
+from backend.services.programs import format_courses_for_rag, get_required_and_completed_courses
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -83,10 +86,7 @@ Respond with exactly "COURSE" if the query is course-related, or "GENERAL" for g
 REASONING_PROMPT = """
 You are an academic advisor helping a student plan their academic journey. Think step by step to answer their question effectively.
 
-Student information:
-- Major: {major}
-- Completed courses:
-{completed_courses}
+{user_data}
 
 Student query: {query}
 
@@ -110,12 +110,9 @@ REASONING: [Brief explanation of your search strategy]
 
 # Final Response Prompt
 FINAL_RESPONSE_PROMPT = """
-You are a friendly, helpful academic advisor. Based on the student's query and retrieved information, provide a personalized response.
+You are a friendly, helpful academic advisor. Based on the student's data and retrieved information, provide a personalized response.
 
-Student information:
-- Major: {major}
-- Completed courses:
-{completed_courses}
+{user_data}
 
 Student query: {query}
 
@@ -128,10 +125,17 @@ just provide the advice naturally as if you already knew this information.
 mention things like:
 - Course descriptions and prerequisites
 - Current availability and scheduling
-
+- How courses fit into degree requirements
 
 Include specific course recommendations when appropriate, explaining how they fit into the student's academic path.
 Provide practical advice that considers both academic requirements and logistical factors like class timing and seat availability.
+Focus on helping the student make progress on their degree requirements by taking courses that:
+1. They haven't yet completed
+2. They have prerequisites for
+3. Are required for their major/minor
+4. Are offered in the current/upcoming term
+
+The current term is Winter 2025.
 """
 
 def classify_intent(query: str) -> str:
@@ -259,26 +263,21 @@ def execute_rag_query(search_query: str) -> List[Document]:
         logger.error(f"Error in RAG query execution: {e}")
         return []
 
-def process_course_query(query: str, completed_courses: List[str], major: str) -> str:
+def process_course_query(query: str, user_data: str) -> str:
     """
     Process course-related queries using multi-step reasoning and RAG.
     
     Args:
         query: The student's query
-        completed_courses: List of courses the student has completed
-        major: The student's major
+        user_data: Formatted string with user's academic information
         
     Returns:
         A formatted response with course recommendations
     """
-    # Format completed courses for the prompt
-    formatted_courses = "\n".join([f"- {course}" for course in completed_courses])
-    
     # Step 1: Generate reasoning about how to approach the query
     reasoning_prompt = REASONING_PROMPT.format(
         query=query,
-        major=major,
-        completed_courses=formatted_courses
+        user_data=user_data
     )
     
     reasoning_response = reasoning_model.invoke(reasoning_prompt)
@@ -318,41 +317,33 @@ def process_course_query(query: str, completed_courses: List[str], major: str) -
     # Step 4: Generate final response
     response_prompt = FINAL_RESPONSE_PROMPT.format(
         query=query,
-        major=major,
-        completed_courses=formatted_courses,
+        user_data=user_data,
         retrieved_info=retrieved_info
     )
     
     final_response = response_model.invoke(response_prompt)
     return final_response.content.strip()
 
-def get_advice(completed_courses, major, query=None):
+def get_advice(db, user_id: int, query=None):
     """
     Main function that orchestrates the entire query processing pipeline.
     
     Args:
-        completed_courses: List of courses the student has completed
-        major: The student's major
+        db: Database session
+        user_id: The user's ID
         query: The student's query (optional)
         
     Returns:
         A formatted response
     """
     try:
-        # Format completed courses if needed
-        if not isinstance(completed_courses, list):
-            # Handle the case where completed_courses might be a string
-            if isinstance(completed_courses, str):
-                formatted_courses = [completed_courses]
-            else:
-                formatted_courses = []
-        else:
-            formatted_courses = completed_courses
+        # Format user data for RAG
+        user_data = format_courses_for_rag(db, user_id)
         
         # If no query is provided, use a default recommendation prompt
         if not query:
-            default_query = f"What courses should I take next as a {major} major?"
-            return process_course_query(default_query, formatted_courses, major)
+            default_query = "What courses should I take next term?"
+            return process_course_query(default_query, user_data)
         
         # Classify the intent of the query
         intent = classify_intent(query)
@@ -360,7 +351,7 @@ def get_advice(completed_courses, major, query=None):
         
         # Process based on intent
         if intent == "COURSE":
-            return process_course_query(query, formatted_courses, major)
+            return process_course_query(query, user_data)
         else:
             return process_general_query(query)
             
@@ -370,7 +361,16 @@ def get_advice(completed_courses, major, query=None):
 
 # Test the retrieval engine (only runs when script is executed directly)
 if __name__ == "__main__":
-    test_courses = ["CS 210 - Introduction to Computer Science I", "CS 211 - Introduction to Computer Science II"]
-    test_major = "Computer Science"
-    test_query = "What math courses should I take next?"
-    print(get_advice(test_courses, test_major, test_query))
+    # This is just for testing without a database connection
+    # In a real application, you'd pass a database session
+    from sqlalchemy.orm import Session
+    from backend.core.database import SessionLocal
+    
+    db = SessionLocal()
+    try:
+        # Replace with a real user ID for testing
+        test_user_id = 1
+        test_query = "What math courses should I take next?"
+        print(get_advice(db, test_user_id, test_query))
+    finally:
+        db.close()

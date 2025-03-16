@@ -2,13 +2,13 @@
 import os
 import sys
 import traceback
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, inspect
 from dotenv import load_dotenv
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # IMPORTANT: Updated imports
-from backend.core.database import get_db, create_tables
+from backend.core.database import get_db, create_tables, Base, UserProgram
 from backend.services.courses import initialize_courses_from_json
 
 # Load environment variables
@@ -44,6 +44,18 @@ def init_db():
         # Create tables
         try:
             create_tables()
+            
+            # Verify tables were created
+            inspector = inspect(engine)
+            table_names = inspector.get_table_names()
+            expected_tables = ['users', 'courses', 'user_courses', 'user_programs']
+            
+            for table in expected_tables:
+                if table in table_names:
+                    print(f"✅ Table '{table}' created successfully")
+                else:
+                    print(f"❌ Table '{table}' not found!")
+            
             print("Created database tables.")
         except Exception as e:
             print(f"Error creating tables: {e}")
