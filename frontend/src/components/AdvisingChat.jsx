@@ -1,31 +1,58 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faCog, faArrowRight, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { faTwitter, faInstagram, faTiktok } from '@fortawesome/free-brands-svg-icons';
 
-import Navbar from '../components/Navbar';
 import MessageBubble from '../components/MessageBubble';
 import TypingIndicator from '../components/TypingIndicator';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import { sendMessage } from '../services/advisingService';
+import './AdvisingChat.css';
 
 const AdvisingChat = () => {
   const { currentUser } = useAuth();
   const { showNotification } = useNotification();
-  const [messages, setMessages] = useState([
-    {
-      content: "Hello! I'm your academic advisor. I can help you plan your courses based on your academic history.\n\nYou can ask me questions like \"What classes should I take next?\" or \"What are the prerequisites for CS 310?\"",
-      isUser: false
-    }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
+  const [activeDot, setActiveDot] = useState(0); // For pagination dots
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem('gradpath-dark-mode') === 'true'
+  );
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Scroll to bottom when messages change
+  // Load dark mode from localStorage on component mount
   useEffect(() => {
-    scrollToBottom();
+    // Apply dark mode class to document on initial load
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, []);
+
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem('gradpath-dark-mode', newDarkMode);
+    
+    if (newDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  };
+
+  // With column-reverse layout, we don't need to scroll to bottom anymore
+  // as new messages will appear at the bottom automatically
+  useEffect(() => {
+    // We'll keep this for compatibility, but with column-reverse it's less necessary
+    if (messagesEndRef.current && messages.length <= 2) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [messages]);
   
   // Focus input field on component mount
@@ -34,13 +61,6 @@ const AdvisingChat = () => {
       inputRef.current.focus();
     }
   }, []);
-
-  // Function to scroll to bottom of chat
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   // Handle input change
   const handleInputChange = (e) => {
@@ -92,59 +112,93 @@ const AdvisingChat = () => {
 
   // Handle key press (Enter to send)
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSendMessage();
     }
   };
 
   return (
-    <>
-      <Navbar />
-      <div className="container">
-        <h2>Academic Advising</h2>
-        <p>Major: <span id="major-display">{currentUser?.major}</span></p>
+    <div className={`GradPath-container ${darkMode ? 'dark-mode' : ''}`}>
+      {/* Header */}
+      <header className="GradPath-header">
+        <div className="header-left-section">
+          <button className="dark-mode-toggle" onClick={toggleDarkMode} aria-label="Toggle dark mode">
+            <FontAwesomeIcon icon={darkMode ? faSun : faMoon} />
+          </button>
+        </div>
+        <div className="header-right-section">
+          <div className="brand">GradPath</div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className={`GradPath-main ${messages.length > 0 ? 'has-messages' : ''}`}>
+        {/* Icon and description - Only show when no messages exist */}
+        {messages.length === 0 && (
+          <div className="GradPath-intro">
+            <h1 className="GradPath-tagline">Plan for your future. Today.</h1>
+          </div>
+        )}
         
-        <div id="chat-section">
-          <div className="chat-container" id="chat-messages">
-            {/* Render messages */}
-            {messages.map((msg, index) => (
-              <MessageBubble 
-                key={index} 
-                message={msg.content} 
-                isUser={msg.isUser} 
-              />
-            ))}
+        {/* Chat messages */}
+        {messages.length > 0 && (
+          <div className="chat-messages-container">
+            {/* With column-reverse, elements at the beginning of the DOM appear at the bottom visually */}
             
-            {/* Typing indicator */}
+            {/* Typing indicator should appear at the bottom (beginning of DOM with column-reverse) */}
             {isWaitingForResponse && <TypingIndicator />}
             
             {/* Invisible element for scrolling to bottom */}
             <div ref={messagesEndRef} />
+            
+            {/* Render messages in reverse order to work with column-reverse layout */}
+            {[...messages].reverse().map((msg, index) => (
+              <MessageBubble 
+                key={messages.length - 1 - index} 
+                message={msg.content} 
+                isUser={msg.isUser} 
+              />
+            ))}
           </div>
-          
-          <div className="chat-input">
-            <input 
-              type="text" 
-              id="chat-input-field" 
-              placeholder="Ask a question..." 
+        )}
+        
+        {/* Input area */}
+        <div className="GradPath-input-container">
+          <div className="GradPath-input-wrapper">
+            <textarea
+              className="GradPath-input-field"
+              placeholder={messages.length === 0 ? "Hello! I'm your academic advisor. Let's plan your courses" : ""}
               value={inputValue}
               onChange={handleInputChange}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
               disabled={isWaitingForResponse}
               ref={inputRef}
+              rows={inputValue.split('\n').length || 1}
             />
             <button 
-              id="send-message-btn" 
+              className="send-btn"
               onClick={handleSendMessage}
               disabled={isWaitingForResponse}
             >
-              <FontAwesomeIcon icon={faPaperPlane} style={{ marginRight: '8px' }} />
-              Send
+              <FontAwesomeIcon icon={faPaperPlane} />
             </button>
           </div>
         </div>
-      </div>
-    </>
+      </main>
+      
+      {/* Footer */}
+      <footer className="GradPath-footer">
+        <div className="social-icons">
+          <FontAwesomeIcon icon={faTwitter} />
+          <FontAwesomeIcon icon={faInstagram} />
+          <FontAwesomeIcon icon={faTiktok} />
+        </div>
+        <div className="privacy-policy">
+          PRIVACY POLICY
+        </div>
+      </footer>
+    </div>
   );
 };
 
