@@ -1,0 +1,80 @@
+{
+    "program_name": "Accounting Major",
+    "program_type": "major",
+    "required_courses": [
+      "BA 101Z",
+      "BA 211Z",
+      "BA 213Z",
+      "EC 201",
+      "EC 202",
+      "BA 240",
+      {
+        "requirement_name": "Pre-Major Requirements - Additional Courses Requirement 3",
+        "options": [
+          "MATH 241",
+          "MATH 251"
+        ],
+        "courses_needed": 1
+      },
+      "STAT 243Z",
+      {
+        "requirement_name": "Pre-Major Requirements - College Compositions Requirement 2",
+        "options": [
+          "WR 121Z",
+          "HC 101H"
+        ],
+        "courses_needed": 1
+      },
+      {
+        "requirement_name": "Pre-Major Requirements - College Compositions Requirement 3",
+        "options": [
+          "WR 122Z",
+          "WR 123",
+          "HC 221H"
+        ],
+        "courses_needed": 1
+      },
+      "BA 308",
+      "BA 322",
+      "MKTG 311",
+      {
+        "requirement_name": "Accounting Major Requirements - Upper-Division Core Requirement 4",
+        "options": [
+          "FIN 311",
+          "EC 311"
+        ],
+        "courses_needed": 1
+      },
+      "FIN 316",
+      "MGMT 311",
+      {
+        "requirement_name": "Accounting Major Requirements - Upper-Division Core Requirement 7",
+        "options": [
+          "BA 325",
+          "BA 425"
+        ],
+        "courses_needed": 1
+      },
+      "OBA 311",
+      "OBA 312",
+      "OBA 335",
+      "BA 453",
+      {
+        "requirement_name": "Accounting Major Requirements - Upper-Division Accounting Courses Requirement 2",
+        "options": [
+          "ACTG 350–352"
+        ],
+        "courses_needed": 3
+      },
+      "ACTG 360",
+      "ACTG 440",
+      "ACTG 450",
+      "ACTG 470",
+      "ANTH 209",
+      "BA 252",
+      "BA 361",
+      "BA 365",
+      "GLBL 102",
+      "MGMT 420"
+    ]
+  }

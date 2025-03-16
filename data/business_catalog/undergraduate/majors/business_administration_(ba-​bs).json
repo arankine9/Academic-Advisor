@@ -1,0 +1,1533 @@
+{
+  "program": "Business Administration (BA/​BS)",
+  "description": "http://business.uoregon.edu/ug/majors/business-administration\nFor more information, contactlcb.undergrad@uoregon.edu.\nGet ready to make a difference. Students majoring in business administration learn to build their ideas into a small business—or a small business empire. Lead a Fortune 500 company. Market an NFL franchise. Realize financial goals. Take Wall Street (or Main Street) by storm. TheLundquist College of Businessat the University of Oregon can take students where they want to go. Lundquist students are part of an intelligently informal community of thinkers and doers who are serious, determined, focused, and hands-on.\nA degree in business administration is just part of the story. Students can pursue a general business focus or choose aconcentrationin accounting, entrepreneurship, finance, marketing, operations and business analytics, or sports business. They can alsominorin business administration, entrepreneurship, sports business, or sustainable business. No matter which degree or concentration is chosen, the Lundquist College of Business provides a collaborative environment where students find ample opportunities to try out real-world projects and scenarios, giving them career experience before they even graduate.",
+  "pre_major_requirements": "For guaranteed admission to the major, students must obtain at least a 3.0 cumulative GPA (including both UO and transfer coursework) and pass all pre-business core classes with a minimum core GPA of 3.00. All pre-major requirements must be taken for a letter grade and passed with a C- or better for admission to the major. BA 240 and AP or IB coursework is acceptable with a grade of P*. The university limits retaking of courses in which a P or mid-C or better is earned. The university also limits attempting a course to a maximum of 3 attempts (including marks of W,N,F,D, C-); a petition is required for an exception. When repeating a core course, only the most recent grade is used in calculating the pre-business core GPA.\nIn addition, international students are required to take Academic English for International Students (AEIS) courses or produce English language proficiency test scores (575 on the TOEFL paper-based test, 89 on the TOEFL internet-based test, or 7.0 in the IELTS).",
+  "additional_program_info": "Upper-division core courses typically are completed during junior year.\nStudents must complete a minimum of 44 upper-division credits in regularly scheduled Lundquist College of Business courses. With the department head’s approval, credits may be transferred from other accredited institutions, independent study, or approved courses in other departments.\n\nIt is possible to select business upper division elective courses in such a way to earn a concentration. Concentrations are available in accounting, entrepreneurship, finance, marketing, operations and business analytics, and sports business. For students completing a concentration, four of their seven business electives are met by the concentration courses, and they must complete three more electives. If their concentration courses are all from one department, at least one of their three remaining electives must be from a business department other than their concentration department (Marketing and Sports Business are considered the same department). Concentrations are optional and do not appear on the UO academic transcript or diploma.\nBA courses count as one of the seven electives, but do not count toward the two-department requirement.\nCultural Awareness for Business Decisions requires students take one course (4 credits) that helps them develop a deeper sensitivity to cultural differences and an understanding of how such differences can impact interactions and relationships in a business setting. Students who study abroad or intern for credit in one country for six weeks or more may have the Cultural Awareness requirement waived with the approval of an academic advisor. Students will not be able to apply courses to the upper-division elective requirement and the Cultural Awareness requirement.",
+  "courses": [
+    {
+      "code": "BA 101Z",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20101Z",
+      "title": "Introduction to Business",
+      "description": "Presents an integrated view of both established and entrepreneurial businesses by studying their common characteristics and processes in a global context. Introduces theory and develops basic skills in the areas of accounting, finance, management, and marketing, with an emphasis on social responsibility and ethical practices. Explores how businesses can create value for themselves and society by addressing environmental and social challenges.",
+      "requisites": "",
+      "equivalent_to": "BA 101",
+      "additional_info": "Social Science Area",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 211Z",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20211Z",
+      "title": "Principles of Financial Accounting",
+      "description": "Imparts an understanding of the purpose of accounting, common financial statement items, and the principles of internal controls. Focuses on recording the impact of economic events on account balances using U.S. Generally Accepted Accounting Principles, and the creation and analysis of financial statements to aid in external decision making.",
+      "requisites": "",
+      "equivalent_to": "ACTG 211",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 213Z",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20213Z",
+      "title": "Principles of Managerial Accounting",
+      "description": "Builds an understanding of the role of managerial accounting in a business, focusing on the development and use of information to evaluate production costs and operational performance in support of short- and long-term organizational decision-making.",
+      "requisites": "BA 211Z.",
+      "equivalent_to": "ACTG 213",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "EC 201",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=EC%20201",
+      "title": "Introduction to Economic Analysis: Microeconomics",
+      "description": "Examines how consumers, firms, and governments make decisions when facing scarce resources and how those decisions affect market outcomes, such as prices and output. MATH 111 recommended.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "Social Science Area",
+      "extra_info": ""
+    },
+    {
+      "code": "EC 202",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=EC%20202",
+      "title": "Introduction to Economic Analysis: Macroeconomics",
+      "description": "Examines the aggregate activity of a market economy, the problems that arise, such as inflation and unemployment, and how the government can use macroeconomic policy to address these problems. EC 201 recommended.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "Social Science Area",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 240",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20240",
+      "title": "Spreadsheet Analysis and Visualization",
+      "description": "Data-oriented approaches for structuring and analyzing information, with applications in the traditional functional areas of business, emphasizing modern techniques for developing fact-based decision models.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MATH 241-242 MATH 241–242",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MATH%20241",
+      "title": "Calculus for Business and Social Science I-II",
+      "description": "Introduction to topics in differential and integral calculus including some aspects of the calculus of several variables. Students cannot receive credit for more than one of  MATH 242, MATH 247, MATH 252.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "STAT 243Z",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=STAT%20243Z",
+      "title": "Elementary Statistics I",
+      "description": "A first course in statistics focusing on the interpretation and communication of statistical concepts. Introduces exploratory data analysis, descriptive statistics, sampling methods and distributions, point and interval estimates, hypothesis tests for means and proportions, and elements of probability and correlation. Technology will be used when appropriate. Previously MATH 243. Students cannot receive credit for both STAT 243Z and MATH 425.",
+      "requisites": "MATH 101 or satisfactory placement test score; MATH 111Z recommended; a programmable calculator capable of displaying function graphs.",
+      "equivalent_to": "MATH 243, MATH 425",
+      "additional_info": "BS Math or Science Area",
+      "extra_info": ""
+    },
+    {
+      "code": "WR 121Z",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=WR%20121Z",
+      "title": "Composition I",
+      "description": "WR 121Z engages students in the study and practice of critical thinking, reading, and writing. The course focuses on analyzing and composing across varied rhetorical situations and in multiple genres. Students will apply key rhetorical concepts flexibly and collaboratively throughout their writing and inquiry processes. Previously WR 121.",
+      "requisites": "SAT Reading or SAT Writing score below 37, or ACT verbal score below 32, or equivalent.",
+      "equivalent_to": "WR 121",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "WR 122Z",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=WR%20122Z",
+      "title": "Composition II",
+      "description": "WR 122Z builds on concepts and processes emphasized in WR 121Z, engaging with inquiry, research, and argumentation in support of students’ development as writers. The course focuses on composing and revising in research-based genres through the intentional use of rhetorical strategies. Students will find, evaluate, and interpret complex material, including lived experience; use this to frame and pursue their own research questions; and integrate material purposefully into their own compositions. Previously WR 122.",
+      "requisites": "WR 121Z or equivalent.",
+      "equivalent_to": "WR 122",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 308",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20308",
+      "title": "Leadership and Communication",
+      "description": "Personal leadership and communication skills. Focuses on self-awareness for leading, persuading, and working with others; effective business writing and speaking; and team development. Students may not receive credit both BA 308 and BA 308H. .",
+      "requisites": "BA 101Z; WR 122Z or WR 123. Sophomore standing required",
+      "equivalent_to": "BA 308H",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 322",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20322",
+      "title": "Fundamentals of Sustainable Business",
+      "description": "Survey of the ideas, tools, and skills used by businesses to address environmental and social challenges, including new business attitudes, models, ventures, and ecosystems.",
+      "requisites": "MGMT 311.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 325",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20325",
+      "title": "Business Law and Ethics",
+      "description": "Legal and ethical environments of business, including U.S. legal concepts, social and environmental impacts of business, and ethical decision making.",
+      "requisites": "BA 101Z; WR 122Z or WR 123.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 453",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20453",
+      "title": "Business Strategy and Planning",
+      "description": "Capstone course focusing on strategy formulation and decisional processes. Includes writing a business plan that applies knowledge and develops course of action to accomplish organizational objectives. Students cannot receive credit for both BA 453 and BA 453H.",
+      "requisites": "completion of 300-level business core courses, senior standing.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 311",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20311",
+      "title": "Economic Foundations of Competitive Analysis",
+      "description": "Analysis of market competition and its relation to product cost and pricing decisions by the firm. Students may receive credit for only one of EC 311, FIN 311, or FIN 311H.",
+      "requisites": "BA 101Z, BA 213Z, BA 240, EC 201, MATH 241.",
+      "equivalent_to": "EC 311, FIN 311H",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 316",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20316",
+      "title": "Financial Management",
+      "description": "Corporate financial planning, selection among alternative investment opportunities, analysis of risk, funds acquisition, and long-term financing. Students cannot receive credit for both FIN 316 and FIN 316H.",
+      "requisites": "BA 101Z, BA 213Z, BA 240, EC 201, MATH 241.",
+      "equivalent_to": "FIN 316H",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 311",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20311",
+      "title": "Managing People in Organizations",
+      "description": "Students learn the theories, empirical evidence, and best practices for managing people at work. Students cannot receive credit for both MGMT 311 and MGMT 311H.",
+      "requisites": "MATH 241 and BA 308 or BA 308H.",
+      "equivalent_to": "MGMT 311H",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 311",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20311",
+      "title": "Marketing Management",
+      "description": "Product, price, promotion, and distribution decisions in consumer and industrial markets. Market segmentation, product positioning for goods and services. Marketing strategy and management. Product life cycles. Students cannot receive credit for both MKTG 311 and MKTG 311H.",
+      "requisites": "BA 240, BA 308.",
+      "equivalent_to": "MKTG 311H",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 311",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20311",
+      "title": "Business Analytics I",
+      "description": "Explores standard protocols for describing and modeling business information and processes; techniques for designing management information systems; criteria for analyzing firms' implementations of information technology. Students cannot receive credit for both OBA 311 and OBA 311H. .",
+      "requisites": "BA 101Z, BA 240, EC 201, MATH 241, STAT 243Z. Sophomore standing required",
+      "equivalent_to": "OBA 311H",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 312",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20312",
+      "title": "Business Analytics II",
+      "description": "Computer-aided business applications of hypothesis testing, simple linear regression. Introduction to multiple regression and nonparametric techniques. Blocked and completely randomized one- and two-factor experimental designs. Students cannot receive credit for both OBA 312 and OBA 312H. .",
+      "requisites": "OBA 311 or equivalent. Sophomore standing required",
+      "equivalent_to": "OBA 312H",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 335",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20335",
+      "title": "Operations Management",
+      "description": "Concepts and applications of operations management. Use of information technology in operations. Topics include forecasting, quality, supply chain management, information systems in operations management, and planning and scheduling. Students cannot receive credit for both OBA 335 and OBA 335H. .",
+      "requisites": "BA 101Z, BA 240, EC 201, MATH 241, STAT 243Z. Sophomore standing required",
+      "equivalent_to": "OBA 335H",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 340",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20340",
+      "title": "Accounting for Entrepreneurs",
+      "description": "Sources and uses of cash in the context of start-up and small firms. Emphasis on cash generated by operations and used for operations and growth. Secondary emphasis on external sources of cash.",
+      "requisites": "BA 211Z or MGMT 335.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 350-352 ACTG 350–352",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20350",
+      "title": "Intermediate Accounting I-III",
+      "description": "Concepts and principles of financial accounting, including U.S. and international financial reporting standards; analysis of alternatives for income measurement and asset and liability valuation.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 351",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20351",
+      "title": "Intermediate Accounting II",
+      "description": "Concepts and principles of financial accounting, including U.S. and international financial reporting standards. Analysis of alternatives for income measurement and asset and liability valuation.",
+      "requisites": "ACTG 350.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 360",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20360",
+      "title": "Cost Accounting",
+      "description": "Development and communication of cost information to assist in planning, motivating managers, controlling costs, and evaluating performance.",
+      "requisites": "BA 101Z, BA 213Z, BA 240, EC 201, EC 202, MATH 241, STAT 243Z; WR 122Z or WR 123.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 410",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20410",
+      "title": "Experimental Course: [Topic]",
+      "description": "A recent topic is Accounting Information Systems. Repeatable when the topic changes.",
+      "requisites": "BA 101Z, BA 213Z, BA 240, EC 201, EC 202, STAT 243Z; one from MATH 241, MATH 246, MATH 251.Repeatable 99 times when topic changes",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 440",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20440",
+      "title": "Auditing",
+      "description": "The audit environment, examinations of financial statements, and the audit process. Includes professional standards, audit sampling, and the audit profession; concepts underlying professional ethics for auditors.",
+      "requisites": "ACTG 350.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 450",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20450",
+      "title": "Advanced Financial Accounting",
+      "description": "Accounting for equity; financial accounting and reporting for corporate consolidation.",
+      "requisites": "ACTG 352.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 460",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20460",
+      "title": "Government & Not for Profit Accounting",
+      "description": "This course teaches differences in accounting and financial reporting for governmental and not-for-profit organizations and differences between private sector and public-sector accounting, standards-setting, meeting stakeholder needs.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 470",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20470",
+      "title": "Federal Taxation",
+      "description": "Federal income tax law covering primarily the taxation of individuals with a focus on business invoice and property transactions. Introduction to tax planning.",
+      "requisites": "BA 101Z, BA 213Z, BA 240, EC 201, EC 202, MATH 241, STAT 243Z.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ACTG 480",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ACTG%20480",
+      "title": "Accounting Data Analytics I",
+      "description": "Focuses on the increased use of data analytics within the accounting profession, including an understanding of data analytic thinking, terminology and application.",
+      "requisites": "ACTG 350.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 380",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20380",
+      "title": "Financial Markets and Investments",
+      "description": "Financial markets and security investment decisions, analysis of risk and return, portfolio policies for individual and institutional investors, financial instruments.",
+      "requisites": "FlN 316, OBA 312.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 410",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20410",
+      "title": "Experimental Course: [Topic]",
+      "description": "Repeatable when the topic changes.",
+      "requisites": "FIN 316 or FIN 316H.Repeatable 99 times when topic changes",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 462",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20462",
+      "title": "Derivative Markets and Financial Institutions",
+      "description": "Valuation of financial derivatives, methodologies for identifying firms' risk exposures, the role of risk management and financial derivatives in corporate strategy, and analysis of financial institutions.",
+      "requisites": "FIN 316.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 463",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20463",
+      "title": "International Finance",
+      "description": "Analysis of currency exchange rates, balance of payments; management of foreign exchange risk; risk and return in international investment.",
+      "requisites": "FIN 316.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 464",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20464",
+      "title": "Commercial Banking",
+      "description": "Operation and pricing policies of a commercial bank, concentrating on management of institutions that take deposits and make loans and investments through the use of computer-simulated banking operations.",
+      "requisites": "FIN 316.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "FIN 473",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=FIN%20473",
+      "title": "Financial Analysis and Valuation",
+      "description": "Topics include working capital management, advanced capital budgeting, dividend policy, financing policy, business valuation, and corporate acquisitions.",
+      "requisites": "FIN 380.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 335",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20335",
+      "title": "Launching New Ventures",
+      "description": "Skills, behaviors, and knowledge necessary for creating and growing new ventures. Evaluating opportunities, developing growth strategies, obtaining venture financing, intellectual property, and building a management team.",
+      "requisites": "BA 101Z.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 410",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20410",
+      "title": "Experimental Course: [Topic]",
+      "description": "Repeatable when the topic changes. Recent topics include Strategic Environmental Management, Technology and Innovation Management.Repeatable 99 times when topic changes",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 415",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20415",
+      "title": "Human Resources Management",
+      "description": "Management of employee relations by an organization. Hiring and developing a productive work force in the context of the legal and competitive environment.",
+      "requisites": "MGMT 311.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 416",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20416",
+      "title": "Organizational Development and Change Management",
+      "description": "Organizational leaders face an accelerating pace of change in information technology, markets, and consumers. Focuses on how leaders create and sustain these organizational changes.",
+      "requisites": "MGMT 311.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 417",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20417",
+      "title": "Negotiation Strategies",
+      "description": "Introduction to negotiation theory, distributive and integrative bargaining techniques, and alternative dispute resolution. Uses workshop format for in-class negotiation simulations.",
+      "requisites": "MGMT 311.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 420",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20420",
+      "title": "Managing in a Global Economy",
+      "description": "Economic, political and cultural challenges facing international managers. Topics include developing competitive global strategies and organizations, international negotiations, building strategic alliances, cross-cultural teams, and international staffing.",
+      "requisites": "MGMT 311.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 422",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20422",
+      "title": "Sustainable Business Strategy and Implementation",
+      "description": "Focus on strategic choice and implementation of initiatives to promote sustainability in business organizations. Exposure to approaches for both established companies and new ventures.",
+      "requisites": "BA 101Z; MGMT 250 or MGMT 311.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 443",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20443",
+      "title": "Life Cycle Assessment",
+      "description": "Build foundations in technical sustainability analysis serving business strategy and operations. Learn tools and skills for firm- and product-level analysis.",
+      "requisites": "BA 101Z, MGMT 250.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 455",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20455",
+      "title": "Implementing Entrepreneurial Strategies",
+      "description": "Fundamentals of entrepreneurship are applied to solve actual problems for real companies. Students will gain a thorough understanding of project management processes (agile, lean six sigma, sprints, etc.) and learn how to effectively execute a project from inception to final deliverable.",
+      "requisites": "ACTG 340, MGMT 335, MKTG 445.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 460",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20460",
+      "title": "Lean Launchpad Entrepreneurship",
+      "description": "The overall goal of the Lean Launchpad Entrepreneurship class is to support students as they learn a methodology for scalable startups in two main areas: customer discovery and customer validation. This means learning not only how to discover and build out your original idea, but also to discover that this initial idea is only a small part of what makes a company successful. This “lean entrepreneurship” methodology will be valuable for the rest of your careers.",
+      "requisites": "MGMT 335.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 461",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20461",
+      "title": "Business of Food",
+      "description": "The Business of Food provides a critical examination of the food industry, with a focus on how consolidation, power, innovation, sustainability, supply chain issues, and consumer/social trends play a role in what ends up on our plates.",
+      "requisites": "MGMT 311 or BA 316.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 390",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20390",
+      "title": "Marketing Research",
+      "description": "Design, implementation, analysis, interpretation, and reporting of research for marketing decisions. Hands-on experience with techniques for data collection, statistical data analysis, and communication of results.",
+      "requisites": "MKTG 311.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 410",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20410",
+      "title": "Experimental Course: [Topic]",
+      "description": "Repeatable when the topic changes. Recent topics include Marketing and Sustainability, Sales Management and Personal Selling.Repeatable 99 times when topic changes",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 415",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20415",
+      "title": "Marketing Analytics",
+      "description": "Covers three pillars of analytics—descriptive, predictive, prescriptive—within the marketing context. Linear and logistic regression, clustering, customer choice, conjoint, natural language processing, and machine learning methods to drive marketing decisions.",
+      "requisites": "MKTG 311 or BA 317.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 420",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20420",
+      "title": "Marketing Communications",
+      "description": "Advertising, sales promotions, public relations, and personal selling. Emerging communication media. Legal regulations and ethical considerations in mass media advertising. Media planning and promotional budgets.",
+      "requisites": "MKTG 311.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 435",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20435",
+      "title": "Consumer Behavior",
+      "description": "Applications of social science concepts to the understanding of consumers and to the optimal delivery of products and services.",
+      "requisites": "MKTG 311.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 445",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20445",
+      "title": "Entrepreneurial Marketing",
+      "description": "Techniques for analyzing and developing new markets. Pricing, communicating, and distributing new products or services with limited resources. Developing marketing plans for new ventures.",
+      "requisites": "MKTG 311 or BA 317, MGMT 335.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 465",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20465",
+      "title": "Digital Marketing",
+      "description": "This course provides a theoretical and practical understanding of digital marketing. Students will learn various digital marketing practices such as managing and executing search engine optimization campaigns, building an effective website, email marketing, social media strategies, online advertising, and converting clicks into purchases through an experiential learning approach.",
+      "requisites": "MKTG 311 or BA 317.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 470",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20470",
+      "title": "International Marketing",
+      "description": "Analysis and development of marketing strategy and tactics for multinational and global markets.",
+      "requisites": "one from BA 317, MKTG 311, MKTG 311H.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 490",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20490",
+      "title": "Marketing Strategy",
+      "description": "Capstone marketing course. Primary focus on developing and implementing marketing strategies and determining their impact on customer satisfaction and profitability.",
+      "requisites": "MKTG 390 or MKTG 415.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 410",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20410",
+      "title": "Experimental Course: [Topic]",
+      "description": "Repeatable up to three times for a total of 16 credits.Repeatable 3 times for a maximum of 16 credits",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 450",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20450",
+      "title": "Sports Marketing",
+      "description": "Essentials of effective sports marketing. Includes research, segmentation, product development, pricing, licensing, and communication channels such as advertising, sales promotion, and publicity.",
+      "requisites": "MKTG 311.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 452",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20452",
+      "title": "Sports Sponsorship",
+      "description": "Detailed consideration of the relationship between sports and corporate sponsorship programs. Focuses on alignment marketing, sponsor value, and sponsorship evaluation.",
+      "requisites": "MKTG 311 or 311H.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 453",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20453",
+      "title": "Law and Sports Business",
+      "description": "Core legal principles across the sports business spectrum to improve risk and strategic management capabilities, competitive advantage, and critical negotiations.",
+      "requisites": "MKTG 311 or 311H.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 455",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20455",
+      "title": "Financing Sports Business",
+      "description": "Revenue sources for sports organizations. Includes conventional sources (e.g., tax support, bonds, ticket, media, concession sales) and innovations (e.g, initial public offerings, seat licenses, naming rights).",
+      "requisites": "MKTG 311 or 311H.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "SBUS 456",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=SBUS%20456",
+      "title": "Sports Brand Management",
+      "description": "An integrative course that supports skills development for success in managing sports-related businesses and brands. It utilizes critical thinking, creative imagining and professional writing in developing capabilities used in businesses aligned with or in sports.",
+      "requisites": "BA 101Z.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 410",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20410",
+      "title": "Experimental Course: [Topic]",
+      "description": "Repeatable when the topic changes. Recent topics include Service Operations, Business Analytics, Analyzing Big Data.Repeatable 99 times when topic changes",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 444",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20444",
+      "title": "Business Database Management Systems",
+      "description": "Techniques for structuring and storing business data; primary focus on relational database theory, with applied skills for business users, including data warehouses, reporting, and normalization.",
+      "requisites": "OBA 340 or OBA 340H.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 455",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20455",
+      "title": "Data Driven Predictive Modeling",
+      "description": "Introduction to basics of programming and fundamentals of predictive modeling.",
+      "requisites": "OBA 312 or MATH 345M.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 465",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20465",
+      "title": "Sports Analytics",
+      "description": "The course is intended for students interested in general management, operations, marketing or consulting in sports. The course leverages students’ core-course data management skills relating to spreadsheets and databases. Students will work on integrating those data management skills with statistics-based sports data-analytics methods, and thus be able to make rigorous data-driven decisions, as well as effectively communicate the rationale supporting those decisions.",
+      "requisites": "OBA 312 or DSCI 102 or DSCI 345M or MATH 345M.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 466",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20466",
+      "title": "Project and Operations Management Models",
+      "description": "Frameworks and solutions for managing complex projects and operations; implementing optimal strategies for producing profitable new products and services in the competitive global business environment.",
+      "requisites": "OBA 335 or 335H.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "OBA 477",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=OBA%20477",
+      "title": "Supply-Chain Operations and Information",
+      "description": "Strategic and tactical issues pertaining to the distribution and delivery of products and services. Methodologies and systems for designing, tracking, and managing complex global operations.",
+      "requisites": "OBA 335 or 335H.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 361",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20361",
+      "title": "Cross-Cultural Business Communication",
+      "description": "Theoretical and practical approach to value dimensions across cultures and their impact on communication in business and professional contexts. Develops intercultural business communication skills.",
+      "requisites": "WR 121Z recommended.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "ANTH 209",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=ANTH%20209",
+      "title": "Business Anthropology",
+      "description": "This course provides a comprehensive overview of business anthropology on a range of topics including entrepreneurship, finance capital, multinational corporations, and race/gender in business. Readings and discussions will focus on how to apply anthropological knowledge to solve real-world business problems.",
+      "requisites": "ANTH 161.",
+      "equivalent_to": "",
+      "additional_info": "Social Science AreaCultural Literacy: Global Perspectives",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 252",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20252",
+      "title": "Global Perspectives in Business",
+      "description": "An interdisciplinary introduction to what it means to participate in a global economy, critically reflecting on globalization, the impacts of business activity, human rights, global finance, marketing, and management. Also explores concepts and skills in intercultural communication and working with others from around the world.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "Cultural Literacy: Global Perspectives",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 365",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20365",
+      "title": "Cross-Cultural Negotiation",
+      "description": "Theory and practice of negotiating effectively across cultures. Research and analysis of culturally specific models for negotiating and experience using those models in cross-cultural simulations.",
+      "requisites": "WR 121Z recommended.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "GLBL 102",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=GLBL%20102",
+      "title": "Foundations for Intercultural Competence",
+      "description": "This course teaches practical skills and analytic frameworks that support safe, respectful, enlightening experiences of intercultural engagement.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "Social Science AreaCultural Literacy: Global Perspectives",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 199",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20199",
+      "title": "Special Studies: [Topic]",
+      "description": "Repeatable when the topic changes.Repeatable 99 times when topic changes",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MATH 111Z",
+      "credits": "",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MATH%20111Z",
+      "title": "Precalculus I: Functions",
+      "description": "A course primarily designed for students preparing for trigonometry or calculus. This course focuses on functions and their properties, including polynomial, rational, exponential, logarithmic, piecewise-defined, and inverse functions. These topics will be explored symbolically, numerically, and graphically in real-life applications and interpreted in context. This course emphasizes skill building, problem solving, modeling, reasoning, communication, connections with other disciplines, and the appropriate use of present-day technology. Previously MATH 111.",
+      "requisites": "MATH 101 or satisfactory placement test score.",
+      "equivalent_to": "MATH 111",
+      "additional_info": "BS Math",
+      "extra_info": ""
+    }
+  ],
+  "degree_path": [
+    {
+      "section": "Pre-Major Requirements",
+      "subsections": [
+        {
+          "subsection": "Core Courses",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "BA 101Z"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 211Z"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 213Z"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "EC 201"
+                ],
+                "credits": "4"
+              }
+            ]
+          ]
+        },
+        {
+          "subsection": "Additional Courses",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "EC 202"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 240"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MATH 241",
+                  "MATH 251"
+                ],
+                "credits": "4"
+              }
+            ]
+          ]
+        },
+        {
+          "subsection": "College Compositions",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "STAT 243Z"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "WR 121Z",
+                  "HC 101H"
+                ],
+                "credits": "4"
+              }
+            ],
+            {
+              "options": [
+                "WR 122Z",
+                "WR 123",
+                "HC 221H"
+              ],
+              "credits": "4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section": "Business Administration Major Requirements",
+      "subsections": [
+        {
+          "subsection": "Upper-Division Core",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "BA 308"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 322"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 325"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 453"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "FIN 311",
+                  "EC 311"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "FIN 316"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 311"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MKTG 311"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "OBA 311"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "OBA 312"
+                ],
+                "credits": "4"
+              }
+            ]
+          ]
+        },
+        {
+          "subsection": "Business Administration Requirements",
+          "requirements": []
+        },
+        {
+          "subsection": "Accounting",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "OBA 335"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 340"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 350"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 351"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 352"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 360"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 410"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 440"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 450"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 460"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ACTG 470"
+                ],
+                "credits": ""
+              }
+            ]
+          ]
+        },
+        {
+          "subsection": "Finance",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "ACTG 480"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "FIN 380"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "FIN 410"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "FIN 462"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "FIN 463"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "FIN 464"
+                ],
+                "credits": ""
+              }
+            ]
+          ]
+        },
+        {
+          "subsection": "Management",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "FIN 473"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 335"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 410"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 415"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 416"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 417"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 420"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 422"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 443"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 455"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MGMT 460"
+                ],
+                "credits": ""
+              }
+            ]
+          ]
+        },
+        {
+          "subsection": "Marketing",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "MGMT 461"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MKTG 390"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MKTG 410"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MKTG 415"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MKTG 420"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MKTG 435"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MKTG 445"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MKTG 465"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MKTG 470"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "MKTG 490"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "SBUS 410"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "SBUS 450"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "SBUS 452"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "SBUS 453"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "SBUS 455"
+                ],
+                "credits": ""
+              }
+            ]
+          ]
+        },
+        {
+          "subsection": "Operations & Business Analytics",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "SBUS 456"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "OBA 410"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "OBA 444"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "OBA 455"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "OBA 465"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "OBA 466"
+                ],
+                "credits": ""
+              }
+            ]
+          ]
+        },
+        {
+          "subsection": "General Business",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "OBA 477"
+                ],
+                "credits": ""
+              }
+            ]
+          ]
+        },
+        {
+          "subsection": "Cultural Awareness Requirement",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "BA 361",
+                  "BA 365"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "ANTH 209"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 252"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 361"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 365"
+                ],
+                "credits": ""
+              }
+            ],
+            [
+              {
+                "options": [
+                  "GLBL 102"
+                ],
+                "credits": ""
+              }
+            ],
+            {
+              "options": [
+                "MGMT 420"
+              ],
+              "credits": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

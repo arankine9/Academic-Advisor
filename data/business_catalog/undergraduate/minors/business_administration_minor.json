@@ -1,0 +1,132 @@
+{
+  "program": "Business Administration Minor",
+  "description": "http://business.uoregon.edu/ug/minors/business-administration\nThe business minor gives students the opportunity to develop a core set of business skills that complement their major passion. The minor in business administration is open to students from all majors except pre-business, business administration, or accounting. General social sciences majors with a concentration in applied economics, business, and society may not earn a Business Administration minor. Completing the minor requires 24 credits of course work, which can be completed in one academic year.\nIt is possible to earn more than one minor within the Lundquist College of Business. However, for students earning more than one business-related minor, no more than three courses can be used to satisfy multiple business minors.\nStudents may declare a minor in business administration online on the college’s website, where a checklist of requirements can be found. Advising assistance is available in the Office of Undergraduate Advising.",
+  "pre_major_requirements": "All professions and organizations, public and private, operate according to business principles. Earning a minor in business administration prepares students to participate in organizational conversations and become leaders within their future professions. The minor in business administration is open to students from all majors other than business administration, accounting, and general social science with a concentration in applied economics, business, and society. Completing the minor requires 24 credits of coursework, which can be completed in one academic year.\nStudents may declare a minor in business administration online at the college’s website, where a checklist of requirements can be found. Advising assistance is available in the Office of Undergraduate Advising.\nTwelve upper-division credits must be taken in the Lundquist College of Business. Courses used to fulfill the minor requirements must be taken for a letter grade and passed with a grade of C- or better. When minor requirements have been completed and notification of application for a degree has been received from the Office of the Registrar, the student is cleared for the minor.",
+  "additional_program_info": "Must be taken before the other required minor courses.\nMust be taken beforeFinance: Creating Value through Capital (BA 318)",
+  "courses": [
+    {
+      "code": "BA 101Z",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20101Z",
+      "title": "Introduction to Business",
+      "description": "Presents an integrated view of both established and entrepreneurial businesses by studying their common characteristics and processes in a global context. Introduces theory and develops basic skills in the areas of accounting, finance, management, and marketing, with an emphasis on social responsibility and ethical practices. Explores how businesses can create value for themselves and society by addressing environmental and social challenges.",
+      "requisites": "",
+      "equivalent_to": "BA 101",
+      "additional_info": "Social Science Area",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 215",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20215",
+      "title": "Accounting: Language of Business Decisions",
+      "description": "How the accounting model reflects business transactions or events. Interpretation and analysis of financial statements. Understanding cost and revenue information, organization, and decisions.",
+      "requisites": "BA 101Z.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 315",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20315",
+      "title": "Economy, Industry, and Competitive Analysis",
+      "description": "Free enterprise capitalism and market competition. Economic value added, product cost, and product pricing. Organizational arrangements and the control of economic activity.",
+      "requisites": "BA 101Z.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 316",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20316",
+      "title": "Management: Creating Value through People",
+      "description": "Management systems for planning, controlling, organizing, and leading; how they influence human behavior in organizations. Selecting, training, retaining, and motivating the human resource in organization.",
+      "requisites": "BA 101Z.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 317",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20317",
+      "title": "Marketing: Creating Value for Customers",
+      "description": "Market analysis, target customer identification, and development of marketing-mix strategies to deliver superior customer value and contribute to the performance of the organization.",
+      "requisites": "BA 101Z.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 318",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20318",
+      "title": "Finance: Creating Value through Capital",
+      "description": "Financial statement analysis, pro forma statements and capital budgeting, time value of money, net present-value analysis, risk and cost of capital.",
+      "requisites": "BA 101Z; BA 211Z or BA 215.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    }
+  ],
+  "degree_path": [
+    {
+      "section": "Business Administration Minor",
+      "subsections": [
+        {
+          "subsection": "",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "BA 101Z"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 215"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 315"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 316"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 317"
+                ],
+                "credits": "4"
+              }
+            ],
+            {
+              "options": [
+                "BA 318"
+              ],
+              "credits": "4"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "program": "Global Business Certificate",
+  "description": "http://business.uoregon.edu/ug/certificates/global-business\nThe Certificate in Global Business is for those who want to be prepared to accept a job internationally and appreciate the different cultural values, economies, and communication styles of our vast and varied business world and is open to students in all University of Oregon majors. Upon successful completion of an approved plan, students will receive their certificate in addition to their diploma. Applications can be submitted to an academic advisor.",
+  "pre_major_requirements": "To receive a Certificate in Global Business, students must complete a total of 36 credits (must include 24 upper division credits) with 12 credits at the 400 level. Of the 12 400-level credits, 8 are included in the international business core. The remaining 4 credits must be planned as part of the area studies.",
+  "additional_program_info": "Area study requirements consist of 20 credits of coursework that relate to an international theme with at least 4 credits at the 400 level. This must be approved by an advisor in the Lundquist College of Business. Area studies coursework must include at least two department prefixes. Usually this theme will be geographically-based, focusing on a region such as Latin America, North Africa, or Europe. Other themes that are not geographic may be submitted for approval; for example global systems, cross cultural competencies, and macro level international forces (such as globalization). Four credits of second year second language can be used toward this requirement. Literature or cultural studies courses taught in a second language may be applied to the area studies. Only 4 credits of business course work can be used in this category and must be pre-approved.",
+  "courses": [
+    {
+      "code": "BA 101Z",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20101Z",
+      "title": "Introduction to Business",
+      "description": "Presents an integrated view of both established and entrepreneurial businesses by studying their common characteristics and processes in a global context. Introduces theory and develops basic skills in the areas of accounting, finance, management, and marketing, with an emphasis on social responsibility and ethical practices. Explores how businesses can create value for themselves and society by addressing environmental and social challenges.",
+      "requisites": "",
+      "equivalent_to": "BA 101",
+      "additional_info": "Social Science Area",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 252",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20252",
+      "title": "Global Perspectives in Business",
+      "description": "An interdisciplinary introduction to what it means to participate in a global economy, critically reflecting on globalization, the impacts of business activity, human rights, global finance, marketing, and management. Also explores concepts and skills in intercultural communication and working with others from around the world.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "Cultural Literacy: Global Perspectives",
+      "extra_info": ""
+    },
+    {
+      "code": "MGMT 420",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MGMT%20420",
+      "title": "Managing in a Global Economy",
+      "description": "Economic, political and cultural challenges facing international managers. Topics include developing competitive global strategies and organizations, international negotiations, building strategic alliances, cross-cultural teams, and international staffing.",
+      "requisites": "MGMT 311.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "MKTG 470",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=MKTG%20470",
+      "title": "International Marketing",
+      "description": "Analysis and development of marketing strategy and tactics for multinational and global markets.",
+      "requisites": "one from BA 317, MKTG 311, MKTG 311H.",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    }
+  ],
+  "degree_path": [
+    {
+      "section": "Site Navigation",
+      "subsections": [
+        {
+          "subsection": "Area Study/Global Systems/Cross Cultural Competencies",
+          "requirements": [
+            {
+              "options": [
+                "MKTG 470"
+              ],
+              "credits": "4"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

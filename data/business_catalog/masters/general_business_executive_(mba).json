@@ -1,0 +1,528 @@
+{
+  "program": "General Business Executive (MBA)",
+  "description": "http://business.uoregon.edu/executive-mba\nFor more information, contactoemba@uoregon.edu\nDesigned for accomplished mid-to-senior managers, executives, entrepreneurs, and business leaders with demanding schedules, the Oregon Executive MBA in Portland is a transformational experience that gives already accomplished professionals the confidence and skills to become successful leaders in today’s complex and global business world. Executive MBA programs are designed for those who want to work full time while earning a graduate degree in twenty months, with the summer off. Executive MBA programs cater to midcareer professionals positioning themselves to move up the corporate ladder by deepening their already broad knowledge base, by sharpening their skills, and by tackling problems their organization will face in the coming years.\nClasses are held twice a month on consecutive Fridays and Saturdays. Courses are open only to students who apply and are admitted to this program. For more information, visit the admissionswebsite.",
+  "pre_major_requirements": "",
+  "additional_program_info": "",
+  "courses": [
+    {
+      "code": "BA 721",
+      "credits": "1",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20721",
+      "title": "Business Writing",
+      "description": "Reviews the theory and practice of writing effectively for U.S. and international business audiences, addressing the use of rhetorical, cultural, and organizational analysis to create persuasive business documents.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 715",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20715",
+      "title": "Managerial Economics",
+      "description": "Covers micro- and macroeconomic analyses and the concepts of cost, demand, profit, and competition. Examines monetary and fiscal policy, the Federal Reserve System, and money and capital markets.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 730",
+      "credits": "1",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20730",
+      "title": "Business Ethics",
+      "description": "Studies the derivation of values and the application of those values to individual choices. Emphasizes the conflict manager's experience when choosing between two alternatives.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 726",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20726",
+      "title": "Global Business",
+      "description": "Examines global competition and strategy, regional economic integration, cross-cultural challenges, foreign market entry, international joint ventures and strategic alliances, international dimensions in functional areas of business.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 712",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20712",
+      "title": "Financial Accounting and Reporting",
+      "description": "Preparation, interpretation, and use of external financial statements and reports. Covers basic accounting principles, recording and reporting techniques underlying valuation and income determination.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 722",
+      "credits": "2",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20722",
+      "title": "Leadership and Motivation: [Topic]",
+      "description": "LEAD is the leadership foundation course that runs across the entire first year. The instructors and 2nd year students lead the in-class discussions of a variety of leadership topics. Topics include elements of motivation and leadership that affect management decision-making and problem-solving. Repeatable twice for a maximum of 3 credits.Repeatable 2 times for a maximum of 3 credits",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 714",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20714",
+      "title": "Managerial Accounting",
+      "description": "Introduction to cost accounting terminology; costing strategies, nontraditional costing systems, activity-based costing and product-service costing applications.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 717",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20717",
+      "title": "Marketing Management",
+      "description": "Examines marketing analysis and planning necessary to develop marketing plans and strategies for a product-line. Includes basic marketing concepts and philosophies and brief exposure to macromarketing strategies.  Sequence with BA 719.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 727",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20727",
+      "title": "Operations Management",
+      "description": "Examines methods and processes for providing a competitive advantage through continuous quality and process improvements, supplier management, and efficient production of goods and services.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 713",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20713",
+      "title": "Data and Business Decisions",
+      "description": "Integrates statistical tools for analyzing business data and covers process analysis, data collection, regression, statistical control, and forecasting.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 716",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20716",
+      "title": "Managing Organizations",
+      "description": "This course investigates organizations as complex social systems including: leadership, managing individuals, groups, teams, and formal and informal processes and systems.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 708",
+      "credits": "1",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20708",
+      "title": "Workshop: [Topic]",
+      "description": "Repeatable.Repeatable 99 times",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 718",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20718",
+      "title": "Financial Analysis",
+      "description": "Covers objectives, tools, methods, and problems of financial management. Includes fund acquisitions, dividend policy, capital acquisitions, taxes, mergers, and investment banking.  Sequence with BA 720.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 735",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20735",
+      "title": "Opportunity Recognition",
+      "description": "Provides students with techniques and models to identify and develop new opportunities and manage innovation processes.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 723",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20723",
+      "title": "Formulating Corporate Strategy",
+      "description": "Focuses on how corporations choose to compete. Covers the analytical techniques and planning models appropriate for making this fundamental decision.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 719",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20719",
+      "title": "Marketing Strategy",
+      "description": "Marketing strategies for product-service introduction, growth, maturity, and decline; managing product-service innovation and development; brand equity, relationship marketing.  Sequence with BA 717.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 725",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20725",
+      "title": "Implementing Corporate Strategy",
+      "description": "Uses problems and cases to examine the implementation of corporate strategy, the strategy process and cycle, and implementation methods.Sequence with BA 723.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 720",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20720",
+      "title": "Corporate Financial Strategy",
+      "description": "Advanced topics in firm evaluation (e.g., acquisitions, restructuring) and financial risk management (e.g., hedging, derivatives, foreign projects) as related to global and domestic corporate strategies.  Sequence with BA 718.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 736",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20736",
+      "title": "Alliances and Acquisitions",
+      "description": "Using alliances and acquisitions as a strategic tool; emphasis on value creation. Includes deal valuation, deal-making, due diligence, integration, and ecosystem development. Builds on negotiation, strategy, and finance courses.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 729",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20729",
+      "title": "Business Negotiation",
+      "description": "Explores the major theories and concepts of negotiation. Opportunities to practice deal-making and conflict resolution. Encourages improvement in communication and persuasion.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 732",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20732",
+      "title": "Technology and Innovation Management",
+      "description": "Exposes students to the dynamics of industries driven by technological innovation, and focuses on thinking strategically about technological innovation and new product development and deployment.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 731",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20731",
+      "title": "New Venture Planning",
+      "description": "Students identify and research a business opportunity; develop and present a professional start-up business plan that includes market, competitor, cash flow, and financial analyses.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 711",
+      "credits": "3",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20711",
+      "title": "Legal Environment of Business",
+      "description": "Analysis of government policy and the legal environment in which business operates; the effects of law, government policy, and social forces on the formulation of business strategy and decision-making.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 740",
+      "credits": "1",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20740",
+      "title": "Capstone Business Project I",
+      "description": "Focuses on integration of functional areas of business. Includes writing a plan that applies knowledge and develops a course of action to accomplish organizational objectives. First in a series for 2yr OEMBA students.Repeatable 3 times for a maximum of 9 credits",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 741",
+      "credits": "2",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20741",
+      "title": "Capstone Business Project II",
+      "description": "Focuses on integration of functional areas of business. Includes writing a plan that applies knowledge and develops a course of action to accomplish organizational objectives. Second in a series for 2yr OEMBA students. Sequence with BA 740, BA 742.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    },
+    {
+      "code": "BA 742",
+      "credits": "4",
+      "course_url": "https://catalog.uoregon.edu/search/?P=BA%20742",
+      "title": "Capstone Business Project III",
+      "description": "Focuses on integration of functional areas of business. Includes writing a plan that applies knowledge and develops a course of action to accomplish organizational objectives. Third in a series for 2yr OEMBA students.  Sequence with BA 740, BA 741.",
+      "requisites": "",
+      "equivalent_to": "",
+      "additional_info": "",
+      "extra_info": ""
+    }
+  ],
+  "degree_path": [
+    {
+      "section": "General Business Executive Major Requirements",
+      "subsections": [
+        {
+          "subsection": "",
+          "requirements": [
+            [
+              {
+                "options": [
+                  "BA 721"
+                ],
+                "credits": "1"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 715"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 730"
+                ],
+                "credits": "1"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 726"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 712"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 722"
+                ],
+                "credits": "2"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 714"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 717"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 727"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 713"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 716"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 708"
+                ],
+                "credits": "1"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 718"
+                ],
+                "credits": "4"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 735"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 708"
+                ],
+                "credits": "1"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 723"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 719"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 725"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 720"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 736"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 729"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 732"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 731"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 711"
+                ],
+                "credits": "3"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 740"
+                ],
+                "credits": "1"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 741"
+                ],
+                "credits": "2"
+              }
+            ],
+            [
+              {
+                "options": [
+                  "BA 742"
+                ],
+                "credits": "4"
+              }
+            ],
+            {
+              "options": [
+                "BA 708"
+              ],
+              "credits": "2"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

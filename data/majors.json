@@ -1,0 +1,58 @@
+{
+    "Computer Science": {
+        "Lower-Division Core": {
+            "courses": ["CS 210 - Introduction to Computer Science I", "CS 211 - Introduction to Computer Science II", "CS 212 - Introduction to Computer Science III", "MATH 231 - Elements of Discrete Mathematics I", "MATH 232 - Elements of Discrete Mathematics II"],
+            "credits": 20,
+            "requirements": "All courses must be taken Graded."
+        },
+        "Upper-Division Core": {
+            "courses": ["CS 313 - Intermediate Data Structures", "CS 314 - Computer Organization", "CS 315 - Intermediate Algorithms", "CS 330 - C/C++ and Unix", "CS 415 - Operating Systems", "CS 422 - Software Methodology I", "CS 425 - Principles of Programming Languages"],
+            "credits": 28,
+            "requirements": "All courses must be taken Graded."
+        },
+        "Upper-Division Electives": {
+            "courses": ["CS 410+ - Upper-Division CS Electives", "CS 300-409 - Up to 8 credits of upper-division electives", "DSCI 311 - Data Science Course Option", "CS 407 - Seminar (repeatable with different subtitles)", "CS 399 - Special Studies (repeatable with different subtitles)"],
+            "credits": 20,
+            "requirements": "12 credits must be taken Graded. A maximum of 8 credits in upper-division courses numbered less than 410 or DSCI 311."
+        },
+        "Mathematics": {
+            "Core Requirement": {
+                "course_sequences": [
+                    ["MATH 251 - Calculus I", "MATH 252 - Calculus II"],
+                    ["MATH 261 - Calculus with Theory I", "MATH 262 - Calculus with Theory II"],
+                    ["MATH 246 - Calculus for the Biological Sciences I", "MATH 247 - Calculus for the Biological Sciences II"]
+                ],
+                "credits": 8,
+                "requirements": "Complete one of the following two-course sequences. All courses must be taken Graded."
+            },
+            "Electives": {
+                "courses": ["MATH 253 - Calculus III", "MATH 263 - Calculus with Theory III", "MATH 347 - Fundamentals of Number Theory I", "MATH 351 - Elementary Numerical Analysis I", "MATH 391 - Fundamentals of Abstract Algebra I", "MATH 341 - Elementary Linear Algebra", "MATH 343 - Statistical Models/Methods", "MATH 425 - Statistical Methods I"],
+                "credits": 8,
+                "requirements": "Must be taken Graded."
+            }
+        },
+        "Science": {
+            "Requirement": {
+                "options": [
+                    ["PHYS 201 - General Physics I", "PHYS 202 - General Physics II", "PHYS 203 - General Physics III"],
+                    ["PHYS 251 - Foundations of Physics I", "PHYS 252 - Foundations of Physics II", "PHYS 253 - Foundations of Physics III"],
+                    ["CH 221 - General Chemistry I", "CH 222 - General Chemistry II", "CH 223 - General Chemistry III"],
+                    ["CH 224H - Honors General Chemistry I", "CH 225H - Honors General Chemistry II", "CH 226H - Honors General Chemistry III"],
+                    ["GEOG 141 - The Natural Environment", "GEOG 321 - Climatology", "GEOG 322 - Geomorphology", "GEOG 323 - Biogeography"],
+                    ["GEOL/ERTH 201 - Earth's Interior Heat and Dynamics", "GEOL/ERTH 202 - Earth Surface and Environmental Geology", "GEOL/ERTH 203 - Evolution of the Earth"],
+                    ["PSY 201 - Mind and Brain", "PSY 301 - Scientific Thinking", "PSY 304 - Biopsychology", "PSY 305 - Cognition", "PSY 348 - Music and the Brain"],
+                    ["CH 111 - Introduction to Chemical Principles", "CH 113 - The Chemistry of Sustainability", "BI 211 - General Biology", "BI 212 - General Biology", "BI 213 - General Biology"]
+                ],
+                "credits": 12,
+                "requirements": "Complete one of the following options. Courses may be taken Pass/No Pass or Graded. Accompanying labs are recommended but not required."
+            }
+        },
+        "Writing": {
+            "Requirement": {
+                "courses": ["WR 320 - Scientific and Technical Writing", "WR 321 - Business Communications"],
+                "credits": 4,
+                "requirements": "Complete one of the following courses. Course may be taken Pass/No Pass or Graded."
+            }
+        }
+    }
+}
