@@ -36,9 +36,15 @@ const CourseRecommendation = ({ courseData }) => {
     courseData.schedule.time ?
       `${courseData.schedule.days} at ${courseData.schedule.time}` : 
       'Schedule to be announced';
+      
+  // Check if course is valid
+  const isInvalid = courseData.verification_status && courseData.verification_status !== "VALID";
+  
+  // Get error message if invalid
+  const errorMessage = isInvalid ? courseData.verification_status.replace("INVALID: ", "") : "";
 
   return (
-    <div className="course-card">
+    <div className={`course-card ${isInvalid ? 'error' : ''}`}>
       <div className="course-header" onClick={toggleExpand}>
         <div className="course-title">
           <span className="course-code">{courseData.course_code}</span>
@@ -47,6 +53,12 @@ const CourseRecommendation = ({ courseData }) => {
         <div className="course-credits">{courseData.credits} credits</div>
         <div className="expand-icon">{expanded ? '▼' : '▶'}</div>
       </div>
+      
+      {isInvalid && (
+        <div className="course-warning">
+          <span className="warning-icon">⚠️</span> {errorMessage}
+        </div>
+      )}
       
       <div className="course-basic-info">
         <div className="course-schedule">

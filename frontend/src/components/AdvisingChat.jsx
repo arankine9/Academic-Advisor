@@ -8,7 +8,7 @@ import CourseRecommendation from './CourseRecommendation';
 import TypingIndicator from './TypingIndicator';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
-import { sendMessage } from '../services/advisingService';
+import { sendMessage, checkPendingResponse } from '../services/advisingService';
 import './AdvisingChat.css';
 import './CourseRecommendation.css';
 
@@ -18,8 +18,10 @@ const AdvisingChat = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
+  const [isPolling, setIsPolling] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const pollTimerRef = useRef(null);
 
   // Debug logging for message state changes
   useEffect(() => {
@@ -42,6 +44,66 @@ const AdvisingChat = () => {
     }
   }, []);
 
+  // Cleanup polling on unmount
+  useEffect(() => {
+    return () => {
+      if (pollTimerRef.current) {
+        clearInterval(pollTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Start polling for response
+  const startPollingForResponse = () => {
+    setIsPolling(true);
+    let pollCount = 0;
+    const maxPolls = 30; // Stop after 30 attempts (30 seconds)
+    
+    pollTimerRef.current = setInterval(async () => {
+      try {
+        pollCount++;
+        
+        const pendingResponse = await checkPendingResponse();
+        
+        if (pendingResponse && pendingResponse.response && !pendingResponse.pending) {
+          // Got a response, stop polling
+          clearInterval(pollTimerRef.current);
+          setIsPolling(false);
+          
+          // Add response to messages
+          setMessages(prev => [...prev, { 
+            content: pendingResponse.response, 
+            isUser: false 
+          }]);
+          
+          // Reset waiting state
+          setIsWaitingForResponse(false);
+        } else if (pollCount >= maxPolls) {
+          // Timeout after 30 seconds
+          clearInterval(pollTimerRef.current);
+          setIsPolling(false);
+          setIsWaitingForResponse(false);
+          
+          // Add timeout message
+          setMessages(prev => [...prev, {
+            content: "I'm taking longer than expected. Please try again or rephrase your question.",
+            isUser: false
+          }]);
+          
+          showNotification('Request timed out', false);
+        }
+      } catch (error) {
+        console.error('Error checking pending response:', error);
+        
+        clearInterval(pollTimerRef.current);
+        setIsPolling(false);
+        setIsWaitingForResponse(false);
+        
+        showNotification('Failed to check response status', false);
+      }
+    }, 1000); // Check every second
+  };
+
   // Handle input change
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -51,7 +113,7 @@ const AdvisingChat = () => {
   const handleSendMessage = async () => {
     const message = inputValue.trim();
     
-    if (!message || isWaitingForResponse) {
+    if (!message || isWaitingForResponse || isPolling) {
       return;
     }
     
@@ -71,36 +133,49 @@ const AdvisingChat = () => {
       // Send message to API
       const response = await sendMessage(message);
       console.log('Raw API response:', response);
-      console.log('Response structure:', JSON.stringify(response, null, 2));
       
       if (response && response.response) {
-        // Add response to chat (can be either string or object)
-        setMessages(prev => [...prev, { content: response.response, isUser: false }]);
+        if (response.processing === true) {
+          // This is an acknowledgment message, start polling for final response
+          setMessages(prev => [...prev, { 
+            content: response.response, 
+            isUser: false,
+            isAcknowledgment: true
+          }]);
+          
+          // Start polling for the full response
+          startPollingForResponse();
+        } else {
+          // This is a final response (for general conversation)
+          setMessages(prev => [...prev, { content: response.response, isUser: false }]);
+          setIsWaitingForResponse(false);
+        }
       } else {
-        // Handle unexpected response format
-        console.error('Unexpected response format:', response);
-        setMessages(prev => [...prev, {
-          content: "I received an unexpected response format. Please try again.",
-          isUser: false
-        }]);
+        handleErrorResponse("Unexpected response format");
       }
-      
-      // Reset waiting state
-      setIsWaitingForResponse(false);
     } catch (error) {
-      console.error('Error sending message:', error);
-      
-      // Add error message to chat
-      setMessages(prev => [...prev, {
-        content: "I'm sorry, I encountered an error. Please try again later.",
-        isUser: false
-      }]);
-      
-      // Show notification
-      showNotification('Failed to send message', false);
-      
-      // Reset waiting state
-      setIsWaitingForResponse(false);
+      handleErrorResponse(`Failed to send message: ${error.message}`);
+    }
+  };
+
+  const handleErrorResponse = (errorMessage) => {
+    console.error(errorMessage);
+    
+    // Add error message to chat
+    setMessages(prev => [...prev, {
+      content: "I'm sorry, I encountered an error. Please try again later.",
+      isUser: false
+    }]);
+    
+    // Show notification
+    showNotification(errorMessage, false);
+    
+    // Reset waiting state
+    setIsWaitingForResponse(false);
+    setIsPolling(false);
+    
+    if (pollTimerRef.current) {
+      clearInterval(pollTimerRef.current);
     }
   };
 
@@ -113,6 +188,7 @@ const AdvisingChat = () => {
   };
 
   return (
+    // Rest of your component remains the same
     <div className="GradPath-container">
       {/* Header */}
       <header className="GradPath-header">

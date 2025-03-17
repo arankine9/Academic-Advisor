@@ -125,3 +125,45 @@
     grid-template-columns: 1fr;
   }
 }
+
+.course-warning {
+  background-color: rgba(231, 76, 60, 0.1);
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  color: #e74c3c;
+  border-bottom: 1px solid rgba(231, 76, 60, 0.2);
+  display: flex;
+  align-items: center;
+}
+
+.warning-icon {
+  margin-right: 8px;
+}
+
+.course-card.error {
+  background-color: rgba(231, 76, 60, 0.05);
+  border: 1px solid rgba(231, 76, 60, 0.2);
+}
+
+.course-card.error .course-code {
+  color: #e74c3c;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  border-radius: 10px;
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+.status-badge.limited-seats {
+  background-color: rgba(243, 156, 18, 0.2);
+  color: #f39c12;
+}
+
+.status-badge.requirement {
+  background-color: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+}

@@ -8,6 +8,15 @@ export const sendMessage = async (message) => {
   return response.data;
 };
 
-export default {
-  sendMessage
+export const checkPendingResponse = async () => {
+  const response = await api.get('/advising/pending');
+  return response.data;
 };
+
+export default {
+  sendMessage,
+  checkPendingResponse
+};
+
+
+

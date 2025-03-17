@@ -4,12 +4,32 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import List, Optional
 
-from backend.core.database import get_db, Course
+from backend.core.database import get_db, Course, SessionLocal
 from backend.core.auth import authenticate_user, create_access_token, get_current_active_user, ACCESS_TOKEN_EXPIRE_MINUTES, create_user
 from backend.core.database import User as UserModel
 from backend.models.schemas import Token, UserCreate, CourseResponse, ChatMessage, User as UserSchema
 from backend.services.courses import get_or_create_course, add_course_to_user, remove_course_from_user, get_user_courses, parse_course_from_string
 from backend.services.query_engine import get_advice
+from fastapi import APIRouter, Depends, HTTPException, status, Form, Body, BackgroundTasks
+import asyncio
+from fastapi.concurrency import run_in_threadpool
+
+import logging
+import asyncio
+from fastapi.concurrency import run_in_threadpool
+
+# Import needed functions from query_engine.py
+from backend.services.query_engine import (
+    get_advice, 
+    classify_intent, 
+    generate_acknowledgment,
+    process_general_query,
+    process_course_query  # Add this import for optimization
+)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # Create API router
 router = APIRouter()
@@ -197,9 +217,13 @@ async def recommend_me(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
+# In-memory response cache
+_processing_responses = {}
+
 @router.post("/advising")
 async def advising_chat(
     message: ChatMessage,
+    background_tasks: BackgroundTasks,
     current_user: UserModel = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
@@ -209,10 +233,61 @@ async def advising_chat(
         if not message_text:
             raise HTTPException(status_code=400, detail="Message cannot be empty")
         
-        # Use the enhanced query engine with the user's message
-        response = get_advice(db, current_user.id, query=message_text)
+        # Classify the intent of the query using LLM only
+        intent = classify_intent(message_text)
+        logger.info(f"Intent classification result: {intent}")
         
-        # Return the response (can be either string or dictionary)
-        return {"response": response}
+        if intent == "COURSE":
+            # For course-related queries, send acknowledgment first
+            acknowledgment = generate_acknowledgment(message_text)
+            
+            # Process query in background
+            background_tasks.add_task(
+                process_advising_query_background,
+                db, current_user.id, message_text
+            )
+            
+            # Return acknowledgment with processing flag
+            return {"response": acknowledgment, "processing": True}
+        else:
+            # For general conversation, process immediately
+            response = process_general_query(message_text)
+            return {"response": response}
+            
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+        logger.error(f"Error in advising_chat: {e}")
+        return {"response": "I'm sorry, I encountered an error. Please try again later or try rephrasing your question."}
+
+async def process_advising_query_background(db: Session, user_id: int, query: str):
+    """Process an advising query in the background and store the result"""
+    try:
+        # Create a new session since we're in a background task
+        db_session = SessionLocal()
+        
+        # Run the CPU-intensive process in a thread pool
+        result = await run_in_threadpool(
+            lambda: get_advice(db_session, user_id, query)
+        )
+        
+        # Store the result in the cache
+        _processing_responses[user_id] = result
+        
+    except Exception as e:
+        logger.error(f"Background processing error: {e}")
+        _processing_responses[user_id] = "I encountered an error while processing your request. Please try again."
+    finally:
+        db_session.close()
+
+@router.get("/advising/pending")
+async def check_pending_response(
+    current_user: UserModel = Depends(get_current_active_user)
+):
+    """Check if there's a pending response for the user"""
+    response = _processing_responses.get(current_user.id)
+    
+    if response:
+        # Remove from cache after retrieving
+        del _processing_responses[current_user.id]
+        return {"response": response, "pending": False}
+    
+    return {"pending": True}
