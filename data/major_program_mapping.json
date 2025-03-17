@@ -1,0 +1,8 @@
+{
+  "Accounting": "accounting_major",
+  "Computer Science": "computer_science_major",
+  "Business Administration": "business_admin_major",
+  "Mathematics": "mathematics_major",
+  "Physics": "physics_major",
+  "Chemistry": "chemistry_major"
+} 

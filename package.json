@@ -1,0 +1,27 @@
+{
+  "name": "ragappattempt1",
+  "version": "1.0.0",
+  "description": "This application uses Retrieval-Augmented Generation (RAG) to provide personalized course recommendations for students based on their major and completed courses.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arankine9/Academic-Advisor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arankine9/Academic-Advisor/issues"
+  },
+  "homepage": "https://github.com/arankine9/Academic-Advisor#readme",
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

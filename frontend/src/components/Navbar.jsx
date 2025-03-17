@@ -22,12 +22,6 @@ const Navbar = () => {
           Dashboard
         </NavLink>
         <NavLink 
-          to="/classes" 
-          className={({ isActive }) => isActive ? "active" : ""}
-        >
-          Class Management
-        </NavLink>
-        <NavLink 
           to="/advising" 
           className={({ isActive }) => isActive ? "active" : ""}
         >

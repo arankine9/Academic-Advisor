@@ -8,7 +8,9 @@ const MessageBubble = ({ message, isUser }) => {
 
   return (
     <div className={`chat-message ${isUser ? 'user-message' : 'advisor-message'}`}>
-      {formattedContent}
+      <div className="message-content">
+        {formattedContent}
+      </div>
     </div>
   );
 };

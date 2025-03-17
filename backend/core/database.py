@@ -1,5 +1,5 @@
 # Copy from original database.py with these changes:
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Table, Boolean, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Table, Boolean, DateTime, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from datetime import datetime
@@ -36,6 +36,15 @@ user_courses = Table(
     Column("completed_date", DateTime, default=datetime.utcnow),
 )
 
+# Define association table for many-to-many relationship between users and majors
+user_majors = Table(
+    "user_majors",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True),
+    Column("major_id", Integer, ForeignKey("majors.id", ondelete="CASCADE"), primary_key=True),
+    Column("added_date", DateTime, default=datetime.utcnow),
+)
+
 # Define User model
 class User(Base):
     __tablename__ = "users"
@@ -45,11 +54,15 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
-    major = Column(String)
+    major = Column(String, nullable=True)  # Keep for backward compatibility
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Define relationship with courses
     courses = relationship("Course", secondary=user_courses, back_populates="users")
+    # Define relationship with programs
+    programs = relationship("UserProgram", back_populates="user")
+    # Define relationship with majors
+    majors = relationship("Major", secondary=user_majors, back_populates="users")
 
 # Define Course model
 class Course(Base):
@@ -63,6 +76,35 @@ class Course(Base):
     
     # Define relationship with users
     users = relationship("User", secondary=user_courses, back_populates="courses")
+
+# Define Major model
+class Major(Base):
+    __tablename__ = "majors"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, index=True)
+    
+    # Define relationship with users
+    users = relationship("User", secondary=user_majors, back_populates="majors")
+
+# Define UserProgram model
+class UserProgram(Base):
+    __tablename__ = "user_programs"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
+    program_type = Column(String)  # 'major' or 'minor'
+    program_name = Column(String)
+    required_courses = Column(JSON)  # JSONB array of course codes
+    
+    # Define relationship with users
+    user = relationship("User", back_populates="programs")
+    
+    __table_args__ = (
+        # Composite unique constraint on user_id and program_name
+        # to ensure a user can't have the same program twice
+        {'sqlite_autoincrement': True},
+    )
 
 # Function to get database session
 def get_db():

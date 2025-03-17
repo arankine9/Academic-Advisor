@@ -92,9 +92,15 @@ def create_user(db: Session, user: UserCreate):
         email=user.email,
         username=user.username,
         hashed_password=hashed_password,
-        major=user.major
+        major=user.major  # Keep for backward compatibility
     )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+    
+    # If a major is provided, add it to the user's majors
+    if user.major:
+        from backend.services.majors import add_major_to_user
+        add_major_to_user(db, db_user.id, user.major)
+    
     return db_user
