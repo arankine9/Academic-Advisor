@@ -227,6 +227,15 @@ def process_general_query(query: str) -> str:
     response = response_model.invoke(prompt)
     return response.content.strip()
 
+def debug_print_document(doc, prefix="DEBUG DOCUMENT"):
+    """Helper function to print document content and metadata"""
+    try:
+        metadata_str = ", ".join([f"{k}:{v}" for k, v in doc.metadata.items()])
+        logger.info(f"{prefix} - METADATA: {metadata_str}")
+        logger.info(f"{prefix} - PAGE_CONTENT: {doc.page_content[:100]}")
+    except Exception as e:
+        logger.info(f"{prefix} - ERROR printing document: {str(e)}")
+
 def extract_search_queries(reasoning_output: str) -> List[str]:
     """
     Extract search queries from the reasoning model's output.
@@ -283,22 +292,20 @@ def extract_search_queries(reasoning_output: str) -> List[str]:
 def execute_rag_query(search_query: str) -> List[Document]:
     """
     Execute a RAG query to retrieve relevant documents.
-    
-    Args:
-        search_query: The search query for the retriever
-        
-    Returns:
-        List of retrieved documents including all fields
     """
     try:
         docs = retriever.get_relevant_documents(search_query)
         logger.info(f"Retrieved {len(docs)} documents for query: {search_query[:50]}...")
         
+        # Log metadata structure for debugging
+        if docs:
+            logger.info(f"First document metadata keys: {list(docs[0].metadata.keys())}")
+        
         # Format each document to include all available fields
         for doc in docs:
             # All fields are available directly in doc.metadata
             formatted_content = f"""
-            Course: {doc.metadata.get('class_code', '')}
+            Course: {doc.metadata.get('class_code', 'Unknown')}
             Credits: {doc.metadata.get('credits', '')}
             Description: {doc.metadata.get('description', '')}
             Prerequisites: {doc.metadata.get('prerequisites', '')}
@@ -307,9 +314,30 @@ def execute_rag_query(search_query: str) -> List[Document]:
             Location: {doc.metadata.get('classroom', '')}
             Seats Available: {doc.metadata.get('available_seats', '')}
             Total Seats: {doc.metadata.get('total_seats', '')}
-            CRN: {doc.metadata.get('crn', '')}
             """
             doc.page_content = formatted_content.strip()
+            
+            # Ensure document has a valid class_code in its metadata
+            if 'class_code' not in doc.metadata or not doc.metadata['class_code']:
+                # Try to extract from page_content if missing
+                course_line = doc.page_content.strip().split('\n')[0]
+                if 'Course:' in course_line:
+                    extracted_code = course_line.split('Course:')[1].strip()
+                    if extracted_code != 'Unknown':
+                        doc.metadata['class_code'] = extracted_code
+                
+                # If still no class_code, create an artificial one
+                if 'class_code' not in doc.metadata or not doc.metadata['class_code']:
+                    # Try to use some other field as the identifier
+                    for key in ['id', 'course_code', 'title']:
+                        if key in doc.metadata and doc.metadata[key]:
+                            doc.metadata['class_code'] = str(doc.metadata[key])
+                            break
+                    
+                    # Last resort - create a synthetic ID
+                    if 'class_code' not in doc.metadata or not doc.metadata['class_code']:
+                        doc.metadata['class_code'] = f"SYN-{hash(doc.page_content) % 10000}"
+        
         return docs
     except Exception as e:
         logger.error(f"Error in RAG query execution: {e}")
@@ -318,14 +346,6 @@ def execute_rag_query(search_query: str) -> List[Document]:
 def optimized_course_search(db: Session, user_id: int, query: str) -> List[Document]:
     """
     Perform optimized course search to find relevant courses.
-    
-    Args:
-        db: Database session
-        user_id: User ID
-        query: The student's query
-    
-    Returns:
-        List of relevant course documents
     """
     # Format user data for RAG
     user_data = format_courses_for_rag(db, user_id)
@@ -352,210 +372,312 @@ def optimized_course_search(db: Session, user_id: int, query: str) -> List[Docum
     with ThreadPoolExecutor(max_workers=min(len(search_queries), 5)) as executor:
         future_to_query = {executor.submit(execute_rag_query, q): q for q in search_queries}
         for future in concurrent.futures.as_completed(future_to_query):
+            query_text = future_to_query[future]
             try:
                 docs = future.result()
+                logger.info(f"Query '{query_text[:30]}...' returned {len(docs)} documents")
                 all_results.extend(docs)
             except Exception as e:
                 logger.error(f"Error executing search query: {e}")
     
-    # Deduplicate results
+    # Much more lenient deduplication logic
     unique_results = []
-    seen_codes = set()
+    seen_identifiers = set()
+    
+    # Debug info
+    logger.info(f"Starting deduplication for {len(all_results)} documents")
+    if all_results:
+        sample_doc = all_results[0]
+        logger.info(f"Sample document metadata keys: {list(sample_doc.metadata.keys())}")
     
     for doc in all_results:
-        code = doc.metadata.get('class_code')
-        if code and code not in seen_codes:
-            seen_codes.add(code)
+        # Try multiple different fields as potential identifiers
+        # First priority: class_code, then other identifiers
+        identifier = None
+        
+        # Try every possible identifier field
+        for field in ['class_code', 'course_code', 'id', 'title', 'name']:
+            if field in doc.metadata and doc.metadata[field]:
+                identifier = str(doc.metadata[field])
+                break
+        
+        # If no identifier found yet, use first line of page_content
+        if not identifier:
+            content_lines = doc.page_content.strip().split('\n')
+            if content_lines:
+                identifier = content_lines[0][:50]  # Use first 50 chars of first line
+        
+        # As a last resort, use a hash of the content
+        if not identifier:
+            identifier = f"doc_{hash(doc.page_content[:100])}"
+        
+        # Only deduplicate if we've seen this exact identifier before
+        if identifier not in seen_identifiers:
+            seen_identifiers.add(identifier)
             unique_results.append(doc)
+            logger.info(f"Added unique document with identifier: {identifier[:30]}...")
     
     logger.info(f"Found {len(unique_results)} unique courses after deduplication")
     return unique_results
 
-def check_schedule_conflict(days1: str, time1: str, days2: str, time2: str) -> bool:
+def reasoning_based_recommendations(db: Session, user_id: int, query: str, courses: List[dict]) -> List[dict]:
     """
-    Check if two schedules conflict.
-    
-    Args:
-        days1: Days for first schedule (e.g., "MWF")
-        time1: Time for first schedule (e.g., "10:00-11:50")
-        days2: Days for second schedule
-        time2: Time for second schedule
-    
-    Returns:
-        True if there's a conflict, False otherwise
-    """
-    # Simple check for now - more sophisticated logic can be added
-    if not days1 or not time1 or not days2 or not time2:
-        return False  # If any schedule is unspecified, assume no conflict
-    
-    # Check if any days overlap
-    for day in days1:
-        if day in days2:
-            # Now check if times overlap
-            try:
-                # Parse times (assuming format like "10:00-11:50")
-                t1_start, t1_end = time1.split('-')
-                t2_start, t2_end = time2.split('-')
-                
-                # Convert to 24-hour format for comparison
-                # This is a simplified version - in a real app we would use proper time parsing
-                t1_start_hour = int(t1_start.split(':')[0])
-                t1_end_hour = int(t1_end.split(':')[0])
-                t2_start_hour = int(t2_start.split(':')[0])
-                t2_end_hour = int(t2_end.split(':')[0])
-                
-                # Check for overlap
-                if (t1_start_hour <= t2_end_hour and t1_end_hour >= t2_start_hour):
-                    return True
-            except:
-                # If time parsing fails, be conservative and assume conflict
-                return True
-                
-    return False
-
-def verify_course_recommendations(db: Session, user_id: int, courses: List[dict]) -> List[dict]:
-    """
-    Verify course recommendations against various constraints.
+    Use the reasoning model to evaluate and filter courses based on user data and course characteristics.
     
     Args:
         db: Database session
         user_id: User ID
-        courses: List of course data dictionaries
+        query: The student's original query
+        courses: List of potential course data dictionaries
         
     Returns:
-        List of verified courses with additional verification status
+        List of filtered and ranked courses with reasoning notes
     """
-    # Get user data
-    user_info = get_required_and_completed_courses(db, user_id)
-    completed_courses = [course['course_code'] for course in user_info.get('completed_courses', [])]
-    
-    # Track scheduled times to check conflicts
-    scheduled_times = {}
-    verified_courses = []
-    
-    for course in courses:
-        # Set default verification status
-        course['verification_status'] = "VALID"
+    try:
+        # First, filter out courses with 0 seats available (only hard rule we keep)
+        available_courses = []
+        for course in courses:
+            # Add debug logging to see what's coming in
+            logger.info(f"Checking course: {course.get('course_code', 'Unknown')}")
+            logger.info(f"Course structure: {course.keys()}")
+            if 'availability' in course:
+                logger.info(f"Availability structure: {course['availability']}")
+            
+            # Try to get available seats (handle both nested and direct access)
+            available_seats = ''
+            if 'availability' in course and isinstance(course['availability'], dict):
+                available_seats = course['availability'].get('available_seats', '')
+                logger.info(f"Found nested available_seats: {available_seats}")
+            elif 'available_seats' in course:
+                available_seats = course.get('available_seats', '')
+                logger.info(f"Found direct available_seats: {available_seats}")
+            
+            # More lenient filtering: only filter out if we're SURE seats = 0
+            try:
+                if available_seats and int(available_seats) == 0:
+                    logger.info(f"Filtering out course with 0 seats: {course.get('course_code', 'Unknown')}")
+                    continue
+                # Keep course in all other cases
+                available_courses.append(course)
+                logger.info(f"Keeping course: {course.get('course_code', 'Unknown')}")
+            except (ValueError, TypeError):
+                # If not parseable as integer, keep the course (benefit of doubt)
+                available_courses.append(course)
+                logger.info(f"Keeping course (non-integer seats): {course.get('course_code', 'Unknown')}")
         
-        # Check if already completed
-        if course['course_code'] in completed_courses:
-            course['verification_status'] = f"INVALID: Already completed {course['course_code']}"
-            continue
-        
-        # Check seat availability
-        available_seats = course.get('availability', {}).get('available_seats', 0)
+        # If no courses with available seats, return empty list
+        if not available_courses:
+            logger.info("No courses with available seats found")
+            return []
+            
+        # Get user data for RAG format
+        user_data = format_courses_for_rag(db, user_id)
+
+        # Extract course data safely
         try:
-            available_seats = int(available_seats)
-        except:
-            available_seats = 0
+            # Get user progress data
+            user_progress = get_required_and_completed_courses(db, user_id)
             
-        if available_seats <= 0:
-            course['verification_status'] = "INVALID: No available seats"
-            continue
+            # Extract completed courses
+            completed_courses = []
+            if user_progress and 'completed_courses' in user_progress:
+                completed_courses = [course.get('course_code', '') for course in user_progress['completed_courses']]
             
-        # Schedule conflict check
-        days = course.get('schedule', {}).get('days', '')
-        time = course.get('schedule', {}).get('time', '')
+            # Extract required courses from all programs
+            required_courses = []
+            if user_progress and 'programs' in user_progress:
+                for program_name, program_data in user_progress['programs'].items():
+                    if 'required_courses' in program_data:
+                        for course in program_data['required_courses']:
+                            if isinstance(course, str):
+                                required_courses.append(course)
+                            elif isinstance(course, dict) and 'course_code' in course:
+                                required_courses.append(course['course_code'])
+                            elif isinstance(course, dict) and 'options' in course:
+                                # Handle course options (OR relationship)
+                                for option in course['options']:
+                                    if isinstance(option, str):
+                                        required_courses.append(option)
+                                    elif isinstance(option, dict) and 'course_code' in option:
+                                        required_courses.append(option['course_code'])
+            
+            logger.info(f"Extracted {len(completed_courses)} completed courses and {len(required_courses)} required courses")
+        except Exception as e:
+            logger.error(f"Error extracting course data: {e}")
+            import traceback
+            logger.error(f"Traceback: {traceback.format_exc()}")
+            completed_courses = []
+            required_courses = []
         
-        if days and time:
-            has_conflict = False
-            for existing_course, existing_time in scheduled_times.items():
-                if check_schedule_conflict(days, time, existing_time[0], existing_time[1]):
-                    course['verification_status'] = f"INVALID: Schedule conflict with {existing_course}"
-                    has_conflict = True
-                    break
-                    
-            if has_conflict:
+        # Prepare for reasoning model
+        logger.info(f"Preparing to evaluate {len(available_courses)} courses with reasoning model")
+        
+        # Format course data for the reasoning model
+        formatted_courses = []
+        for i, course in enumerate(available_courses):
+            formatted_course = f"""
+Course {i+1}: {course.get('course_code', '')}
+Name: {course.get('course_name', '')}
+Credits: {course.get('credits', '')}
+Description: {course.get('description', '')}
+Prerequisites: {course.get('prerequisites', '')}
+Schedule: {course.get('schedule', {}).get('days', '')} at {course.get('schedule', {}).get('time', '')}
+Instructor: {course.get('instructor', '')}
+Location: {course.get('location', '')}
+Available Seats: {course.get('availability', {}).get('available_seats', '')}
+            """
+            formatted_courses.append(formatted_course)
+        
+        courses_text = "\n\n".join(formatted_courses)
+        
+        # Create prompt for the reasoning model
+        reasoning_prompt = f"""
+You are an expert academic advisor evaluating course options for a student. You need to:
+1. Consider the student's academic history and requirements
+2. Evaluate each course option for fit, prerequisites, and schedule conflicts
+3. Select the BEST options that would serve this student
+
+STUDENT DATA:
+{user_data}
+
+COMPLETED COURSES:
+{', '.join(completed_courses) if completed_courses else 'None provided'}
+
+REQUIRED COURSES FOR DEGREE:
+{', '.join(required_courses) if required_courses else 'None provided'}
+
+STUDENT QUERY:
+{query}
+
+AVAILABLE COURSE OPTIONS:
+{courses_text}
+
+For each course, determine:
+1. If the student meets prerequisites (based on their completed courses)
+2. If there are schedule conflicts with other recommended courses
+3. How well it aligns with their query and academic goals
+4. Its overall priority ranking (High, Medium, Low)
+
+Then provide your final recommendations in this exact format:
+
+RECOMMENDATIONS:
+[course_code_1]: RECOMMEND - [brief reason] - [priority]
+[course_code_2]: RECOMMEND - [brief reason] - [priority]
+[course_code_3]: REJECT - [brief reason]
+...etc for all courses
+
+Final format must be "RECOMMEND" or "REJECT" followed by reason and priority.
+"""
+        
+        # Get reasoning model's evaluation
+        reasoning_response = reasoning_model.invoke(reasoning_prompt)
+        reasoning_text = reasoning_response.content
+        
+        # Log response information
+        logger.info(f"Received reasoning model response of length: {len(reasoning_text)}")
+        
+        # Process recommendations
+        recommendation_results = []
+        
+        # Extract recommendations section
+        recommendations_section = reasoning_text
+        if "RECOMMENDATIONS:" in reasoning_text:
+            recommendations_section = reasoning_text.split("RECOMMENDATIONS:")[1].strip()
+        
+        # Map from course codes to original course dictionaries
+        code_to_course = {course.get('course_code', ''): course for course in available_courses}
+        
+        # Process each line in the recommendations
+        for line in recommendations_section.split('\n'):
+            line = line.strip()
+            if not line:
                 continue
                 
-            # Add to scheduled times
-            scheduled_times[course['course_code']] = (days, time)
+            try:
+                # Extract course code and recommendation
+                parts = line.split(':', 1)
+                if len(parts) < 2:
+                    continue
+                    
+                course_code = parts[0].strip()
+                recommendation = parts[1].strip()
+                
+                # Find the original course data
+                course = code_to_course.get(course_code)
+                if not course:
+                    # Try partial matching if exact match fails
+                    for code, c in code_to_course.items():
+                        if course_code in code:
+                            course = c
+                            break
+                
+                if not course:
+                    continue
+                    
+                # Extract decision and reason
+                is_recommended = "RECOMMEND" in recommendation.upper()
+                
+                # Try to extract priority
+                priority = "Medium"  # Default
+                if "HIGH" in recommendation.upper():
+                    priority = "High"
+                elif "MEDIUM" in recommendation.upper():
+                    priority = "Medium" 
+                elif "LOW" in recommendation.upper():
+                    priority = "Low"
+                
+                # Extract reason
+                reason = recommendation
+                if "-" in recommendation:
+                    parts = recommendation.split("-")
+                    if len(parts) >= 2:
+                        reason = parts[1].strip()
+                
+                # Add evaluated course to results
+                course_copy = course.copy()
+                course_copy['recommendation'] = {
+                    'is_recommended': is_recommended,
+                    'reason': reason,
+                    'priority': priority
+                }
+                
+                recommendation_results.append(course_copy)
+            except Exception as e:
+                logger.error(f"Error processing recommendation line: {e}")
+                continue
         
-        # Course passed all basic checks
-        verified_courses.append(course)
-    
-    # If we have many verified courses, use LLM for prerequisite checking
-    if len(verified_courses) > 1:
-        prerequisite_check_data = []
-        for course in verified_courses:
-            prerequisite_check_data.append({
-                'code': course['course_code'],
-                'prerequisites': course.get('prerequisites', '')
-            })
+        # Sort by priority (High > Medium > Low)
+        priority_order = {"High": 0, "Medium": 1, "Low": 2}
+        recommendation_results.sort(
+            key=lambda x: (
+                not x.get('recommendation', {}).get('is_recommended', False),  # Recommended first
+                priority_order.get(x.get('recommendation', {}).get('priority', "Medium"), 1)  # Then by priority
+            )
+        )
         
-        # Prepare user data for prerequisite check
-        prerequisite_prompt = f"""
-        Check if this student has completed prerequisites for these courses:
-        {json.dumps(prerequisite_check_data, indent=2)}
+        logger.info(f"Evaluated {len(recommendation_results)} courses with reasoning model")
+        return recommendation_results
         
-        Student's completed courses: {', '.join(completed_courses)}
-        
-        For each course, respond ONLY with one of:
-        1. "PREREQUISITE_MET" if all prerequisites are met
-        2. "PREREQUISITE_MISSING: [specific missing prerequisite]" if any are missing
-        
-        Format: COURSE_CODE: RESULT
-        """
-        
-        try:
-            prerequisite_response = reasoning_model.invoke(prerequisite_prompt)
-            prerequisite_results = parse_prerequisite_results(prerequisite_response.content)
-            
-            # Apply prerequisite check results
-            for course in verified_courses:
-                course_code = course['course_code']
-                if course_code in prerequisite_results:
-                    result = prerequisite_results[course_code]
-                    if not result.startswith("PREREQUISITE_MET"):
-                        course['verification_status'] = f"INVALID: {result}"
-        except Exception as e:
-            logger.error(f"Error in prerequisite checking: {e}")
-    
-    return courses
+    except Exception as e:
+        logger.error(f"Error in reasoning-based evaluation: {e}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return []  # Return empty list on error
 
-def parse_prerequisite_results(content: str) -> Dict[str, str]:
-    """
-    Parse prerequisite check results from LLM output.
-    
-    Args:
-        content: LLM response content
-        
-    Returns:
-        Dictionary mapping course codes to prerequisite check results
-    """
-    results = {}
-    
-    # Parse each line
-    for line in content.strip().split('\n'):
-        # Look for "COURSE_CODE: RESULT" pattern
-        if ':' in line:
-            parts = line.split(':', 1)
-            course_code = parts[0].strip()
-            result = parts[1].strip()
-            
-            results[course_code] = result
-    
-    return results
 
 def format_course_data(courses: List[Document]) -> List[dict]:
     """
     Format course documents into structured data for the frontend.
-    
-    Args:
-        courses: List of course documents
-        
-    Returns:
-        List of course data dictionaries
     """
     course_data = []
     
     for doc in courses:
         metadata = doc.metadata
         
-        # Extract course details from metadata
+        # Extract course details from metadata using class_code
         course_info = {
-            "course_code": metadata.get('class_code', ''),
-            "course_name": metadata.get('class_name', ''),
+            "course_code": metadata.get('class_code', 'Unknown'),
+            "course_name": metadata.get('course_name', 'Unknown'),  # Could be improved with a course name field
             "credits": metadata.get('credits', ''),
             "description": metadata.get('description', ''),
             "prerequisites": metadata.get('prerequisites', ''),
@@ -569,65 +691,16 @@ def format_course_data(courses: List[Document]) -> List[dict]:
                 "available_seats": metadata.get('available_seats', ''),
                 "total_seats": metadata.get('total_seats', '')
             },
-            "crn": metadata.get('crn', '')
+            "crn": ""  # Keep empty as we're not using CRN
         }
         
         course_data.append(course_info)
     
     return course_data
 
-def generate_friendly_response(query: str, valid_courses: List[dict]) -> str:
+def process_course_query_with_reasoning(db: Session, user_id: int, query: str) -> dict:
     """
-    Generate a friendly, concise response with emojis
-    
-    Args:
-        query: The student's query
-        valid_courses: List of validated course data
-        
-    Returns:
-        A friendly, concise response message
-    """
-    # Extract course codes for the prompt
-    course_codes = [course['course_code'] for course in valid_courses]
-    
-    if not course_codes:
-        # No valid courses found
-        prompt = f"""
-        The student asked: "{query}"
-        
-        Unfortunately, I couldn't find any suitable courses that meet all requirements (prerequisites, availability, scheduling).
-        
-        Write a friendly, brief response (1-3 sentences) that:
-        1. Acknowledges their request
-        2. Explains that no perfect matches were found
-        3. Suggests they might want to check with their academic advisor or consider schedule flexibility
-        4. Includes an appropriate emoji
-        
-        RESPONSE:
-        """
-    else:
-        # Valid courses found
-        prompt = f"""
-        The student asked: "{query}"
-        
-        I found these courses for them: {', '.join(course_codes)}
-        
-        Write a friendly, brief response (1-3 sentences) that:
-        1. Addresses their query directly
-        2. Mentions you've found some great options for them
-        3. Includes 1-2 appropriate emojis (📚, ✨, 🎯, 🚀, ✅)
-        4. Is encouraging and positive
-        5. Does NOT list the individual courses (they'll be shown separately)
-        
-        RESPONSE:
-        """
-    
-    response = response_model.invoke(prompt)
-    return response.content.strip()
-
-def process_course_query(db: Session, user_id: int, query: str) -> dict:
-    """
-    Process course-related queries using optimized search and verification.
+    Process course-related queries using reasoning model for filtering and ranking.
     
     Args:
         db: Database session
@@ -638,11 +711,16 @@ def process_course_query(db: Session, user_id: int, query: str) -> dict:
         A dictionary with structured course data and a conversational message
     """
     try:
+        logger.info(f"Starting course query processing with reasoning for query: {query[:100]}")
+        
         # Step 1: Perform optimized search
         search_results = optimized_course_search(db, user_id, query)
         
+        logger.info(f"Search returned {len(search_results)} results")
+        
         if not search_results:
             # No results found
+            logger.info("No search results found")
             return {
                 "type": "course_recommendations",
                 "message": "I couldn't find any courses matching your criteria. Can you try rephrasing your request or providing more details? 📚",
@@ -651,24 +729,46 @@ def process_course_query(db: Session, user_id: int, query: str) -> dict:
         
         # Step 2: Format course data
         course_data = format_course_data(search_results)
+        logger.info(f"Formatted {len(course_data)} courses")
         
-        # Step 3: Verify courses against constraints
-        verified_courses = verify_course_recommendations(db, user_id, course_data)
+        # Step 3: Use reasoning model to evaluate and filter courses
+        evaluated_courses = reasoning_based_recommendations(db, user_id, query, course_data)
+        logger.info(f"Evaluated {len(evaluated_courses)} courses with reasoning model")
         
-        # Filter out valid courses
-        valid_courses = [course for course in verified_courses if course['verification_status'] == "VALID"]
+        # Filter recommended courses
+        recommended_courses = [course for course in evaluated_courses 
+                              if course.get('recommendation', {}).get('is_recommended', False)]
         
-        # Step 4: Generate friendly response
-        message = generate_friendly_response(query, valid_courses)
+        # Step 4: Generate friendly response based on reasoning results
+        response_prompt = f"""
+The student asked: "{query}"
+
+Based on their academic history and requirements, I've evaluated potential courses. 
+I found {len(recommended_courses)} recommended courses that would be beneficial for them.
+
+Write a friendly, brief response (2-3 sentences) that:
+1. Addresses their query directly
+2. Mentions how you evaluated courses based on their academic history and requirements
+3. Includes an encouraging tone and 1-2 appropriate emojis
+4. Is personalized to their situation
+
+DO NOT list the courses - they'll be shown separately.
+"""
         
-        # Return structured response
+        message_response = response_model.invoke(response_prompt)
+        message = message_response.content.strip()
+        
+        # Return structured response with all evaluated courses
         return {
             "type": "course_recommendations",
             "message": message,
-            "course_data": verified_courses  # Include all courses with their verification status
+            "course_data": evaluated_courses  # Include all courses with reasoning notes
         }
+        
     except Exception as e:
-        logger.error(f"Error in process_course_query: {e}")
+        logger.error(f"Error in process_course_query_with_reasoning: {e}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return {
             "type": "course_recommendations",
             "message": "I encountered an issue while finding courses for you. Please try again or rephrase your request. 🙇",
@@ -677,7 +777,7 @@ def process_course_query(db: Session, user_id: int, query: str) -> dict:
 
 def get_advice(db, user_id: int, query=None):
     """
-    Main function that orchestrates the entire query processing pipeline.
+    Main function that orchestrates the entire query processing pipeline using reasoning model.
     
     Args:
         db: Database session
@@ -691,7 +791,7 @@ def get_advice(db, user_id: int, query=None):
         # If no query is provided, use a default recommendation prompt
         if not query:
             default_query = "What courses should I take next term?"
-            return process_course_query(db, user_id, default_query)
+            return process_course_query_with_reasoning(db, user_id, default_query)
         
         # Classify the intent using LLM
         intent = classify_intent(query)
@@ -699,7 +799,7 @@ def get_advice(db, user_id: int, query=None):
         
         # Process based on intent
         if intent == "COURSE":
-            return process_course_query(db, user_id, query)
+            return process_course_query_with_reasoning(db, user_id, query)
         else:
             # For general conversation, return plain text
             return process_general_query(query)

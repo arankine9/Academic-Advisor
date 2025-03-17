@@ -9,7 +9,7 @@ from backend.core.auth import authenticate_user, create_access_token, get_curren
 from backend.core.database import User as UserModel
 from backend.models.schemas import Token, UserCreate, CourseResponse, ChatMessage, User as UserSchema
 from backend.services.courses import get_or_create_course, add_course_to_user, remove_course_from_user, get_user_courses, parse_course_from_string
-from backend.services.query_engine import get_advice
+from backend.services.query_engine import get_advice, classify_intent, generate_acknowledgment, process_general_query
 from fastapi import APIRouter, Depends, HTTPException, status, Form, Body, BackgroundTasks
 import asyncio
 from fastapi.concurrency import run_in_threadpool
@@ -18,21 +18,15 @@ import logging
 import asyncio
 from fastapi.concurrency import run_in_threadpool
 
-# Import needed functions from query_engine.py
-from backend.services.query_engine import (
-    get_advice, 
-    classify_intent, 
-    generate_acknowledgment,
-    process_general_query,
-    process_course_query  # Add this import for optimization
-)
-
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # Create API router
 router = APIRouter()
+
+# In-memory response cache
+_processing_responses = {}
 
 # Authentication endpoints
 @router.post("/token", response_model=Token)
@@ -216,9 +210,6 @@ async def recommend_me(
         return {"recommendations": recommendations}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
-
-# In-memory response cache
-_processing_responses = {}
 
 @router.post("/advising")
 async def advising_chat(
