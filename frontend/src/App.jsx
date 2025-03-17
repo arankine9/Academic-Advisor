@@ -4,7 +4,6 @@ import { AuthProvider } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Notification from './components/Notification';
-import ClassManagement from './components/ClassManagement';
 import AdvisingChat from './components/AdvisingChat';
 import AppBackground from './components/background';
 
@@ -32,14 +31,6 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <Dashboard />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/classes" 
-                element={
-                  <ProtectedRoute>
-                    <ClassManagement />
                   </ProtectedRoute>
                 } 
               />

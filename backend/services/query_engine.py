@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 
 # Import our services
 from backend.services.programs import format_courses_for_rag, get_required_and_completed_courses
+from backend.services.majors import get_user_majors
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -263,6 +264,25 @@ def execute_rag_query(search_query: str) -> List[Document]:
         logger.error(f"Error in RAG query execution: {e}")
         return []
 
+def format_major_info(majors):
+    """
+    Format user majors for inclusion in the RAG context.
+    
+    Args:
+        majors: List of Major objects
+        
+    Returns:
+        Formatted string with major information
+    """
+    if not majors:
+        return "Majors: None declared"
+    
+    major_names = [major.name for major in majors]
+    if len(major_names) == 1:
+        return f"Major: {major_names[0]}"
+    else:
+        return f"Majors: {', '.join(major_names[:-1])} and {major_names[-1]}"
+
 def process_course_query(query: str, user_data: str) -> str:
     """
     Process course-related queries using multi-step reasoning and RAG.
@@ -337,8 +357,17 @@ def get_advice(db, user_id: int, query=None):
         A formatted response
     """
     try:
-        # Format user data for RAG
-        user_data = format_courses_for_rag(db, user_id)
+        # Get user course information
+        courses_data = format_courses_for_rag(db, user_id)
+        
+        # Get user major information
+        majors = get_user_majors(db, user_id)
+        major_info = format_major_info(majors)
+        
+        # Combine course and major information for RAG context
+        user_data = f"{major_info}\n\n{courses_data}"
+        
+        logger.info(f"User context: {major_info}")
         
         # If no query is provided, use a default recommendation prompt
         if not query:

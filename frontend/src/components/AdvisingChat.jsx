@@ -1,10 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faCog, faArrowRight, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faPaperPlane, 
+  faCog, 
+  faArrowRight, 
+  faMoon, 
+  faSun,
+  faGraduationCap
+} from '@fortawesome/free-solid-svg-icons';
 import { faTwitter, faInstagram, faTiktok } from '@fortawesome/free-brands-svg-icons';
 
 import MessageBubble from '../components/MessageBubble';
 import TypingIndicator from '../components/TypingIndicator';
+import ClassManagementModal from '../components/ClassManagementModal';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import { sendMessage } from '../services/advisingService';
@@ -20,6 +28,7 @@ const AdvisingChat = () => {
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem('gradpath-dark-mode') === 'true'
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -44,6 +53,20 @@ const AdvisingChat = () => {
     } else {
       document.body.classList.remove('dark-mode');
     }
+  };
+
+  // Open class management modal
+  const openModal = () => {
+    setIsModalOpen(true);
+    // Prevent body scrolling when modal is open
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Close class management modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    // Restore body scrolling when modal is closed
+    document.body.style.overflow = 'auto';
   };
 
   // With column-reverse layout, we don't need to scroll to bottom anymore
@@ -128,6 +151,10 @@ const AdvisingChat = () => {
           </button>
         </div>
         <div className="header-right-section">
+          <button className="manage-classes-btn" onClick={openModal}>
+            <FontAwesomeIcon icon={faGraduationCap} className="btn-icon" />
+            <span>Manage Classes</span>
+          </button>
           <div className="brand">GradPath</div>
         </div>
       </header>
@@ -198,6 +225,12 @@ const AdvisingChat = () => {
           PRIVACY POLICY
         </div>
       </footer>
+
+      {/* Class Management Modal */}
+      <ClassManagementModal 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+      />
     </div>
   );
 };
