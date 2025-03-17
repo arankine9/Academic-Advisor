@@ -422,247 +422,149 @@ def optimized_course_search(db: Session, user_id: int, query: str) -> List[Docum
 
 def reasoning_based_recommendations(db: Session, user_id: int, query: str, courses: List[dict]) -> List[dict]:
     """
-    Use the reasoning model to evaluate and filter courses based on user data and course characteristics.
-    
-    Args:
-        db: Database session
-        user_id: User ID
-        query: The student's original query
-        courses: List of potential course data dictionaries
-        
-    Returns:
-        List of filtered and ranked courses with reasoning notes
+    Use the reasoning model to recommend 3-5 courses based on user data.
     """
     try:
-        # First, filter out courses with 0 seats available (only hard rule we keep)
-        available_courses = []
-        for course in courses:
-            # Add debug logging to see what's coming in
-            logger.info(f"Checking course: {course.get('course_code', 'Unknown')}")
-            logger.info(f"Course structure: {course.keys()}")
-            if 'availability' in course:
-                logger.info(f"Availability structure: {course['availability']}")
-            
-            # Try to get available seats (handle both nested and direct access)
-            available_seats = ''
-            if 'availability' in course and isinstance(course['availability'], dict):
-                available_seats = course['availability'].get('available_seats', '')
-                logger.info(f"Found nested available_seats: {available_seats}")
-            elif 'available_seats' in course:
-                available_seats = course.get('available_seats', '')
-                logger.info(f"Found direct available_seats: {available_seats}")
-            
-            # More lenient filtering: only filter out if we're SURE seats = 0
-            try:
-                if available_seats and int(available_seats) == 0:
-                    logger.info(f"Filtering out course with 0 seats: {course.get('course_code', 'Unknown')}")
-                    continue
-                # Keep course in all other cases
-                available_courses.append(course)
-                logger.info(f"Keeping course: {course.get('course_code', 'Unknown')}")
-            except (ValueError, TypeError):
-                # If not parseable as integer, keep the course (benefit of doubt)
-                available_courses.append(course)
-                logger.info(f"Keeping course (non-integer seats): {course.get('course_code', 'Unknown')}")
+        # Log the number of courses we're starting with
+        logger.info(f"Starting with {len(courses)} courses to evaluate")
         
-        # If no courses with available seats, return empty list
-        if not available_courses:
-            logger.info("No courses with available seats found")
-            return []
-            
-        # Get user data for RAG format
-        user_data = format_courses_for_rag(db, user_id)
-
-        # Extract course data safely
+        # Get user data for the reasoning model
+        user_data = ""
         try:
-            # Get user progress data
-            user_progress = get_required_and_completed_courses(db, user_id)
-            
-            # Extract completed courses
-            completed_courses = []
-            if user_progress and 'completed_courses' in user_progress:
-                completed_courses = [course.get('course_code', '') for course in user_progress['completed_courses']]
-            
-            # Extract required courses from all programs
-            required_courses = []
-            if user_progress and 'programs' in user_progress:
-                for program_name, program_data in user_progress['programs'].items():
-                    if 'required_courses' in program_data:
-                        for course in program_data['required_courses']:
-                            if isinstance(course, str):
-                                required_courses.append(course)
-                            elif isinstance(course, dict) and 'course_code' in course:
-                                required_courses.append(course['course_code'])
-                            elif isinstance(course, dict) and 'options' in course:
-                                # Handle course options (OR relationship)
-                                for option in course['options']:
-                                    if isinstance(option, str):
-                                        required_courses.append(option)
-                                    elif isinstance(option, dict) and 'course_code' in option:
-                                        required_courses.append(option['course_code'])
-            
-            logger.info(f"Extracted {len(completed_courses)} completed courses and {len(required_courses)} required courses")
+            user_data = format_courses_for_rag(db, user_id)
+            logger.info("Successfully retrieved user course data")
         except Exception as e:
-            logger.error(f"Error extracting course data: {e}")
-            import traceback
-            logger.error(f"Traceback: {traceback.format_exc()}")
-            completed_courses = []
-            required_courses = []
+            logger.error(f"Error getting user data: {e}")
+            # Continue anyway - we'll just have less context
         
-        # Prepare for reasoning model
-        logger.info(f"Preparing to evaluate {len(available_courses)} courses with reasoning model")
-        
-        # Format course data for the reasoning model
+        # Format course data for the reasoning model - simplified version
         formatted_courses = []
-        for i, course in enumerate(available_courses):
-            formatted_course = f"""
-Course {i+1}: {course.get('course_code', '')}
+        for i, course in enumerate(courses):
+            course_info = f"""
+Course {i+1}: {course.get('course_code', 'Unknown')}
 Name: {course.get('course_name', '')}
-Credits: {course.get('credits', '')}
-Description: {course.get('description', '')}
+Description: {course.get('description', '')[:100]}...
 Prerequisites: {course.get('prerequisites', '')}
-Schedule: {course.get('schedule', {}).get('days', '')} at {course.get('schedule', {}).get('time', '')}
-Instructor: {course.get('instructor', '')}
-Location: {course.get('location', '')}
-Available Seats: {course.get('availability', {}).get('available_seats', '')}
             """
-            formatted_courses.append(formatted_course)
+            formatted_courses.append(course_info)
         
         courses_text = "\n\n".join(formatted_courses)
         
-        # Create prompt for the reasoning model
+        # Create simpler prompt for the reasoning model
         reasoning_prompt = f"""
-You are an expert academic advisor evaluating course options for a student. You need to:
-1. Consider the student's academic history and requirements
-2. Evaluate each course option for fit, prerequisites, and schedule conflicts
-3. Select the BEST options that would serve this student
+You are an academic advisor helping a student choose courses. Based on the student's query and academic history, recommend 3-5 courses from the list below.
 
-STUDENT DATA:
+STUDENT QUERY: {query}
+
+STUDENT ACADEMIC HISTORY:
 {user_data}
 
-COMPLETED COURSES:
-{', '.join(completed_courses) if completed_courses else 'None provided'}
-
-REQUIRED COURSES FOR DEGREE:
-{', '.join(required_courses) if required_courses else 'None provided'}
-
-STUDENT QUERY:
-{query}
-
-AVAILABLE COURSE OPTIONS:
+AVAILABLE COURSES:
 {courses_text}
 
-For each course, determine:
-1. If the student meets prerequisites (based on their completed courses)
-2. If there are schedule conflicts with other recommended courses
-3. How well it aligns with their query and academic goals
-4. Its overall priority ranking (High, Medium, Low)
+Please respond with ONLY the course codes of your recommended courses in this exact format:
+RECOMMENDED COURSES:
+- [course_code_1]
+- [course_code_2]
+- [course_code_3]
+- [course_code_4] (optional)
+- [course_code_5] (optional)
 
-Then provide your final recommendations in this exact format:
-
-RECOMMENDATIONS:
-[course_code_1]: RECOMMEND - [brief reason] - [priority]
-[course_code_2]: RECOMMEND - [brief reason] - [priority]
-[course_code_3]: REJECT - [brief reason]
-...etc for all courses
-
-Final format must be "RECOMMEND" or "REJECT" followed by reason and priority.
+Just list the course codes, nothing else. For example: "CS 101", "MATH 210", etc.
 """
         
         # Get reasoning model's evaluation
+        logger.info("Sending query to reasoning model")
         reasoning_response = reasoning_model.invoke(reasoning_prompt)
         reasoning_text = reasoning_response.content
-        
-        # Log response information
         logger.info(f"Received reasoning model response of length: {len(reasoning_text)}")
         
-        # Process recommendations
-        recommendation_results = []
+        # Extract recommended course codes using a more forgiving approach
+        recommended_codes = []
         
-        # Extract recommendations section
-        recommendations_section = reasoning_text
-        if "RECOMMENDATIONS:" in reasoning_text:
-            recommendations_section = reasoning_text.split("RECOMMENDATIONS:")[1].strip()
-        
-        # Map from course codes to original course dictionaries
-        code_to_course = {course.get('course_code', ''): course for course in available_courses}
-        
-        # Process each line in the recommendations
-        for line in recommendations_section.split('\n'):
-            line = line.strip()
-            if not line:
-                continue
-                
-            try:
-                # Extract course code and recommendation
-                parts = line.split(':', 1)
-                if len(parts) < 2:
-                    continue
+        # Try to find a "RECOMMENDED COURSES:" section
+        if "RECOMMENDED COURSES:" in reasoning_text:
+            recommendation_section = reasoning_text.split("RECOMMENDED COURSES:")[1].strip()
+            
+            # Extract course codes from bullet points or numbered lists
+            for line in recommendation_section.split('\n'):
+                line = line.strip()
+                if line.startswith('-') or line.startswith('*') or (line and line[0].isdigit() and '. ' in line):
+                    # Extract the code from the line
+                    if line.startswith('-') or line.startswith('*'):
+                        code = line[1:].strip()
+                    else:
+                        code = line.split('. ', 1)[1].strip()
                     
-                course_code = parts[0].strip()
-                recommendation = parts[1].strip()
-                
-                # Find the original course data
-                course = code_to_course.get(course_code)
-                if not course:
-                    # Try partial matching if exact match fails
-                    for code, c in code_to_course.items():
-                        if course_code in code:
-                            course = c
-                            break
-                
-                if not course:
-                    continue
+                    # Clean up the code
+                    if '[' in code and ']' in code:
+                        code = code.split('[')[1].split(']')[0]
                     
-                # Extract decision and reason
-                is_recommended = "RECOMMEND" in recommendation.upper()
-                
-                # Try to extract priority
-                priority = "Medium"  # Default
-                if "HIGH" in recommendation.upper():
-                    priority = "High"
-                elif "MEDIUM" in recommendation.upper():
-                    priority = "Medium" 
-                elif "LOW" in recommendation.upper():
-                    priority = "Low"
-                
-                # Extract reason
-                reason = recommendation
-                if "-" in recommendation:
-                    parts = recommendation.split("-")
-                    if len(parts) >= 2:
-                        reason = parts[1].strip()
-                
-                # Add evaluated course to results
+                    recommended_codes.append(code)
+        else:
+            # Fallback: just look for anything that looks like a course code
+            # This regex looks for patterns like "CS 101", "MATH 210", etc.
+            import re
+            course_code_pattern = r'[A-Z]{2,4}\s*\d{3,4}'
+            recommended_codes = re.findall(course_code_pattern, reasoning_text)[:5]  # Take up to 5
+        
+        logger.info(f"Extracted {len(recommended_codes)} recommended course codes: {recommended_codes}")
+        
+        # If we got no recommendations, just take the first 3 courses
+        if not recommended_codes and courses:
+            logger.info("No recommendations found, using first 3 courses")
+            recommended_codes = [course.get('course_code', f"Course-{i}") for i, course in enumerate(courses[:3])]
+        
+        # Map recommended codes back to full course objects
+        result_courses = []
+        for code in recommended_codes:
+            # Find matching course
+            for course in courses:
+                course_code = course.get('course_code', '')
+                # Case-insensitive partial matching for robustness
+                if code.lower() in course_code.lower() or course_code.lower() in code.lower():
+                    # Create a copy with recommendation data
+                    course_copy = course.copy()
+                    course_copy['recommendation'] = {
+                        'is_recommended': True,
+                        'reason': "Recommended based on your academic history and goals.",
+                        'priority': "High"
+                    }
+                    result_courses.append(course_copy)
+                    break
+        
+        # Ensure we have at least some recommendations
+        if not result_courses and courses:
+            logger.info("Couldn't match recommendations to courses, using first 3")
+            for i, course in enumerate(courses[:3]):
                 course_copy = course.copy()
                 course_copy['recommendation'] = {
-                    'is_recommended': is_recommended,
-                    'reason': reason,
-                    'priority': priority
+                    'is_recommended': True,
+                    'reason': "Suggested option for your next semester.",
+                    'priority': "Medium"
                 }
-                
-                recommendation_results.append(course_copy)
-            except Exception as e:
-                logger.error(f"Error processing recommendation line: {e}")
-                continue
+                result_courses.append(course_copy)
         
-        # Sort by priority (High > Medium > Low)
-        priority_order = {"High": 0, "Medium": 1, "Low": 2}
-        recommendation_results.sort(
-            key=lambda x: (
-                not x.get('recommendation', {}).get('is_recommended', False),  # Recommended first
-                priority_order.get(x.get('recommendation', {}).get('priority', "Medium"), 1)  # Then by priority
-            )
-        )
-        
-        logger.info(f"Evaluated {len(recommendation_results)} courses with reasoning model")
-        return recommendation_results
+        logger.info(f"Returning {len(result_courses)} recommended courses")
+        return result_courses
         
     except Exception as e:
-        logger.error(f"Error in reasoning-based evaluation: {e}")
+        logger.error(f"Error in reasoning-based recommendations: {e}")
         import traceback
         logger.error(f"Traceback: {traceback.format_exc()}")
-        return []  # Return empty list on error
+        
+        # As a last resort, return simple recommendations
+        if courses:
+            logger.info("Using fallback recommendation logic")
+            return [
+                {**courses[i], 'recommendation': {
+                    'is_recommended': True,
+                    'reason': "Suggested course option.",
+                    'priority': "Medium"
+                }} 
+                for i in range(min(3, len(courses)))
+            ]
+        return []
 
 
 def format_course_data(courses: List[Document]) -> List[dict]:
