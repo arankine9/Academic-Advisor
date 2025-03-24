@@ -88,32 +88,4 @@ class Major(Base):
     users = relationship("User", secondary=user_majors, back_populates="majors")
 
 # Define UserProgram model
-class UserProgram(Base):
-    __tablename__ = "user_programs"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
-    program_type = Column(String)  # 'major' or 'minor'
-    program_name = Column(String)
-    required_courses = Column(JSON)  # JSONB array of course codes
-    
-    # Define relationship with users
-    user = relationship("User", back_populates="programs")
-    
-    __table_args__ = (
-        # Composite unique constraint on user_id and program_name
-        # to ensure a user can't have the same program twice
-        {'sqlite_autoincrement': True},
-    )
-
-# Function to get database session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-# Create all tables in the database
-def create_tables():
-    Base.metadata.create_all(bind=engine)
+class UserProgram(Ba

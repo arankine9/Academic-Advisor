@@ -21,6 +21,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 # Import our services
 from backend.services.programs import format_courses_for_rag, get_required_and_completed_courses
+# Add back the majors import that was missing in paste 2
+from backend.services.majors import get_user_majors
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -98,27 +100,27 @@ CRITICAL GUIDANCE:
 Respond with exactly one word: either COURSE or GENERAL.
 """
 
-# Reasoning Prompt
+# Reasoning Prompt - Updated to include major requirements
 REASONING_PROMPT = """
 You are an academic advisor who will be retrieving information and formulating recommendations for the given student.
 
 You need to determine the best courses for this student based on:
 - The user's specific query and academic history
-- Their major/minor requirements
+- Their major/minor requirements and degree progress
 - Course prerequisites and availability
-- How courses fit into their degree progress
+- How courses fit into their academic plan
 
 {user_data}
 
 Student query: {query}
 
 Analyze what this student needs and generate 3-5 specific search queries that would find the most relevant courses.
-Each query should target a different aspect of what the student needs.
+Each query should target a different aspect of what the student needs, including major requirements if applicable.
 
 SEARCH QUERIES:
 """
 
-# Final Response Prompt
+# Final Response Prompt - Updated to reference major requirements
 FINAL_RESPONSE_PROMPT = """
 You are a friendly, helpful academic advisor. Based on the student's data and the recommended courses, provide a personalized response.
 
@@ -131,12 +133,31 @@ Recommended courses:
 
 Create a brief, friendly response (1-3 sentences max) that:
 1. Addresses their query directly
-2. Mentions how the recommended courses help them
+2. Mentions how the recommended courses help them progress in their major when applicable
 3. Includes 1-2 appropriate emojis (📚, ✨, 🎯, 🚀, ✅, 📋, etc.)
 
 Do NOT list the courses in your response - they will be displayed separately. Focus on being encouraging and helpful.
 """
 
+# Add the major formatting function from paste 1
+def format_major_info(majors):
+    """
+    Format user majors for inclusion in the RAG context.
+    
+    Args:
+        majors: List of Major objects
+        
+    Returns:
+        Formatted string with major information
+    """
+    if not majors:
+        return "Majors: None declared"
+    
+    major_names = [major.name for major in majors]
+    if len(major_names) == 1:
+        return f"Major: {major_names[0]}"
+    else:
+        return f"Majors: {', '.join(major_names[:-1])} and {major_names[-1]}"
 
 def classify_intent(query: str) -> str:
     """
@@ -183,6 +204,7 @@ def generate_acknowledgment(query: str) -> str:
     3. SCHEDULE_PLANNING: Concerned about scheduling
     4. DEGREE_PROGRESS: Asking about graduation requirements
     5. COURSE_DETAILS: Asking about specific course information
+    6. MAJOR_REQUIREMENTS: Asking about major-specific courses or requirements
     
     Respond with only the category name.
     """
@@ -202,6 +224,8 @@ def generate_acknowledgment(query: str) -> str:
         return "Reviewing your degree requirements and progress... 🎓"
     elif "DETAILS" in detailed_intent:
         return "Looking up those course details for you... 📚"
+    elif "MAJOR" in detailed_intent:
+        return "Checking your major requirements and progress... 📝"
     else:
         return "On it! Searching for course recommendations that match your academic plan... 🔍"
 
@@ -346,9 +370,18 @@ def execute_rag_query(search_query: str) -> List[Document]:
 def optimized_course_search(db: Session, user_id: int, query: str) -> List[Document]:
     """
     Perform optimized course search to find relevant courses.
+    Includes major information in the search context.
     """
-    # Format user data for RAG
-    user_data = format_courses_for_rag(db, user_id)
+    # Get user course data for RAG
+    course_data = format_courses_for_rag(db, user_id)
+    
+    # Get and format user major information
+    majors = get_user_majors(db, user_id)
+    major_info = format_major_info(majors)
+    
+    # Combine course and major information for the user context
+    user_data = f"{major_info}\n\n{course_data}"
+    logger.info(f"User context includes: {major_info}")
     
     # Generate search queries
     reasoning_prompt = REASONING_PROMPT.format(
@@ -422,20 +455,33 @@ def optimized_course_search(db: Session, user_id: int, query: str) -> List[Docum
 
 def reasoning_based_recommendations(db: Session, user_id: int, query: str, courses: List[dict]) -> List[dict]:
     """
-    Use the reasoning model to recommend 3-5 courses based on user data.
+    Use the reasoning model to recommend 3-5 courses based on user data including major information.
     """
     try:
         # Log the number of courses we're starting with
         logger.info(f"Starting with {len(courses)} courses to evaluate")
         
-        # Get user data for the reasoning model
-        user_data = ""
+        # Get user course data
+        course_data = ""
         try:
-            user_data = format_courses_for_rag(db, user_id)
+            course_data = format_courses_for_rag(db, user_id)
             logger.info("Successfully retrieved user course data")
         except Exception as e:
-            logger.error(f"Error getting user data: {e}")
+            logger.error(f"Error getting user course data: {e}")
             # Continue anyway - we'll just have less context
+        
+        # Get user major data
+        major_info = ""
+        try:
+            majors = get_user_majors(db, user_id)
+            major_info = format_major_info(majors)
+            logger.info(f"Successfully retrieved user major data: {major_info}")
+        except Exception as e:
+            logger.error(f"Error getting user major data: {e}")
+            major_info = "Majors: Unknown"
+        
+        # Combine course and major information for the user context
+        user_data = f"{major_info}\n\n{course_data}"
         
         # Format course data for the reasoning model - simplified version
         formatted_courses = []
@@ -452,11 +498,11 @@ Prerequisites: {course.get('prerequisites', '')}
         
         # Create simpler prompt for the reasoning model
         reasoning_prompt = f"""
-You are an academic advisor helping a student choose courses. Based on the student's query and academic history, recommend 3-5 courses from the list below.
+You are an academic advisor helping a student choose courses. Based on the student's query, academic history, and major requirements, recommend 3-5 courses from the list below.
 
 STUDENT QUERY: {query}
 
-STUDENT ACADEMIC HISTORY:
+STUDENT ACADEMIC INFORMATION:
 {user_data}
 
 AVAILABLE COURSES:
@@ -525,11 +571,23 @@ Just list the course codes, nothing else. For example: "CS 101", "MATH 210", etc
                 if code.lower() in course_code.lower() or course_code.lower() in code.lower():
                     # Create a copy with recommendation data
                     course_copy = course.copy()
-                    course_copy['recommendation'] = {
-                        'is_recommended': True,
-                        'reason': "Recommended based on your academic history and goals.",
-                        'priority': "High"
-                    }
+                    
+                    # Add recommendation reason based on user's major if available
+                    major_names = [major.name for major in majors] if majors else []
+                    if major_names:
+                        major_text = major_names[0] if len(major_names) == 1 else "your majors"
+                        course_copy['recommendation'] = {
+                            'is_recommended': True,
+                            'reason': f"Recommended for your progress in {major_text}.",
+                            'priority': "High"
+                        }
+                    else:
+                        course_copy['recommendation'] = {
+                            'is_recommended': True,
+                            'reason': "Recommended based on your academic history and goals.",
+                            'priority': "High"
+                        }
+                    
                     result_courses.append(course_copy)
                     break
         
@@ -565,7 +623,6 @@ Just list the course codes, nothing else. For example: "CS 101", "MATH 210", etc
                 for i in range(min(3, len(courses)))
             ]
         return []
-
 
 def format_course_data(courses: List[Document]) -> List[dict]:
     """
@@ -603,6 +660,7 @@ def format_course_data(courses: List[Document]) -> List[dict]:
 def process_course_query_with_reasoning(db: Session, user_id: int, query: str) -> dict:
     """
     Process course-related queries using reasoning model for filtering and ranking.
+    Includes major information in the reasoning context.
     
     Args:
         db: Database session
@@ -641,9 +699,15 @@ def process_course_query_with_reasoning(db: Session, user_id: int, query: str) -
         recommended_courses = [course for course in evaluated_courses 
                               if course.get('recommendation', {}).get('is_recommended', False)]
         
+        # Get user's majors for personalized response
+        majors = get_user_majors(db, user_id)
+        major_names = [major.name for major in majors] if majors else []
+        
         # Step 4: Generate friendly response based on reasoning results
         response_prompt = f"""
 The student asked: "{query}"
+
+Student major(s): {', '.join(major_names) if major_names else 'None declared'}
 
 Based on their academic history and requirements, I've evaluated potential courses. 
 I found {len(recommended_courses)} recommended courses that would be beneficial for them.
@@ -651,8 +715,9 @@ I found {len(recommended_courses)} recommended courses that would be beneficial 
 Write a friendly, brief response (2-3 sentences) that:
 1. Addresses their query directly
 2. Mentions how you evaluated courses based on their academic history and requirements
-3. Includes an encouraging tone and 1-2 appropriate emojis
-4. Is personalized to their situation
+3. References their major(s) if they have any declared
+4. Includes an encouraging tone and 1-2 appropriate emojis
+5. Is personalized to their situation
 
 DO NOT list the courses - they'll be shown separately.
 """
@@ -679,7 +744,8 @@ DO NOT list the courses - they'll be shown separately.
 
 def get_advice(db, user_id: int, query=None):
     """
-    Main function that orchestrates the entire query processing pipeline using reasoning model.
+    Main function that orchestrates the entire query processing pipeline.
+    Now includes user major information in the context.
     
     Args:
         db: Database session
