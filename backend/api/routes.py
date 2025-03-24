@@ -1,22 +1,19 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Form, Body
+from fastapi import APIRouter, Depends, HTTPException, status, Form, Body, BackgroundTasks
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import List, Optional
-
-from backend.core.database import get_db, Course, SessionLocal
-from backend.core.auth import authenticate_user, create_access_token, get_current_active_user, ACCESS_TOKEN_EXPIRE_MINUTES, create_user
-from backend.core.database import User as UserModel
-from backend.models.schemas import Token, UserCreate, CourseResponse, ChatMessage, User as UserSchema
-from backend.services.courses import get_or_create_course, add_course_to_user, remove_course_from_user, get_user_courses, parse_course_from_string
-from backend.services.query_engine import get_advice, classify_intent, generate_acknowledgment, process_general_query
-from fastapi import APIRouter, Depends, HTTPException, status, Form, Body, BackgroundTasks
-import asyncio
-from fastapi.concurrency import run_in_threadpool
-
 import logging
 import asyncio
 from fastapi.concurrency import run_in_threadpool
+
+from backend.core.database import get_db, Course, SessionLocal
+from backend.core.auth import authenticate_user, create_access_token, get_current_active_user, ACCESS_TOKEN_EXPIRE_MINUTES, create_user
+from backend.core.database import User as UserModel, Major
+from backend.models.schemas import Token, UserCreate, CourseResponse, ChatMessage, User as UserSchema, MajorResponse
+from backend.services.courses import get_or_create_course, add_course_to_user, remove_course_from_user, get_user_courses, parse_course_from_string
+from backend.services.query_engine import get_advice, classify_intent, generate_acknowledgment, process_general_query
+from backend.services.majors import get_available_majors, add_major_to_user, remove_major_from_user, get_user_majors
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -282,3 +279,80 @@ async def check_pending_response(
         return {"response": response, "pending": False}
     
     return {"pending": True}
+
+# Major endpoints
+@router.get("/majors/available", response_model=List[str])
+async def get_available_major_options():
+    """
+    Get a list of all available major options.
+    """
+    try:
+        majors = get_available_majors()
+        return majors
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
+@router.get("/majors/me", response_model=List[MajorResponse])
+async def get_my_majors(
+    current_user: UserModel = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Get all majors for the current user.
+    """
+    try:
+        majors = get_user_majors(db, current_user.id)
+        return majors
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
+@router.post("/majors", response_model=MajorResponse)
+async def add_major(
+    major_data: dict = Body(...),
+    current_user: UserModel = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Add a major to the current user.
+    """
+    try:
+        major_name = major_data.get("name")
+        if not major_name:
+            raise HTTPException(status_code=400, detail="Major name is required")
+        
+        # Check if major is in available options
+        available_majors = get_available_majors()
+        if major_name not in available_majors:
+            raise HTTPException(status_code=400, detail=f"Invalid major: {major_name}")
+        
+        major = add_major_to_user(db, current_user.id, major_name)
+        
+        if not major:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        return major
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
+@router.delete("/majors/{major_id}", response_model=dict)
+async def remove_major(
+    major_id: int,
+    current_user: UserModel = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Remove a major from the current user.
+    """
+    try:
+        major = remove_major_from_user(db, current_user.id, major_id)
+        
+        if not major:
+            raise HTTPException(status_code=404, detail="Major not found or not associated with user")
+        
+        return {"status": "success", "message": f"Major {major.name} removed successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")

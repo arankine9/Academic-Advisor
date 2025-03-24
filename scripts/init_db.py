@@ -1,4 +1,3 @@
-# Copy from original init_db.py with these import changes:
 import os
 import sys
 import traceback
@@ -10,6 +9,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 # IMPORTANT: Updated imports
 from backend.core.database import get_db, create_tables, Base, UserProgram
 from backend.services.courses import initialize_courses_from_json
+from backend.services.majors import initialize_majors_from_list
 
 # Load environment variables
 load_dotenv()
@@ -48,7 +48,7 @@ def init_db():
             # Verify tables were created
             inspector = inspect(engine)
             table_names = inspector.get_table_names()
-            expected_tables = ['users', 'courses', 'user_courses', 'user_programs']
+            expected_tables = ['users', 'courses', 'user_courses', 'user_programs', 'majors', 'user_majors']
             
             for table in expected_tables:
                 if table in table_names:
@@ -62,13 +62,19 @@ def init_db():
             traceback.print_exc()
             sys.exit(1)
         
-        # Initialize courses from majors.json
+        # Initialize data
         try:
             db = next(get_db())
+            
+            # Initialize courses from majors.json
             initialize_courses_from_json(db)
             print("Initialized courses from majors.json.")
+            
+            # Synchronize majors with majors_list.json
+            initialize_majors_from_list(db)
+            print("Synchronized majors with majors_list.json.")
         except Exception as e:
-            print(f"Error initializing courses: {e}")
+            print(f"Error initializing data: {e}")
             traceback.print_exc()
             sys.exit(1)
         

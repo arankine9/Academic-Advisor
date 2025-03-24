@@ -30,11 +30,25 @@ class UserCreate(UserBase):
 class UserAuth(UserBase):
     password: str
 
+# Major schema
+class MajorBase(BaseModel):
+    name: str
+
+class MajorCreate(MajorBase):
+    pass
+
+class MajorResponse(MajorBase):
+    id: int
+    
+    class Config:
+        from_attributes = True
+
 class UserResponse(UserBase):
     id: int
     is_active: bool
     created_at: datetime
     courses: List[CourseResponse] = []
+    majors: List[MajorResponse] = []
     
     class Config:
         from_attributes = True

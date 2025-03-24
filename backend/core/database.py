@@ -36,6 +36,15 @@ user_courses = Table(
     Column("completed_date", DateTime, default=datetime.utcnow),
 )
 
+# Define association table for many-to-many relationship between users and majors
+user_majors = Table(
+    "user_majors",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True),
+    Column("major_id", Integer, ForeignKey("majors.id", ondelete="CASCADE"), primary_key=True),
+    Column("added_date", DateTime, default=datetime.utcnow),
+)
+
 # Define User model
 class User(Base):
     __tablename__ = "users"
@@ -45,13 +54,15 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
-    major = Column(String)
+    major = Column(String, nullable=True)  # Keep for backward compatibility
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Define relationship with courses
     courses = relationship("Course", secondary=user_courses, back_populates="users")
     # Define relationship with programs
     programs = relationship("UserProgram", back_populates="user")
+    # Define relationship with majors
+    majors = relationship("Major", secondary=user_majors, back_populates="users")
 
 # Define Course model
 class Course(Base):
@@ -65,6 +76,16 @@ class Course(Base):
     
     # Define relationship with users
     users = relationship("User", secondary=user_courses, back_populates="courses")
+
+# Define Major model
+class Major(Base):
+    __tablename__ = "majors"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, index=True)
+    
+    # Define relationship with users
+    users = relationship("User", secondary=user_majors, back_populates="majors")
 
 # Define UserProgram model
 class UserProgram(Base):

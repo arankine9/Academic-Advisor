@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faGraduationCap } from '@fortawesome/free-solid-svg-icons';
 import { faTwitter, faInstagram, faTiktok } from '@fortawesome/free-brands-svg-icons';
 
 import MessageBubble from './MessageBubble';
 import CourseRecommendation from './CourseRecommendation';
 import TypingIndicator from './TypingIndicator';
+import ClassManagementModal from './ClassManagementModal'; // Added component
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import { sendMessage, checkPendingResponse } from '../services/advisingService';
@@ -19,6 +20,7 @@ const AdvisingChat = () => {
   const [inputValue, setInputValue] = useState('');
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
   const [isPolling, setIsPolling] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Added state
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const pollTimerRef = useRef(null);
@@ -52,6 +54,20 @@ const AdvisingChat = () => {
       }
     };
   }, []);
+
+  // Open class management modal - Added from Version 2
+  const openModal = () => {
+    setIsModalOpen(true);
+    // Prevent body scrolling when modal is open
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Close class management modal - Added from Version 2
+  const closeModal = () => {
+    setIsModalOpen(false);
+    // Restore body scrolling when modal is closed
+    document.body.style.overflow = 'auto';
+  };
 
   // Start polling for response
   const startPollingForResponse = () => {
@@ -188,7 +204,6 @@ const AdvisingChat = () => {
   };
 
   return (
-    // Rest of your component remains the same
     <div className="GradPath-container">
       {/* Header */}
       <header className="GradPath-header">
@@ -199,6 +214,11 @@ const AdvisingChat = () => {
           {/* Empty center - removed Academic Advisor */}
         </div>
         <div className="header-right-section">
+          {/* Added manage classes button */}
+          <button className="manage-classes-btn" onClick={openModal}>
+            <FontAwesomeIcon icon={faGraduationCap} className="btn-icon" />
+            <span>Manage Classes</span>
+          </button>
           <div className="brand">GradPath</div>
         </div>
       </header>
@@ -263,6 +283,12 @@ const AdvisingChat = () => {
           PRIVACY POLICY
         </div>
       </footer>
+      
+      {/* Added class management modal */}
+      <ClassManagementModal 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+      />
     </div>
   );
 };
