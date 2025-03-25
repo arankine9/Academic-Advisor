@@ -69,4 +69,16 @@ class UserProgramResponse(UserProgramBase):
     id: int
     user_id: int
     
-    class
+    class Config:
+        from_attributes = True
+
+# Token schemas
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
+class ChatMessage(BaseModel):
+    message: str
