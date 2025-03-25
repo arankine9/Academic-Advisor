@@ -1,4 +1,5 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Table, Boolean, DateTime, JSON
+# Updated database.py
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Table, Boolean, DateTime, JSON, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from datetime import datetime
@@ -8,16 +9,16 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Hardcode the correct connection string
+# Get database URL from environment
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Create SQLAlchemy engine with PostgreSQL-specific settings
+# Create SQLAlchemy engine with optimized settings
 engine = create_engine(
     DATABASE_URL,
-    pool_pre_ping=True,  # Verify connections before using them
-    pool_recycle=3600,   # Recycle connections after 1 hour
-    pool_size=5,         # Maximum number of connections to keep
-    max_overflow=10      # Maximum number of connections to create beyond pool_size
+    pool_pre_ping=True,
+    pool_recycle=3600,
+    pool_size=5,
+    max_overflow=10
 )
 
 # Create session factory
@@ -35,16 +36,7 @@ user_courses = Table(
     Column("completed_date", DateTime, default=datetime.utcnow),
 )
 
-# Define association table for many-to-many relationship between users and majors
-user_majors = Table(
-    "user_majors",
-    Base.metadata,
-    Column("user_id", Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True),
-    Column("major_id", Integer, ForeignKey("majors.id", ondelete="CASCADE"), primary_key=True),
-    Column("added_date", DateTime, default=datetime.utcnow),
-)
-
-# Define User model
+# Define User model - REMOVED legacy major field and majors relationship
 class User(Base):
     __tablename__ = "users"
 
@@ -53,17 +45,13 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
-    major = Column(String, nullable=True)  # Keep for backward compatibility
     created_at = Column(DateTime, default=datetime.utcnow)
     
-    # Define relationship with courses
+    # Define relationships
     courses = relationship("Course", secondary=user_courses, back_populates="users")
-    # Define relationship with programs
     programs = relationship("UserProgram", back_populates="user")
-    # Define relationship with majors
-    majors = relationship("Major", secondary=user_majors, back_populates="users")
 
-# Define Course model
+# Define enhanced Course model with all fields that might be used
 class Course(Base):
     __tablename__ = "courses"
 
@@ -72,36 +60,33 @@ class Course(Base):
     course_name = Column(String)
     credit_hours = Column(Integer, nullable=True)
     term = Column(String, nullable=True)
+    description = Column(Text, nullable=True)
+    prerequisites = Column(String, nullable=True)
+    instructor = Column(String, nullable=True)
+    days = Column(String, nullable=True)
+    time = Column(String, nullable=True)
+    classroom = Column(String, nullable=True)
+    available_seats = Column(Integer, nullable=True)
+    total_seats = Column(Integer, nullable=True)
     
     # Define relationship with users
     users = relationship("User", secondary=user_courses, back_populates="courses")
 
-# Define Major model
-class Major(Base):
-    __tablename__ = "majors"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True, index=True)
-    
-    # Define relationship with users
-    users = relationship("User", secondary=user_majors, back_populates="majors")
-
-# Define UserProgram model
+# Define UserProgram model - This will replace the Major model completely
 class UserProgram(Base):
     __tablename__ = "user_programs"
     
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
     program_type = Column(String)  # 'major' or 'minor'
-    program_name = Column(String)
-    required_courses = Column(JSON)  # JSONB array of course codes
+    program_name = Column(String, index=True)
+    required_courses = Column(JSON)  # JSON array of course codes
     
-    # Define relationship with users
+    # Define relationship with user
     user = relationship("User", back_populates="programs")
     
     __table_args__ = (
         # Composite unique constraint on user_id and program_name
-        # to ensure a user can't have the same program twice
         {'sqlite_autoincrement': True},
     )
 

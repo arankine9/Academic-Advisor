@@ -2,18 +2,18 @@ from fastapi import APIRouter, Depends, HTTPException, status, Form, Body, Backg
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from datetime import timedelta
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 import logging
 import asyncio
 from fastapi.concurrency import run_in_threadpool
 
 from backend.core.database import get_db, Course, SessionLocal
 from backend.core.auth import authenticate_user, create_access_token, get_current_active_user, ACCESS_TOKEN_EXPIRE_MINUTES, create_user
-from backend.core.database import User as UserModel, Major
-from backend.models.schemas import Token, UserCreate, CourseResponse, ChatMessage, User as UserSchema, MajorResponse
-from backend.services.courses import get_or_create_course, add_course_to_user, remove_course_from_user, get_user_courses, parse_course_from_string
-from backend.services.query_engine import get_advice, classify_intent, generate_acknowledgment, process_general_query
-from backend.services.majors import get_available_majors, add_major_to_user, remove_major_from_user, get_user_majors
+from backend.core.database import User as UserModel
+from backend.models.schemas import Token, UserCreate, CourseResponse, ChatMessage, User as UserSchema, ProgramResponse
+from backend.services.unified_course_service import course_service
+from backend.services.recommendation_service import recommendation_service
+from backend.services.unified_program_service import program_service
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -46,7 +46,7 @@ async def register(
     username: str = Form(...),
     email: str = Form(...), 
     password: str = Form(...),
-    major: str = Form(...), 
+    program_id: str = Form(...),  # Changed from major to program_id
     db: Session = Depends(get_db)
 ):
     # Check if username already exists
@@ -54,9 +54,15 @@ async def register(
     if user:
         raise HTTPException(status_code=400, detail="Username already registered")
     
-    # Create new user
-    user_create = UserCreate(username=username, email=email, password=password, major=major)
+    # Create new user without setting legacy major field
+    user_create = UserCreate(username=username, email=email, password=password)
     user = create_user(db, user_create)
+    
+    # Assign program to user
+    try:
+        program_service.assign_program_to_user(db, user.id, program_id)
+    except HTTPException as e:
+        logger.error(f"Error assigning program {program_id} to new user {username}: {e.detail}")
     
     # Create access token
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -71,7 +77,6 @@ async def register(
 @router.get("/users/me", response_model=UserSchema)
 async def read_users_me(current_user: UserModel = Depends(get_current_active_user)):
     return current_user
-
 
 # JSON version for React frontend
 @router.post("/courses")
@@ -92,16 +97,16 @@ async def add_course_json(
             course_string = f"{course_string} - {course_name}"
             
         # Parse course and add term if provided
-        course_create = parse_course_from_string(course_string)
+        course_create = course_service.parse_course_from_string(course_string)
         term = course_data.get("term")
         if term:
             course_create.term = term
             
         # Get or create course
-        course = get_or_create_course(db, course_create)
+        course = course_service.get_or_create_course(db, course_create)
         
         # Add course to user
-        result = add_course_to_user(db, current_user.id, course.id)
+        result = course_service.add_course_to_user(db, current_user.id, course.id)
         
         if not result:
             raise HTTPException(status_code=400, detail="Failed to add course to user")
@@ -125,7 +130,7 @@ async def remove_course(
 ):
     try:
         # Remove course from user
-        course = remove_course_from_user(db, current_user.id, course_id)
+        course = course_service.remove_course_from_user(db, current_user.id, course_id)
         
         if not course:
             raise HTTPException(status_code=404, detail="Course not found or not associated with user")
@@ -183,7 +188,7 @@ async def get_my_courses(
     db: Session = Depends(get_db)
 ):
     try:
-        courses = get_user_courses(db, current_user.id)
+        courses = course_service.get_user_courses(db, current_user.id)
         return courses
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
@@ -195,16 +200,9 @@ async def recommend_me(
     db: Session = Depends(get_db)
 ):
     try:
-        # Get user courses
-        courses = get_user_courses(db, current_user.id)
-        
-        if not courses:
-            return {"recommendations": "You haven't added any courses yet. Please add your completed courses to get recommendations."}
-        
-        # Get recommendations using the new function signature
-        recommendations = get_advice(db, current_user.id)
-        
-        return {"recommendations": recommendations}
+        # Get recommendations using the unified service
+        recommendations = await recommendation_service.process_query(db, current_user.id)
+        return recommendations
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
@@ -221,13 +219,13 @@ async def advising_chat(
         if not message_text:
             raise HTTPException(status_code=400, detail="Message cannot be empty")
         
-        # Classify the intent of the query using LLM only
-        intent = classify_intent(message_text)
+        # Classify the intent of the query
+        intent = recommendation_service.classify_intent(message_text)
         logger.info(f"Intent classification result: {intent}")
         
         if intent == "COURSE":
             # For course-related queries, send acknowledgment first
-            acknowledgment = generate_acknowledgment(message_text)
+            acknowledgment = recommendation_service.generate_acknowledgment(message_text)
             
             # Process query in background
             background_tasks.add_task(
@@ -239,7 +237,7 @@ async def advising_chat(
             return {"response": acknowledgment, "processing": True}
         else:
             # For general conversation, process immediately
-            response = process_general_query(message_text)
+            response = recommendation_service.process_general_query(message_text)
             return {"response": response}
             
     except Exception as e:
@@ -254,7 +252,7 @@ async def process_advising_query_background(db: Session, user_id: int, query: st
         
         # Run the CPU-intensive process in a thread pool
         result = await run_in_threadpool(
-            lambda: get_advice(db_session, user_id, query)
+            lambda: recommendation_service.process_query(db_session, user_id, query)
         )
         
         # Store the result in the cache
@@ -262,7 +260,10 @@ async def process_advising_query_background(db: Session, user_id: int, query: st
         
     except Exception as e:
         logger.error(f"Background processing error: {e}")
-        _processing_responses[user_id] = "I encountered an error while processing your request. Please try again."
+        _processing_responses[user_id] = {
+            "type": "error",
+            "message": "I encountered an error while processing your request. Please try again."
+        }
     finally:
         db_session.close()
 
@@ -280,79 +281,102 @@ async def check_pending_response(
     
     return {"pending": True}
 
-# Major endpoints
-@router.get("/majors/available", response_model=List[str])
-async def get_available_major_options():
+# Program endpoints (replacing major endpoints)
+@router.get("/programs/available", response_model=List[Dict[str, Any]])
+async def get_available_program_options():
     """
-    Get a list of all available major options.
+    Get a list of all available program options.
     """
     try:
-        majors = get_available_majors()
-        return majors
+        programs = program_service.get_available_programs()
+        return programs
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
-@router.get("/majors/me", response_model=List[MajorResponse])
-async def get_my_majors(
+@router.get("/programs/me", response_model=List[ProgramResponse])
+async def get_my_programs(
     current_user: UserModel = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
-    Get all majors for the current user.
+    Get all programs for the current user.
     """
     try:
-        majors = get_user_majors(db, current_user.id)
-        return majors
+        programs = program_service.get_user_programs(db, current_user.id)
+        return programs
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
-@router.post("/majors", response_model=MajorResponse)
-async def add_major(
-    major_data: dict = Body(...),
+@router.post("/programs", response_model=ProgramResponse)
+async def add_program(
+    program_data: dict = Body(...),
     current_user: UserModel = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
-    Add a major to the current user.
+    Add a program to the current user.
     """
     try:
-        major_name = major_data.get("name")
-        if not major_name:
-            raise HTTPException(status_code=400, detail="Major name is required")
+        # If program_id is provided, use the program template
+        if "program_id" in program_data:
+            program_id = program_data.get("program_id")
+            program = program_service.assign_program_to_user(db, current_user.id, program_id)
+            return program
         
-        # Check if major is in available options
-        available_majors = get_available_majors()
-        if major_name not in available_majors:
-            raise HTTPException(status_code=400, detail=f"Invalid major: {major_name}")
+        # Otherwise, create a custom program
+        program_type = program_data.get("program_type")
+        program_name = program_data.get("program_name")
+        required_courses = program_data.get("required_courses", [])
         
-        major = add_major_to_user(db, current_user.id, major_name)
+        if not program_type or not program_name:
+            raise HTTPException(status_code=400, detail="Program type and name are required")
         
-        if not major:
-            raise HTTPException(status_code=404, detail="User not found")
+        # Create program
+        program_create = {
+            "program_type": program_type,
+            "program_name": program_name,
+            "required_courses": required_courses
+        }
         
-        return major
+        program = program_service.create_program(db, current_user.id, program_create)
+        
+        return program
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
-@router.delete("/majors/{major_id}", response_model=dict)
-async def remove_major(
-    major_id: int,
+@router.delete("/programs/{program_name}", response_model=dict)
+async def remove_program(
+    program_name: str,
     current_user: UserModel = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
-    Remove a major from the current user.
+    Remove a program from the current user.
     """
     try:
-        major = remove_major_from_user(db, current_user.id, major_id)
+        success = program_service.delete_program(db, current_user.id, program_name)
         
-        if not major:
-            raise HTTPException(status_code=404, detail="Major not found or not associated with user")
+        if not success:
+            raise HTTPException(status_code=404, detail="Program not found or not associated with user")
         
-        return {"status": "success", "message": f"Major {major.name} removed successfully"}
+        return {"status": "success", "message": f"Program {program_name} removed successfully"}
     except HTTPException:
         raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
+@router.get("/programs/progress", response_model=dict)
+async def get_progress(
+    current_user: UserModel = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Get formatted progress information for the current user.
+    """
+    try:
+        progress = program_service.format_user_progress(db, current_user.id)
+        return {"progress": progress}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
