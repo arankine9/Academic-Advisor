@@ -8,8 +8,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 # IMPORTANT: Updated imports
 from backend.core.database import get_db, create_tables, Base, UserProgram
-from backend.services.courses import initialize_courses_from_json
-from backend.services.majors import initialize_majors_from_list
+from backend.services.unified_course_service import initialize_courses_from_json
+from backend.services.unified_program_service import initialize_majors_from_list
 
 # Load environment variables
 load_dotenv()
