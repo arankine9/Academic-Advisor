@@ -80,7 +80,7 @@ const Login = () => {
     <div className="auth-wrapper">
       <div id="auth-section" className="container">
         <div className="logo-container">
-          <h1>Academic Advisor</h1>
+          <h1>GradPath</h1>
           <p className="form-subtitle">Your academic journey starts here</p>
         </div>
         

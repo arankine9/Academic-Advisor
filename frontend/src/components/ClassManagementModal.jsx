@@ -7,7 +7,8 @@ import {
   faCalendar, 
   faBook,
   faTimes,
-  faGraduationCap
+  faGraduationCap,
+  faChevronDown
 } from '@fortawesome/free-solid-svg-icons';
 
 import CourseItem from './CourseItem';
@@ -37,6 +38,7 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
   const [majors, setMajors] = useState([]);
   const [availableMajors, setAvailableMajors] = useState([]);
   const [selectedMajor, setSelectedMajor] = useState('');
+  const [isMajorsExpanded, setIsMajorsExpanded] = useState(false);
   const [formData, setFormData] = useState({
     department: '',
     courseNumber: '',
@@ -260,50 +262,61 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
         
         <div className="modal-body">
           <div id="major-management" className="major-management">
-            <h3>
-              <FontAwesomeIcon icon={faGraduationCap} style={{ marginRight: '10px' }} />
-              Majors
-            </h3>
-            
-            <div className="major-select-container">
-              <label htmlFor="major-select">Select a major to add:</label>
-              <select 
-                id="major-select" 
-                className="major-select"
-                value={selectedMajor}
-                onChange={handleMajorChange}
-              >
-                <option value="">-- Select a Major --</option>
-                {availableMajors.map((major, index) => (
-                  <option key={index} value={major}>{major}</option>
-                ))}
-              </select>
-              
-              <button 
-                className="add-major-btn"
-                onClick={handleAddMajor}
-                disabled={!selectedMajor}
-              >
-                <FontAwesomeIcon icon={faPlus} />
-                Add Major
-              </button>
+            <div 
+              className="major-header"
+              onClick={() => setIsMajorsExpanded(!isMajorsExpanded)}
+            >
+              <h3>
+                <FontAwesomeIcon icon={faGraduationCap} style={{ marginRight: '10px' }} />
+                Majors
+              </h3>
+              <FontAwesomeIcon 
+                icon={faChevronDown} 
+                className={`chevron-icon ${isMajorsExpanded ? 'expanded' : ''}`}
+              />
             </div>
             
-            <h4>Your Majors:</h4>
-            <div className="major-list">
-              {loadingMajors ? (
-                <div className="no-majors-message">Loading majors...</div>
-              ) : majors.length === 0 ? (
-                <div className="no-majors-message">You haven't added any majors yet.</div>
-              ) : (
-                majors.map(major => (
-                  <MajorItem 
-                    key={major.id}
-                    major={major}
-                    onRemove={handleRemoveMajor}
-                  />
-                ))
-              )}
+            <div className={`major-content ${isMajorsExpanded ? 'expanded' : ''}`}>
+              <div className="major-select-container">
+                <label htmlFor="major-select">Select a major to add:</label>
+                <select 
+                  id="major-select" 
+                  className="major-select"
+                  value={selectedMajor}
+                  onChange={handleMajorChange}
+                >
+                  <option value="">Select a Major</option>
+                  {availableMajors.map((major, index) => (
+                    <option key={index} value={major}>{major}</option>
+                  ))}
+                </select>
+                
+                <button 
+                  className="add-major-btn"
+                  onClick={handleAddMajor}
+                  disabled={!selectedMajor}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                  Add Major
+                </button>
+              </div>
+              
+              <h4>Your Majors:</h4>
+              <div className="major-list">
+                {loadingMajors ? (
+                  <div className="no-majors-message">Loading majors...</div>
+                ) : majors.length === 0 ? (
+                  <div className="no-majors-message">You haven't added any majors yet.</div>
+                ) : (
+                  majors.map(major => (
+                    <MajorItem 
+                      key={major.id}
+                      major={major}
+                      onRemove={handleRemoveMajor}
+                    />
+                  ))
+                )}
+              </div>
             </div>
           </div>
           
@@ -319,7 +332,7 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
                   <div className="form-group">
                     <label htmlFor="department">Department</label>
                     <div className="input-wrapper">
-                      <FontAwesomeIcon icon={faBuildingColumns} className="input-icon" />
+                      <FontAwesomeIcon icon={faBuildingColumns} className="classes-icon" />
                       <input 
                         type="text" 
                         id="department" 
@@ -334,7 +347,7 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
                   <div className="form-group">
                     <label htmlFor="courseNumber">Course Number</label>
                     <div className="input-wrapper">
-                      <FontAwesomeIcon icon={faHashtag} className="input-icon" />
+                      <FontAwesomeIcon icon={faHashtag} className="classes-icon" />
                       <input 
                         type="text" 
                         id="courseNumber" 
@@ -349,13 +362,13 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
                   <div className="form-group">
                     <label htmlFor="term">Term Taken</label>
                     <div className="input-wrapper">
-                      <FontAwesomeIcon icon={faCalendar} className="input-icon" />
+                      <FontAwesomeIcon icon={faCalendar} className="classes-icon" />
                       <select 
                         id="term"
                         value={formData.term}
                         onChange={handleChange}
                       >
-                        <option value="">-- Select Term --</option>
+                        <option value="">Select Term</option>
                         <option value="Fall 2023">Fall 2023</option>
                         <option value="Spring 2023">Spring 2023</option>
                         <option value="Fall 2022">Fall 2022</option>
@@ -368,7 +381,7 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
                 <div className="form-group">
                   <label htmlFor="courseName">Course Name</label>
                   <div className="input-wrapper">
-                    <FontAwesomeIcon icon={faBook} className="input-icon" />
+                    <FontAwesomeIcon icon={faBook} className="classes-icon" />
                     <input 
                       type="text" 
                       id="courseName" 
