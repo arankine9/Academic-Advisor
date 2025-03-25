@@ -217,7 +217,7 @@ const AdvisingChat = () => {
           {/* Added manage classes button */}
           <button className="manage-classes-btn" onClick={openModal}>
             <FontAwesomeIcon icon={faGraduationCap} className="btn-icon" />
-            <span>Manage Classes</span>
+            Manage Classes
           </button>
           <div className="brand">GradPath</div>
         </div>
