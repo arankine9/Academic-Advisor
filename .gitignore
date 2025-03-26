@@ -48,7 +48,3 @@ Thumbs.db
 
 # Firebase
 frontend/src/services/firebase.js
-
-# Node modules
-frontend/node_modules/
-node_modules
