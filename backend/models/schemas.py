@@ -1,13 +1,22 @@
+# Updated schemas.py
 from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional, Dict, Any, Union
 from datetime import datetime
 
-# Course schemas
+# Course schemas - Consistent naming and fields
 class CourseBase(BaseModel):
     course_code: str
     course_name: Optional[str] = None
     credit_hours: Optional[int] = None
     term: Optional[str] = None
+    description: Optional[str] = None
+    prerequisites: Optional[str] = None
+    instructor: Optional[str] = None
+    days: Optional[str] = None
+    time: Optional[str] = None
+    classroom: Optional[str] = None
+    available_seats: Optional[int] = None
+    total_seats: Optional[int] = None
 
 class CourseCreate(CourseBase):
     pass
@@ -18,27 +27,44 @@ class CourseResponse(CourseBase):
     class Config:
         from_attributes = True
 
-# User schemas
+# Recommendation-specific schemas
+class RecommendationDetails(BaseModel):
+    is_recommended: bool
+    reason: str
+    priority: str  # High, Medium, Low
+
+class RecommendedCourseResponse(CourseResponse):
+    recommendation: Optional[RecommendationDetails] = None
+
+class CourseRecommendationResponse(BaseModel):
+    type: str = "course_recommendations"
+    message: str
+    course_data: List[RecommendedCourseResponse]
+
+# User schemas - REMOVED major field
 class UserBase(BaseModel):
     email: EmailStr
     username: str
-    major: Optional[str] = None
 
 class UserCreate(UserBase):
     password: str
+    # No more major field - use programs instead
 
 class UserAuth(UserBase):
     password: str
 
-# Major schema
-class MajorBase(BaseModel):
-    name: str
+# Program schemas
+class ProgramBase(BaseModel):
+    program_type: str  # 'major' or 'minor'
+    program_name: str
+    required_courses: List[Union[str, Dict[str, Any]]]
 
-class MajorCreate(MajorBase):
+class ProgramCreate(ProgramBase):
     pass
 
-class MajorResponse(MajorBase):
+class ProgramResponse(ProgramBase):
     id: int
+    user_id: int
     
     class Config:
         from_attributes = True
@@ -48,29 +74,13 @@ class UserResponse(UserBase):
     is_active: bool
     created_at: datetime
     courses: List[CourseResponse] = []
-    majors: List[MajorResponse] = []
+    programs: List[ProgramResponse] = []
     
     class Config:
         from_attributes = True
 
-# Create an alias for UserResponse as User for backward compatibility
+# Create an alias for UserResponse for backward compatibility
 User = UserResponse
-
-# User Program schemas
-class UserProgramBase(BaseModel):
-    program_type: str  # 'major' or 'minor'
-    program_name: str
-    required_courses: List[Union[str, Dict[str, Any]]]  # List of course codes or course objects
-
-class UserProgramCreate(UserProgramBase):
-    pass
-
-class UserProgramResponse(UserProgramBase):
-    id: int
-    user_id: int
-    
-    class Config:
-        from_attributes = True
 
 # Token schemas
 class Token(BaseModel):
