@@ -3,51 +3,51 @@
   "program_type": "major",
   "required_courses": [
     {
-      "class_code": "CS 210",
+      "course_code": "CS 210",
       "course_name": "Introduction to Computer Science I"
     },
     {
-      "class_code": "CS 211",
+      "course_code": "CS 211",
       "course_name": "Introduction to Computer Science II"
     },
     {
-      "class_code": "CS 250",
+      "course_code": "CS 250",
       "course_name": "Discrete Mathematics"
     },
     {
-      "class_code": "CS 261",
+      "course_code": "CS 261",
       "course_name": "Data Structures"
     },
     {
-      "class_code": "CS 325",
+      "course_code": "CS 325",
       "course_name": "Algorithms"
     },
     {
-      "class_code": "CS 344",
+      "course_code": "CS 344",
       "course_name": "Operating Systems"
     },
     {
-      "class_code": "CS 361",
+      "course_code": "CS 361",
       "course_name": "Software Engineering I"
     },
     {
-      "class_code": "CS 362",
+      "course_code": "CS 362",
       "course_name": "Software Engineering II"
     },
     {
-      "class_code": "CS 372",
+      "course_code": "CS 372",
       "course_name": "Computer Networks"
     },
     {
-      "class_code": "MTH 231",
+      "course_code": "MTH 231",
       "course_name": "Calculus I"
     },
     {
-      "class_code": "MTH 232",
+      "course_code": "MTH 232",
       "course_name": "Calculus II"
     },
     {
-      "class_code": "WR 121",
+      "course_code": "WR 121",
       "course_name": "Academic Composition"
     }
   ]

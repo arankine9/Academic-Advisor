@@ -115,5 +115,5 @@ npm run dev
 ## Database Schema
 
 - **users**: Stores user information (id, email, username, hashed_password, major)
-- **courses**: Stores course information (id, class_code, course_name, credit_hours, term)
+- **courses**: Stores course information (id, course_code, course_name, credit_hours, term)
 - **user_courses**: Junction table for the many-to-many relationship between users and courses

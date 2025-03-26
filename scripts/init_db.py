@@ -63,9 +63,6 @@ def init_db():
             # Check for missing columns and add them
             ensure_all_columns_exist(engine)
             
-            # Rename 'course_code' column to 'class_code'
-            rename_column_course_code_to_class_code(engine)
-            
             # Check if legacy tables exist (for migration purposes)
             legacy_tables = ['majors', 'user_majors']
             legacy_exists = False
@@ -180,38 +177,6 @@ def ensure_all_columns_exist(engine):
     except Exception as e:
         transaction.rollback()
         print(f"Error checking/adding columns: {e}")
-        traceback.print_exc()
-    finally:
-        connection.close()
-
-def rename_column_course_code_to_class_code(engine):
-    """Rename 'course_code' column to 'class_code' in the courses table."""
-    print("Checking for column renaming from 'course_code' to 'class_code'...")
-    
-    inspector = inspect(engine)
-    connection = engine.connect()
-    transaction = connection.begin()
-    
-    try:
-        # Check if the 'course_code' column exists in the 'courses' table
-        course_columns = {column['name'] for column in inspector.get_columns('courses')}
-        
-        if 'course_code' in course_columns:
-            # Rename 'course_code' to 'class_code'
-            query = "ALTER TABLE courses RENAME COLUMN course_code TO class_code"
-            print(f"Renaming column: 'course_code' to 'class_code' in courses table")
-            connection.execute(text(query))
-            print(f"✅ Renamed column 'course_code' to 'class_code' in 'courses' table")
-        else:
-            print(f"Column 'course_code' not found in 'courses' table, no renaming needed")
-        
-        # Commit the transaction
-        transaction.commit()
-        print("Column renaming complete.")
-        
-    except Exception as e:
-        transaction.rollback()
-        print(f"Error renaming columns: {e}")
         traceback.print_exc()
     finally:
         connection.close()
@@ -359,12 +324,12 @@ def extract_and_create_courses(db, required_courses):
                     if isinstance(option, str):
                         course_data = course_service.parse_course_from_string(option)
                         course_service.get_or_create_course(db, course_data)
-                    elif isinstance(option, dict) and 'class_code' in option:
-                        course_data = course_service.parse_course_from_string(option['class_code'])
+                    elif isinstance(option, dict) and 'course_code' in option:
+                        course_data = course_service.parse_course_from_string(option['course_code'])
                         course_service.get_or_create_course(db, course_data)
             # Could be a direct course reference
-            elif 'class_code' in item:
-                course_data = course_service.parse_course_from_string(item['class_code'])
+            elif 'course_code' in item:
+                course_data = course_service.parse_course_from_string(item['course_code'])
                 course_service.get_or_create_course(db, course_data)
 
 def initialize_program_templates(db):

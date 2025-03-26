@@ -11,8 +11,8 @@ const CourseItem = ({
   isEditing 
 }) => {
   const [editData, setEditData] = useState({
-    department: course.department || course.class_code.split(' ')[0],
-    course_number: course.course_number || course.class_code.split(' ')[1],
+    department: course.department || course.course_code.split(' ')[0],
+    course_number: course.course_number || course.course_code.split(' ')[1],
     name: course.name || course.course_name,
     term: course.term || ''
   });
@@ -34,7 +34,7 @@ const CourseItem = ({
     if (course.department && course.course_number) {
       return `${course.department} ${course.course_number}`;
     }
-    return course.class_code;
+    return course.course_code;
   };
 
   // Display mode

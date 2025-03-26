@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Course schemas - Consistent naming and fields
 class CourseBase(BaseModel):
-    class_code: str
+    course_code: str
     course_name: Optional[str] = None
     credit_hours: Optional[int] = None
     term: Optional[str] = None
