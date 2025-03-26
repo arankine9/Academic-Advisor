@@ -1,6 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, registerUser, getCurrentUser } from '../services/authService';
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut, 
+  onAuthStateChanged 
+} from 'firebase/auth';
+import { auth } from '../services/firebase';
 
 // Create a context for authentication
 const AuthContext = createContext();
@@ -19,66 +25,49 @@ export const AuthProvider = ({ children }) => {
 
   // Check if user is logged in on initial load
   useEffect(() => {
-    const checkLoggedIn = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (token) {
-          const userData = await getCurrentUser();
-          setCurrentUser(userData);
-        }
-      } catch (error) {
-        console.error('Authentication check failed:', error);
-        localStorage.removeItem('token');
-      } finally {
-        setLoading(false);
-      }
-    };
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+      setLoading(false);
+    });
 
-    checkLoggedIn();
+    return unsubscribe;
   }, []);
 
   // Login function
-  const login = async (username, password) => {
+  const login = async (email, password) => {
     try {
       setError(null);
-      const data = await loginUser(username, password);
-      
-      if (data.access_token) {
-        localStorage.setItem('token', data.access_token);
-        const userData = await getCurrentUser();
-        setCurrentUser(userData);
-        return true;
-      }
+      await signInWithEmailAndPassword(auth, email, password);
+      return true;
     } catch (error) {
-      setError(error.response?.data?.detail || 'Login failed');
+      console.error('Login error:', error);
+      setError(error.message || 'Login failed');
       return false;
     }
   };
 
   // Register function
-  const register = async (username, email, password, major) => {
+  const register = async (email, password) => {
     try {
       setError(null);
-      const data = await registerUser(username, email, password, major);
-      
-      if (data.access_token) {
-        localStorage.setItem('token', data.access_token);
-        const userData = await getCurrentUser();
-        setCurrentUser(userData);
-        return true;
-      }
-      return true; // Registration successful but no auto-login
+      await createUserWithEmailAndPassword(auth, email, password);
+      return true;
     } catch (error) {
-      setError(error.response?.data?.detail || 'Registration failed');
+      console.error('Registration error:', error);
+      setError(error.message || 'Registration failed');
       return false;
     }
   };
 
   // Logout function
-  const logout = () => {
-    localStorage.removeItem('token');
-    setCurrentUser(null);
-    navigate('/');
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+      setError(error.message || 'Logout failed');
+    }
   };
 
   // Value object to be provided by context
@@ -94,7 +83,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

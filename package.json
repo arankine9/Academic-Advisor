@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/arankine9/Academic-Advisor#readme",
   "dependencies": {
+    "dotenv": "^16.4.7",
+    "firebase": "^11.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }
