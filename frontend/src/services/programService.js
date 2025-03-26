@@ -27,4 +27,7 @@ export const removeProgram = async (programName) => {
 };
 
 // Get program progress
-export cons
+export const getProgramProgress = async () => {
+  const response = await api.get('/programs/progress');
+  return response.data;
+};

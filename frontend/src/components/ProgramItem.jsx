@@ -16,4 +16,10 @@ const ProgramItem = ({ program, onRemove }) => {
         onClick={handleRemove}
         aria-label={`Remove ${program.program_name}`}
       >
-        <FontAwesomeIcon icon
+        <FontAwesomeIcon icon={faTimes} />
+      </button>
+    </div>
+  );
+};
+
+export default ProgramItem;
