@@ -3,35 +3,48 @@ from sqlalchemy.orm import Session
 from typing import List, Dict, Any, Optional
 import logging
 import os
+import traceback
 from langchain_openai import ChatOpenAI
 
 from backend.services.unified_course_service import course_service
 from backend.services.unified_program_service import program_service
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # Initialize LLM models with consistent naming
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+logger.debug(f"OPENAI_API_KEY is {'set' if OPENAI_API_KEY else 'NOT SET'}")
 
-intent_model = ChatOpenAI(
-    model="gpt-4o-mini",
-    openai_api_key=OPENAI_API_KEY,
-    temperature=0.2
-)
+newline = '\n'
 
-recommendation_model = ChatOpenAI(
-    model="o1-mini",
-    openai_api_key=OPENAI_API_KEY,
-    temperature=0.2
-)
-
-response_model = ChatOpenAI(
-    model="gpt-4o",
-    openai_api_key=OPENAI_API_KEY,
-    temperature=0.7
-)
+try:
+    logger.debug("Initializing intent_model (gpt-4o-mini)")
+    intent_model = ChatOpenAI(
+        model="gpt-4o-mini",
+        openai_api_key=OPENAI_API_KEY,
+        temperature=0.2
+    )
+    
+    logger.debug("Initializing recommendation_model (o1-mini)")
+    recommendation_model = ChatOpenAI(
+        model="o1-mini",
+        openai_api_key=OPENAI_API_KEY,
+        temperature=1.0
+    )
+    
+    logger.debug("Initializing response_model (gpt-4o)")
+    response_model = ChatOpenAI(
+        model="gpt-4o",
+        openai_api_key=OPENAI_API_KEY,
+        temperature=0.7
+    )
+    
+    logger.info("All OpenAI models initialized successfully")
+except Exception as e:
+    logger.error(f"Error initializing OpenAI models: {e}")
+    logger.error(traceback.format_exc())
 
 # Intent classification prompt
 INTENT_CLASSIFICATION_PROMPT = """
@@ -81,11 +94,11 @@ For each course you recommend, provide:
 
 FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
 RECOMMENDED COURSES:
-- [course_code_1]: [reason] | [priority]
-- [course_code_2]: [reason] | [priority]
-- [course_code_3]: [reason] | [priority]
-- [course_code_4]: [reason] | [priority] (optional)
-- [course_code_5]: [reason] | [priority] (optional)
+- [class_code_1]: [reason] | [priority]
+- [class_code_2]: [reason] | [priority]
+- [class_code_3]: [reason] | [priority]
+- [class_code_4]: [reason] | [priority] (optional)
+- [class_code_5]: [reason] | [priority] (optional)
 """
 
 # Final response format
@@ -122,12 +135,18 @@ class RecommendationService:
         Returns:
             String indicating "COURSE" or "GENERAL"
         """
+        logger.debug(f"Classifying intent for query: '{query}'")
+        
         try:
             prompt = INTENT_CLASSIFICATION_PROMPT.format(query=query)
+            logger.debug("Calling intent_model with formatted prompt")
+            
             response = intent_model.invoke(prompt)
+            logger.debug(f"Raw intent model response: {response}")
             
             # Extract the response and normalize
             intent = response.content.strip().upper()
+            logger.debug(f"Extracted intent: '{intent}'")
             
             # Default to COURSE if response is unclear
             if "COURSE" in intent:
@@ -142,6 +161,7 @@ class RecommendationService:
                 
         except Exception as e:
             logger.error(f"Error in intent classification: {e}")
+            logger.error(traceback.format_exc())
             # Default to COURSE in case of errors
             return "COURSE"
     
@@ -150,6 +170,8 @@ class RecommendationService:
         """
         Generate a contextual acknowledgment message based on the query.
         """
+        logger.debug(f"Generating acknowledgment for query: '{query}'")
+        
         prompt = f"""
         The student asked: "{query}"
         
@@ -165,24 +187,33 @@ class RecommendationService:
         """
         
         try:
+            logger.debug("Calling intent_model for detailed intent classification")
             response = intent_model.invoke(prompt)
             detailed_intent = response.content.strip().upper()
-        except:
+            logger.debug(f"Detailed intent classification: '{detailed_intent}'")
+        except Exception as e:
+            logger.error(f"Error in detailed intent classification: {e}")
+            logger.error(traceback.format_exc())
             detailed_intent = "COURSE_RECOMMENDATION"  # Default if classification fails
+            logger.debug(f"Using default intent: {detailed_intent}")
         
         # Generate acknowledgment based on intent
+        acknowledgment = ""
         if "PREREQUISITE" in detailed_intent:
-            return "Checking prerequisites and course sequences for you... 📋"
+            acknowledgment = "Checking prerequisites and course sequences for you... 📋"
         elif "SCHEDULE" in detailed_intent:
-            return "Analyzing your schedule to find compatible courses... ⏰"
+            acknowledgment = "Analyzing your schedule to find compatible courses... ⏰"
         elif "DEGREE" in detailed_intent or "PROGRESS" in detailed_intent:
-            return "Reviewing your degree requirements and progress... 🎓"
+            acknowledgment = "Reviewing your degree requirements and progress... 🎓"
         elif "DETAILS" in detailed_intent:
-            return "Looking up those course details for you... 📚"
+            acknowledgment = "Looking up those course details for you... 📚"
         elif "PROGRAM" in detailed_intent:
-            return "Checking your program requirements and progress... 📝"
+            acknowledgment = "Checking your program requirements and progress... 📝"
         else:
-            return "On it! Searching for course recommendations that match your academic plan... 🔍"
+            acknowledgment = "On it! Searching for course recommendations that match your academic plan... 🔍"
+        
+        logger.debug(f"Generated acknowledgment: '{acknowledgment}'")
+        return acknowledgment
     
     @staticmethod
     def process_general_query(query: str) -> str:
@@ -195,6 +226,8 @@ class RecommendationService:
         Returns:
             A friendly response
         """
+        logger.debug(f"Processing general query: '{query}'")
+        
         prompt = f"""
         You are a friendly academic advisor chatbot. The student has asked a general question (not specifically about courses).
         Respond in a friendly, helpful way. Keep your response concise and natural.
@@ -204,8 +237,18 @@ class RecommendationService:
         Student query: {query}
         """
         
-        response = response_model.invoke(prompt)
-        return response.content.strip()
+        try:
+            logger.debug("Calling response_model for general query")
+            response = response_model.invoke(prompt)
+            logger.debug(f"Raw response model output: {response}")
+            
+            result = response.content.strip()
+            logger.debug(f"Processed general response: '{result[:100]}...'")
+            return result
+        except Exception as e:
+            logger.error(f"Error processing general query: {e}")
+            logger.error(traceback.format_exc())
+            return "I'm sorry, I'm having trouble understanding your question. Could you try asking in a different way?"
     
     @staticmethod
     async def get_course_recommendations(db: Session, user_id: int, query: str = None) -> Dict[str, Any]:
@@ -220,22 +263,33 @@ class RecommendationService:
         Returns:
             Dictionary with recommendation message and course data
         """
+        logger.debug(f"Getting course recommendations for user {user_id}, query: '{query}'")
+        
         # Set default query if none provided
         if not query:
             query = "What courses should I take next term?"
+            logger.debug(f"Using default query: '{query}'")
         
         try:
             # Get user's academic progress information
+            logger.debug(f"Getting academic progress for user {user_id}")
             user_progress = program_service.format_user_progress(db, user_id)
+            logger.debug(f"Retrieved user progress: {len(user_progress.split(newline))} lines")
+            logger.debug(f"Progress preview: {user_progress[:200]}...")
             
             # Search for available courses
+            logger.debug(f"Searching for courses related to query: '{query}'")
             available_courses = await course_service.search_courses_in_vector_db(query, limit=10)
+            logger.debug(f"Found {len(available_courses)} available courses")
+            class_codes = [c.get('class_code', 'Unknown') for c in available_courses]
+            logger.debug(f"Available course codes: {class_codes}")
             
             # Format available courses for the recommendation prompt
+            logger.debug("Formatting courses for recommendation prompt")
             formatted_courses = []
             for i, course in enumerate(available_courses):
                 course_info = f"""
-                Course {i+1}: {course.get('course_code', 'Unknown')}
+                Course {i+1}: {course.get('class_code', 'Unknown')}
                 Name: {course.get('course_name', '')}
                 Description: {course.get('description', '')[:100]}...
                 Prerequisites: {course.get('prerequisites', '')}
@@ -244,6 +298,7 @@ class RecommendationService:
                 formatted_courses.append(course_info)
             
             courses_text = "\n\n".join(formatted_courses)
+            logger.debug(f"Formatted {len(formatted_courses)} courses for prompt")
             
             # Generate course recommendations
             recommendation_prompt = COURSE_RECOMMENDATION_PROMPT.format(
@@ -252,36 +307,47 @@ class RecommendationService:
                 available_courses=courses_text
             )
             
+            logger.debug("Calling recommendation_model for course recommendations")
             recommendation_response = recommendation_model.invoke(recommendation_prompt)
             recommendation_text = recommendation_response.content
+            logger.debug(f"Recommendation response length: {len(recommendation_text)} chars")
+            logger.debug(f"Raw recommendation text preview: {recommendation_text[:200]}...")
             
             # Parse recommended courses
+            logger.debug("Parsing recommended courses from response")
             recommended_courses = []
             recommendation_section = ""
             
             if "RECOMMENDED COURSES:" in recommendation_text:
                 recommendation_section = recommendation_text.split("RECOMMENDED COURSES:")[1].strip()
+                logger.debug(f"Found recommendation section: {len(recommendation_section)} chars")
                 
-                for line in recommendation_section.split('\n'):
+                for line in recommendation_section.split(newline):
                     line = line.strip()
                     if line.startswith('-') or line.startswith('*'):
+                        logger.debug(f"Parsing recommendation line: '{line}'")
                         parts = line[1:].strip().split(':', 1)
                         if len(parts) == 2:
-                            course_code = parts[0].strip()
+                            class_code = parts[0].strip()
                             details = parts[1].strip()
+                            logger.debug(f"Extracted class_code: '{class_code}', details: '{details}'")
                             
                             # Split reason and priority
                             if '|' in details:
                                 reason, priority = details.split('|', 1)
                                 reason = reason.strip()
                                 priority = priority.strip()
+                                logger.debug(f"Extracted reason: '{reason}', priority: '{priority}'")
                             else:
                                 reason = details
                                 priority = "Medium"
+                                logger.debug(f"No priority found, using default. Reason: '{reason}'")
                             
                             # Find the matching course in our enriched courses
+                            found_match = False
                             for course in available_courses:
-                                if course.get('course_code') and course_code in course.get('course_code'):
+                                if course.get('class_code') and class_code in course.get('class_code'):
+                                    logger.debug(f"Found matching course for '{class_code}'")
                                     course_copy = course.copy()
                                     course_copy['recommendation'] = {
                                         'is_recommended': True,
@@ -289,10 +355,19 @@ class RecommendationService:
                                         'priority': priority
                                     }
                                     recommended_courses.append(course_copy)
+                                    found_match = True
                                     break
+                            
+                            if not found_match:
+                                logger.warning(f"No matching course found for '{class_code}'")
+            else:
+                logger.warning("No 'RECOMMENDED COURSES:' section found in response")
+            
+            logger.debug(f"Parsed {len(recommended_courses)} recommended courses")
             
             # If we couldn't extract recommendations, use the first 3 courses
             if not recommended_courses and available_courses:
+                logger.warning("No recommended courses parsed, using first 3 available courses")
                 for i, course in enumerate(available_courses[:3]):
                     course_copy = course.copy()
                     course_copy['recommendation'] = {
@@ -301,8 +376,10 @@ class RecommendationService:
                         'priority': "Medium"
                     }
                     recommended_courses.append(course_copy)
+                logger.debug(f"Added {len(recommended_courses)} fallback course recommendations")
             
             # Generate friendly response
+            logger.debug("Generating final response message")
             response_prompt = FINAL_RESPONSE_PROMPT.format(
                 query=query,
                 recommended_courses=recommendation_section
@@ -310,18 +387,21 @@ class RecommendationService:
             
             message_response = response_model.invoke(response_prompt)
             message = message_response.content.strip()
+            logger.debug(f"Generated final message: '{message}'")
             
             # Return structured response
-            return {
+            result = {
                 "type": "course_recommendations",
                 "message": message,
                 "course_data": recommended_courses
             }
             
+            logger.info(f"Successfully generated recommendations for user {user_id} with {len(recommended_courses)} courses")
+            return result
+            
         except Exception as e:
             logger.error(f"Error in get_course_recommendations: {e}")
-            import traceback
-            logger.error(f"Traceback: {traceback.format_exc()}")
+            logger.error(traceback.format_exc())
             
             # Return error response
             return {
@@ -343,23 +423,33 @@ class RecommendationService:
         Returns:
             Response data based on the query
         """
+        logger.debug(f"Processing query for user {user_id}: '{query}'")
+        
         # Set default query if none provided
         if not query:
+            logger.debug("No query provided, using default")
             query = "What courses should I take next term?"
+            logger.debug(f"Using default query: '{query}'")
             return await RecommendationService.get_course_recommendations(db, user_id, query)
         
         # Classify the intent
+        logger.debug(f"Classifying intent for query: '{query}'")
         intent = RecommendationService.classify_intent(query)
+        logger.info(f"Query intent for user {user_id}: {intent}")
         
         # Process based on intent
         if intent == "COURSE":
+            logger.debug(f"Processing as COURSE intent for user {user_id}")
             return await RecommendationService.get_course_recommendations(db, user_id, query)
         else:
+            logger.debug(f"Processing as GENERAL intent for user {user_id}")
             # For general conversation, return plain text
+            general_response = RecommendationService.process_general_query(query)
             return {
                 "type": "general_response",
-                "message": RecommendationService.process_general_query(query)
+                "message": general_response
             }
 
 # Create a global instance of the service
+logger.info("Creating global recommendation_service instance")
 recommendation_service = RecommendationService()
