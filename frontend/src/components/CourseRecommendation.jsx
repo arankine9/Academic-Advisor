@@ -47,7 +47,7 @@ const CourseRecommendation = ({ courseData }) => {
     <div className={`course-card ${isInvalid ? 'error' : ''}`}>
       <div className="course-header" onClick={toggleExpand}>
         <div className="course-title">
-          <span className="course-code">{courseData.course_code}</span>
+          <span className="course-code">{courseData.class_code}</span>
           <span className="course-name">{courseData.course_name}</span>
         </div>
         <div className="course-credits">{courseData.credits} credits</div>

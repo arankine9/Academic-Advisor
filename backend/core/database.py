@@ -56,7 +56,7 @@ class Course(Base):
     __tablename__ = "courses"
 
     id = Column(Integer, primary_key=True, index=True)
-    course_code = Column(String, index=True)
+    class_code = Column(String, index=True)
     course_name = Column(String)
     credit_hours = Column(Integer, nullable=True)
     term = Column(String, nullable=True)
