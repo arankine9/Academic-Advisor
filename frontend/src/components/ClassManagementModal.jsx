@@ -12,7 +12,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import CourseItem from './CourseItem';
-import ProgramItem from './ProgramItem';  // Updated import
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import { 
