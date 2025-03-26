@@ -193,19 +193,6 @@ async def get_my_courses(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
-# Recommendation endpoints
-@router.get("/recommend/me")
-async def recommend_me(
-    current_user: UserModel = Depends(get_current_active_user),
-    db: Session = Depends(get_db)
-):
-    try:
-        # Get recommendations using the unified service
-        recommendations = await recommendation_service.process_query(db, current_user.id)
-        return recommendations
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
-
 # Advising chat endpoints
 @router.post("/advising")
 async def advising_chat(
@@ -322,30 +309,10 @@ async def add_program(
     Add a program to the current user.
     """
     try:
-        # If program_id is provided, use the program template
-        if "program_id" in program_data:
             program_id = program_data.get("program_id")
             program = program_service.assign_program_to_user(db, current_user.id, program_id)
             return program
         
-        # Otherwise, create a custom program
-        program_type = program_data.get("program_type")
-        program_name = program_data.get("program_name")
-        required_courses = program_data.get("required_courses", [])
-        
-        if not program_type or not program_name:
-            raise HTTPException(status_code=400, detail="Program type and name are required")
-        
-        # Create program
-        program_create = {
-            "program_type": program_type,
-            "program_name": program_name,
-            "required_courses": required_courses
-        }
-        
-        program = program_service.create_program(db, current_user.id, program_create)
-        
-        return program
     except HTTPException:
         raise
     except Exception as e:

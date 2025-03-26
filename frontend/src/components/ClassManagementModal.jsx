@@ -24,8 +24,7 @@ import {
 import {
   getAvailablePrograms,
   getUserPrograms,
-  assignProgramFromTemplate,
-  addCustomProgram,
+  assignProgram,
   removeProgram
 } from '../services/programService';  // Updated import
 
@@ -40,11 +39,6 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
   const [availablePrograms, setAvailablePrograms] = useState([]);
   const [selectedProgramId, setSelectedProgramId] = useState('');
   const [isProgramsExpanded, setIsProgramsExpanded] = useState(false);
-  const [customProgramMode, setCustomProgramMode] = useState(false);
-  const [customProgramData, setCustomProgramData] = useState({
-    program_type: 'major',  // Default to major
-    program_name: ''
-  });
   const [formData, setFormData] = useState({
     department: '',
     courseNumber: '',
@@ -117,30 +111,6 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
     setSelectedProgramId(e.target.value);
   };
 
-  // Handle custom program data change
-  const handleCustomProgramChange = (e) => {
-    const { name, value } = e.target;
-    setCustomProgramData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  // Toggle custom program mode
-  const toggleCustomProgramMode = () => {
-    setCustomProgramMode(!customProgramMode);
-    if (customProgramMode) {
-      // Reset fields when exiting custom mode
-      setSelectedProgramId('');
-    } else {
-      // Reset custom program data when entering custom mode
-      setCustomProgramData({
-        program_type: 'major',
-        program_name: ''
-      });
-    }
-  };
-
   // Handle add course form submission
   const handleAddCourse = async (e) => {
     e.preventDefault();
@@ -174,14 +144,14 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
   };
 
   // Handle add program from template
-  const handleAddProgramFromTemplate = async () => {
+  const handleAddProgram = async () => {
     if (!selectedProgramId) {
       showNotification('Please select a program', false);
       return;
     }
     
     try {
-      const newProgram = await assignProgramFromTemplate(selectedProgramId);
+      const newProgram = await assignProgram(selectedProgramId);
       
       // Add to local state
       setPrograms(prev => [...prev, newProgram]);
@@ -193,43 +163,6 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
     } catch (error) {
       console.error('Error adding program:', error);
       showNotification('Failed to add program', false);
-    }
-  };
-
-  // Handle add custom program
-  const handleAddCustomProgram = async () => {
-    const { program_type, program_name } = customProgramData;
-    
-    if (!program_type || !program_name) {
-      showNotification('Program type and name are required', false);
-      return;
-    }
-    
-    // Check if program name already exists
-    if (programs.some(p => p.program_name === program_name)) {
-      showNotification('A program with this name already exists', false);
-      return;
-    }
-    
-    try {
-      const newProgram = await addCustomProgram(program_type, program_name);
-      
-      // Add to local state
-      setPrograms(prev => [...prev, newProgram]);
-      
-      // Clear form
-      setCustomProgramData({
-        program_type: 'major',
-        program_name: ''
-      });
-      
-      showNotification('Custom program added successfully');
-      
-      // Exit custom program mode
-      setCustomProgramMode(false);
-    } catch (error) {
-      console.error('Error adding custom program:', error);
-      showNotification('Failed to add custom program', false);
     }
   };
 
@@ -338,97 +271,36 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
             </div>
             
             <div className={`program-content ${isProgramsExpanded ? 'expanded' : ''}`}>
-              {!customProgramMode ? (
-                // Program template selection mode
-                <div className="program-select-container">
-                  <div className="program-select-header">
-                    <label htmlFor="program-select">Select a program template:</label>
-                    <button 
-                      className="toggle-custom-btn"
-                      onClick={toggleCustomProgramMode}
-                    >
-                      Create Custom Program
-                    </button>
-                  </div>
-                  
-                  <div className="program-select-form">
-                    <select 
-                      id="program-select" 
-                      className="program-select"
-                      value={selectedProgramId}
-                      onChange={handleProgramChange}
-                    >
-                      <option value="">Select a Program</option>
-                      {availablePrograms.map((program) => (
-                        <option key={program.id} value={program.id}>
-                          {program.program_name} ({program.program_type})
-                        </option>
-                      ))}
-                    </select>
-                    
-                    <button 
-                      className="add-program-btn"
-                      onClick={handleAddProgramFromTemplate}
-                      disabled={!selectedProgramId}
-                    >
-                      <FontAwesomeIcon icon={faPlus} />
-                      Add Program
-                    </button>
-                  </div>
+              <div className="program-select-container">
+                <div className="program-select-header">
+                  <label htmlFor="program-select">Select a program template:</label>
                 </div>
-              ) : (
-                // Custom program form
-                <div className="custom-program-container">
-                  <div className="custom-program-header">
-                    <h4>Create Custom Program</h4>
-                    <button 
-                      className="toggle-custom-btn"
-                      onClick={toggleCustomProgramMode}
-                    >
-                      Use Program Template
-                    </button>
-                  </div>
+                
+                <div className="program-select-form">
+                  <select 
+                    id="program-select" 
+                    className="program-select"
+                    value={selectedProgramId}
+                    onChange={handleProgramChange}
+                  >
+                    <option value="">Select a Program</option>
+                    {availablePrograms.map((program) => (
+                      <option key={program.id} value={program.id}>
+                        {program.program_name} ({program.program_type})
+                      </option>
+                    ))}
+                  </select>
                   
-                  <div className="custom-program-form">
-                    <div className="form-group">
-                      <label htmlFor="program_type">Program Type</label>
-                      <select
-                        id="program_type"
-                        name="program_type"
-                        value={customProgramData.program_type}
-                        onChange={handleCustomProgramChange}
-                      >
-                        <option value="major">Major</option>
-                        <option value="minor">Minor</option>
-                        <option value="certificate">Certificate</option>
-                        <option value="concentration">Concentration</option>
-                      </select>
-                    </div>
-                    
-                    <div className="form-group">
-                      <label htmlFor="program_name">Program Name</label>
-                      <input
-                        type="text"
-                        id="program_name"
-                        name="program_name"
-                        value={customProgramData.program_name}
-                        onChange={handleCustomProgramChange}
-                        placeholder="e.g., Computer Science"
-                        required
-                      />
-                    </div>
-                    
-                    <button
-                      className="add-custom-program-btn"
-                      onClick={handleAddCustomProgram}
-                      disabled={!customProgramData.program_name || !customProgramData.program_type}
-                    >
-                      <FontAwesomeIcon icon={faPlus} />
-                      Add Custom Program
-                    </button>
-                  </div>
+                  <button 
+                    className="add-program-btn"
+                    onClick={handleAddProgram}
+                    disabled={!selectedProgramId}
+                  >
+                    <FontAwesomeIcon icon={faPlus} />
+                    Add Program
+                  </button>
                 </div>
-              )}
+              </div>
               
               <h4>Your Academic Programs:</h4>
               <div className="program-list">

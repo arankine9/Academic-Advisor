@@ -21,18 +21,30 @@ class UnifiedProgramService:
     @staticmethod
     def get_available_programs() -> List[Dict[str, Any]]:
         """
-        Gets all available program templates.
+        Gets all available program templates from the undergraduate/majors directory.
         """
         programs = []
         
-        if not PROGRAMS_DIR.exists():
+        # Define the specific directory to search
+        majors_dir = PROGRAMS_DIR / "undergraduate" / "majors"
+        
+        if not majors_dir.exists():
             return programs
         
-        for file_path in PROGRAMS_DIR.glob("*.json"):
+        # Search for all JSON files in the majors directory
+        for file_path in majors_dir.glob("*.json"):
             try:
                 with open(file_path, "r") as f:
                     program_data = json.load(f)
-                    program_data["id"] = file_path.stem  # Add the filename (without extension) as ID
+                
+                    # Get filename without extension as the ID
+                    program_id = file_path.stem
+                    
+                    # Set the ID with the full path
+                    program_data["id"] = f"undergraduate/majors/{program_id}"
+                    # Set category to "majors" since we're only looking in the majors directory
+                    program_data["category"] = "majors"
+                
                     programs.append(program_data)
             except Exception as e:
                 print(f"Error loading program {file_path}: {e}")

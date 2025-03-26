@@ -13,19 +13,9 @@ export const getUserPrograms = async () => {
 };
 
 // Add program to user from template
-export const assignProgramFromTemplate = async (programId) => {
+export const assignProgram = async (programId) => {
   const response = await api.post('/programs', {
     program_id: programId
-  });
-  return response.data;
-};
-
-// Add custom program to user
-export const addCustomProgram = async (programType, programName, requiredCourses = []) => {
-  const response = await api.post('/programs', {
-    program_type: programType,
-    program_name: programName,
-    required_courses: requiredCourses
   });
   return response.data;
 };
@@ -37,16 +27,4 @@ export const removeProgram = async (programName) => {
 };
 
 // Get program progress
-export const getProgramProgress = async () => {
-  const response = await api.get('/programs/progress');
-  return response.data;
-};
-
-export default {
-  getAvailablePrograms,
-  getUserPrograms,
-  assignProgramFromTemplate,
-  addCustomProgram,
-  removeProgram,
-  getProgramProgress
-};
+export cons

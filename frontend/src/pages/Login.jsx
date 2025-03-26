@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock, faEnvelope, faGraduationCap } from '@fortawesome/free-solid-svg-icons';
+import { getAvailablePrograms } from '../services/programService';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,9 +11,11 @@ const Login = () => {
     username: '',
     email: '',
     password: '',
-    major: 'Computer Science'
+    programId: '' // Changed from 'major' to 'programId'
   });
+  const [availablePrograms, setAvailablePrograms] = useState([]);
   const [registerSuccess, setRegisterSuccess] = useState('');
+  const [loadingPrograms, setLoadingPrograms] = useState(false);
   const { login, register, error, currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -22,6 +25,33 @@ const Login = () => {
       navigate('/dashboard');
     }
   }, [currentUser, navigate]);
+
+  // Fetch available programs on component mount and when switching to register form
+  useEffect(() => {
+    if (!isLogin) {
+      fetchAvailablePrograms();
+    }
+  }, [isLogin]);
+
+  // Fetch available programs
+  const fetchAvailablePrograms = async () => {
+    try {
+      setLoadingPrograms(true);
+      const programs = await getAvailablePrograms();
+      setAvailablePrograms(programs);
+      // Set the first program as default if available
+      if (programs.length > 0 && !formData.programId) {
+        setFormData(prev => ({
+          ...prev,
+          programId: programs[0].id
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to fetch available programs:', error);
+    } finally {
+      setLoadingPrograms(false);
+    }
+  };
 
   // Handle form input change
   const handleChange = (e) => {
@@ -48,7 +78,7 @@ const Login = () => {
         formData.username, 
         formData.email, 
         formData.password, 
-        formData.major
+        formData.programId // Changed from formData.major
       );
       
       if (success) {
@@ -58,7 +88,7 @@ const Login = () => {
           username: '',
           email: '',
           password: '',
-          major: 'Computer Science'
+          programId: availablePrograms.length > 0 ? availablePrograms[0].id : ''
         });
         
         // Switch to login after 2 seconds
@@ -168,17 +198,31 @@ const Login = () => {
               
               <div className="input-wrapper">
                 <FontAwesomeIcon icon={faGraduationCap} className="input-icon" />
-                <label htmlFor="register-major">Major</label>
-                <select 
-                  id="register-major" 
-                  name="major" 
-                  value={formData.major}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="Computer Science">Computer Science</option>
-                  {/* Add more majors as needed */}
-                </select>
+                <label htmlFor="register-program">Academic Program</label>
+                {loadingPrograms ? (
+                  <select 
+                    id="register-program"
+                    name="programId"
+                    disabled
+                  >
+                    <option>Loading programs...</option>
+                  </select>
+                ) : (
+                  <select 
+                    id="register-program" 
+                    name="programId" 
+                    value={formData.programId}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select a program</option>
+                    {availablePrograms.map(program => (
+                      <option key={program.id} value={program.id}>
+                        {program.program_name} ({program.program_type})
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
               
               <button type="submit">Create Account</button>

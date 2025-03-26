@@ -48,7 +48,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
-    # No more major field - use programs instead
+    academic_level: str
 
 class UserAuth(UserBase):
     password: str

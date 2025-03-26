@@ -158,28 +158,6 @@ class UnifiedCourseService:
             
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Vector search error: {str(e)}")
-    
-    @staticmethod
-    def enrich_course_data(db: Session, courses: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """
-        Enrich course data from vector DB with data from SQL DB when available
-        """
-        enriched_courses = []
-        
-        for course in courses:
-            course_code = course.get("course_code")
-            if course_code:
-                # Check if we have this course in the SQL database
-                db_course = UnifiedCourseService.get_course_by_code(db, course_code)
-                if db_course:
-                    # Merge the data, prioritizing vector DB for full descriptions
-                    for field in ["course_name", "credit_hours", "term"]:
-                        if getattr(db_course, field) and not course.get(field):
-                            course[field] = getattr(db_course, field)
-            
-            enriched_courses.append(course)
-        
-        return enriched_courses
 
 # Create a global instance of the service
 course_service = UnifiedCourseService()

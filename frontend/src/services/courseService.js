@@ -31,7 +31,7 @@ export const updateCourse = async (courseId, courseData) => {
 
 // Get recommendations
 export const getRecommendations = async () => {
-  const response = await api.get('/recommend/me');
+  const response = await api.get('/advising');
   return response.data;
 };
 

@@ -231,12 +231,9 @@ class RecommendationService:
             # Search for available courses
             available_courses = await course_service.search_courses_in_vector_db(query, limit=10)
             
-            # Enrich course data with SQL database information
-            enriched_courses = course_service.enrich_course_data(db, available_courses)
-            
             # Format available courses for the recommendation prompt
             formatted_courses = []
-            for i, course in enumerate(enriched_courses):
+            for i, course in enumerate(available_courses):
                 course_info = f"""
                 Course {i+1}: {course.get('course_code', 'Unknown')}
                 Name: {course.get('course_name', '')}
@@ -283,7 +280,7 @@ class RecommendationService:
                                 priority = "Medium"
                             
                             # Find the matching course in our enriched courses
-                            for course in enriched_courses:
+                            for course in available_courses:
                                 if course.get('course_code') and course_code in course.get('course_code'):
                                     course_copy = course.copy()
                                     course_copy['recommendation'] = {
@@ -295,8 +292,8 @@ class RecommendationService:
                                     break
             
             # If we couldn't extract recommendations, use the first 3 courses
-            if not recommended_courses and enriched_courses:
-                for i, course in enumerate(enriched_courses[:3]):
+            if not recommended_courses and available_courses:
+                for i, course in enumerate(available_courses[:3]):
                     course_copy = course.copy()
                     course_copy['recommendation'] = {
                         'is_recommended': True,

@@ -39,13 +39,13 @@ export const loginUser = async (username, password) => {
   return response.data;
 };
 
-// Register user
-export const registerUser = async (username, email, password, major) => {
+// Register user - Updated to use program_id instead of major
+export const registerUser = async (username, email, password, programId) => {
   const formData = new FormData();
   formData.append('username', username);
   formData.append('email', email);
   formData.append('password', password);
-  formData.append('major', major);
+  formData.append('program_id', programId); // Changed from 'major' to 'program_id'
 
   const response = await axios.post(`${API_URL}/register`, formData, {
     headers: {
