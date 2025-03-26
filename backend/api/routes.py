@@ -46,7 +46,7 @@ async def register(
     username: str = Form(...),
     email: str = Form(...), 
     password: str = Form(...),
-    program_id: str = Form(...),  # Changed from major to program_id
+    program_id: str = Form(...),
     db: Session = Depends(get_db)
 ):
     # Check if username already exists
@@ -54,7 +54,7 @@ async def register(
     if user:
         raise HTTPException(status_code=400, detail="Username already registered")
     
-    # Create new user without setting legacy major field
+    # Create new user
     user_create = UserCreate(username=username, email=email, password=password)
     user = create_user(db, user_create)
     
@@ -78,7 +78,7 @@ async def register(
 async def read_users_me(current_user: UserModel = Depends(get_current_active_user)):
     return current_user
 
-# JSON version for React frontend
+# Course endpoints
 @router.post("/courses")
 async def add_course_json(
     course_data: dict = Body(...),
@@ -206,6 +206,7 @@ async def recommend_me(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
+# Advising chat endpoints
 @router.post("/advising")
 async def advising_chat(
     message: ChatMessage,
@@ -245,15 +246,19 @@ async def advising_chat(
         return {"response": "I'm sorry, I encountered an error. Please try again later or try rephrasing your question."}
 
 async def process_advising_query_background(db: Session, user_id: int, query: str):
-    """Process an advising query in the background and store the result"""
     try:
         # Create a new session since we're in a background task
         db_session = SessionLocal()
         
-        # Run the CPU-intensive process in a thread pool
-        result = await run_in_threadpool(
-            lambda: recommendation_service.process_query(db_session, user_id, query)
-        )
+        # Check if it's an async function and handle accordingly
+        if asyncio.iscoroutinefunction(recommendation_service.process_query):
+            # For async function, we need to await it properly
+            result = await recommendation_service.process_query(db_session, user_id, query)
+        else:
+            # For sync function, use threadpool
+            result = await run_in_threadpool(
+                lambda: recommendation_service.process_query(db_session, user_id, query)
+            )
         
         # Store the result in the cache
         _processing_responses[user_id] = result
@@ -281,11 +286,11 @@ async def check_pending_response(
     
     return {"pending": True}
 
-# Program endpoints (replacing major endpoints)
+# Program endpoints (consolidated from both route files)
 @router.get("/programs/available", response_model=List[Dict[str, Any]])
-async def get_available_program_options():
+async def get_available_programs():
     """
-    Get a list of all available program options.
+    Get a list of all available program templates.
     """
     try:
         programs = program_service.get_available_programs()
@@ -353,7 +358,7 @@ async def remove_program(
     db: Session = Depends(get_db)
 ):
     """
-    Remove a program from the current user.
+    Remove a program from the current user by name.
     """
     try:
         success = program_service.delete_program(db, current_user.id, program_name)
@@ -367,13 +372,48 @@ async def remove_program(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
-@router.get("/programs/progress", response_model=dict)
-async def get_progress(
+@router.get("/programs/{program_name}", response_model=ProgramResponse)
+async def get_program(
+    program_name: str,
     current_user: UserModel = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
-    Get formatted progress information for the current user.
+    Get a specific program by name for the current user.
+    """
+    program = program_service.get_program_by_name(db, current_user.id, program_name)
+    if not program:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Program {program_name} not found",
+        )
+    return program
+
+@router.put("/programs/{program_name}", response_model=ProgramResponse)
+async def update_program(
+    program_name: str,
+    program_update: dict = Body(...),
+    current_user: UserModel = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Update a program by name for the current user.
+    """
+    result = program_service.update_program(db, current_user.id, program_name, program_update)
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Program {program_name} not found",
+        )
+    return result
+
+@router.get("/programs/progress", response_model=dict)
+async def get_program_progress(
+    current_user: UserModel = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Get the user's progress information.
     """
     try:
         progress = program_service.format_user_progress(db, current_user.id)

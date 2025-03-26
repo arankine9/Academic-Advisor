@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import CourseItem from './CourseItem';
-import MajorItem from './MajorItem';
+import ProgramItem from './ProgramItem';  // Updated import
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import { 
@@ -22,11 +22,12 @@ import {
   updateCourse 
 } from '../services/courseService';
 import {
-  getAvailableMajors,
-  getUserMajors,
-  addMajor,
-  removeMajor
-} from '../services/majorService';
+  getAvailablePrograms,
+  getUserPrograms,
+  assignProgramFromTemplate,
+  addCustomProgram,
+  removeProgram
+} from '../services/programService';  // Updated import
 
 import './ClassManagementModal.css';
 
@@ -35,10 +36,15 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
   const { showNotification } = useNotification();
   
   const [courses, setCourses] = useState([]);
-  const [majors, setMajors] = useState([]);
-  const [availableMajors, setAvailableMajors] = useState([]);
-  const [selectedMajor, setSelectedMajor] = useState('');
-  const [isMajorsExpanded, setIsMajorsExpanded] = useState(false);
+  const [programs, setPrograms] = useState([]);
+  const [availablePrograms, setAvailablePrograms] = useState([]);
+  const [selectedProgramId, setSelectedProgramId] = useState('');
+  const [isProgramsExpanded, setIsProgramsExpanded] = useState(false);
+  const [customProgramMode, setCustomProgramMode] = useState(false);
+  const [customProgramData, setCustomProgramData] = useState({
+    program_type: 'major',  // Default to major
+    program_name: ''
+  });
   const [formData, setFormData] = useState({
     department: '',
     courseNumber: '',
@@ -47,14 +53,14 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
   });
   const [editingCourseId, setEditingCourseId] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [loadingMajors, setLoadingMajors] = useState(true);
+  const [loadingPrograms, setLoadingPrograms] = useState(true);
 
-  // Load user courses on component mount and when modal opens
+  // Load user courses and programs on component mount and when modal opens
   useEffect(() => {
     if (isOpen) {
       loadUserCourses();
-      loadUserMajors();
-      loadAvailableMajors();
+      loadUserPrograms();
+      loadAvailablePrograms();
     }
   }, [isOpen]);
 
@@ -72,32 +78,32 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
     }
   };
 
-  // Function to load user majors
-  const loadUserMajors = async () => {
+  // Function to load user programs
+  const loadUserPrograms = async () => {
     try {
-      setLoadingMajors(true);
-      const userMajors = await getUserMajors();
-      setMajors(userMajors);
+      setLoadingPrograms(true);
+      const userPrograms = await getUserPrograms();
+      setPrograms(userPrograms);
     } catch (error) {
-      console.error('Error loading majors:', error);
-      showNotification('Failed to load majors', false);
+      console.error('Error loading programs:', error);
+      showNotification('Failed to load programs', false);
     } finally {
-      setLoadingMajors(false);
+      setLoadingPrograms(false);
     }
   };
 
-  // Function to load available majors
-  const loadAvailableMajors = async () => {
+  // Function to load available program templates
+  const loadAvailablePrograms = async () => {
     try {
-      const majors = await getAvailableMajors();
-      setAvailableMajors(majors);
+      const programs = await getAvailablePrograms();
+      setAvailablePrograms(programs);
     } catch (error) {
-      console.error('Error loading available majors:', error);
-      showNotification('Failed to load available majors', false);
+      console.error('Error loading available programs:', error);
+      showNotification('Failed to load available programs', false);
     }
   };
 
-  // Handle form input change
+  // Handle course form input change
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData(prev => ({
@@ -106,9 +112,33 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
     }));
   };
 
-  // Handle major selection change
-  const handleMajorChange = (e) => {
-    setSelectedMajor(e.target.value);
+  // Handle program selection change
+  const handleProgramChange = (e) => {
+    setSelectedProgramId(e.target.value);
+  };
+
+  // Handle custom program data change
+  const handleCustomProgramChange = (e) => {
+    const { name, value } = e.target;
+    setCustomProgramData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Toggle custom program mode
+  const toggleCustomProgramMode = () => {
+    setCustomProgramMode(!customProgramMode);
+    if (customProgramMode) {
+      // Reset fields when exiting custom mode
+      setSelectedProgramId('');
+    } else {
+      // Reset custom program data when entering custom mode
+      setCustomProgramData({
+        program_type: 'major',
+        program_name: ''
+      });
+    }
   };
 
   // Handle add course form submission
@@ -143,51 +173,82 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
     }
   };
 
-  // Handle add major
-  const handleAddMajor = async () => {
-    if (!selectedMajor) {
-      showNotification('Please select a major', false);
-      return;
-    }
-
-    // Check if major is already added
-    if (majors.some(major => major.name === selectedMajor)) {
-      showNotification('This major is already added', false);
+  // Handle add program from template
+  const handleAddProgramFromTemplate = async () => {
+    if (!selectedProgramId) {
+      showNotification('Please select a program', false);
       return;
     }
     
     try {
-      const newMajor = await addMajor(selectedMajor);
+      const newProgram = await assignProgramFromTemplate(selectedProgramId);
       
       // Add to local state
-      setMajors(prev => [...prev, newMajor]);
+      setPrograms(prev => [...prev, newProgram]);
       
       // Clear selection
-      setSelectedMajor('');
+      setSelectedProgramId('');
       
-      showNotification('Major added successfully');
+      showNotification('Program added successfully');
     } catch (error) {
-      console.error('Error adding major:', error);
-      showNotification('Failed to add major', false);
+      console.error('Error adding program:', error);
+      showNotification('Failed to add program', false);
     }
   };
 
-  // Handle remove major
-  const handleRemoveMajor = async (majorId) => {
-    if (!window.confirm('Are you sure you want to remove this major?')) {
+  // Handle add custom program
+  const handleAddCustomProgram = async () => {
+    const { program_type, program_name } = customProgramData;
+    
+    if (!program_type || !program_name) {
+      showNotification('Program type and name are required', false);
+      return;
+    }
+    
+    // Check if program name already exists
+    if (programs.some(p => p.program_name === program_name)) {
+      showNotification('A program with this name already exists', false);
       return;
     }
     
     try {
-      await removeMajor(majorId);
+      const newProgram = await addCustomProgram(program_type, program_name);
+      
+      // Add to local state
+      setPrograms(prev => [...prev, newProgram]);
+      
+      // Clear form
+      setCustomProgramData({
+        program_type: 'major',
+        program_name: ''
+      });
+      
+      showNotification('Custom program added successfully');
+      
+      // Exit custom program mode
+      setCustomProgramMode(false);
+    } catch (error) {
+      console.error('Error adding custom program:', error);
+      showNotification('Failed to add custom program', false);
+    }
+  };
+
+  // Handle remove program
+  const handleRemoveProgram = async (programName) => {
+    if (!window.confirm('Are you sure you want to remove this program?')) {
+      return;
+    }
+    
+    try {
+      await removeProgram(programName);
       
       // Remove from local state
-      setMajors(prev => prev.filter(major => major.id !== majorId));
+      setPrograms(prev => prev.filter(program => program.program_name !== programName));
       
-      showNotification('Major removed successfully');
+      showNotification('Program removed successfully');
     } catch (error) {
-      console.error('Error removing major:', error);
-      showNotification('Failed to remove major', false);
+      console.error('Error removing program:', error);
+      showNotification('Failed to remove program', false);
     }
   };
 
@@ -261,58 +322,126 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
         </div>
         
         <div className="modal-body">
-          <div id="major-management" className="major-management">
+          <div id="program-management" className="program-management">
             <div 
-              className="major-header"
-              onClick={() => setIsMajorsExpanded(!isMajorsExpanded)}
+              className="program-header"
+              onClick={() => setIsProgramsExpanded(!isProgramsExpanded)}
             >
               <h3>
                 <FontAwesomeIcon icon={faGraduationCap} style={{ marginRight: '10px' }} />
-                Majors
+                Academic Programs
               </h3>
               <FontAwesomeIcon 
                 icon={faChevronDown} 
-                className={`chevron-icon ${isMajorsExpanded ? 'expanded' : ''}`}
+                className={`chevron-icon ${isProgramsExpanded ? 'expanded' : ''}`}
               />
             </div>
             
-            <div className={`major-content ${isMajorsExpanded ? 'expanded' : ''}`}>
-              <div className="major-select-container">
-                <label htmlFor="major-select">Select a major to add:</label>
-                <select 
-                  id="major-select" 
-                  className="major-select"
-                  value={selectedMajor}
-                  onChange={handleMajorChange}
-                >
-                  <option value="">Select a Major</option>
-                  {availableMajors.map((major, index) => (
-                    <option key={index} value={major}>{major}</option>
-                  ))}
-                </select>
-                
-                <button 
-                  className="add-major-btn"
-                  onClick={handleAddMajor}
-                  disabled={!selectedMajor}
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                  Add Major
-                </button>
-              </div>
+            <div className={`program-content ${isProgramsExpanded ? 'expanded' : ''}`}>
+              {!customProgramMode ? (
+                // Program template selection mode
+                <div className="program-select-container">
+                  <div className="program-select-header">
+                    <label htmlFor="program-select">Select a program template:</label>
+                    <button 
+                      className="toggle-custom-btn"
+                      onClick={toggleCustomProgramMode}
+                    >
+                      Create Custom Program
+                    </button>
+                  </div>
+                  
+                  <div className="program-select-form">
+                    <select 
+                      id="program-select" 
+                      className="program-select"
+                      value={selectedProgramId}
+                      onChange={handleProgramChange}
+                    >
+                      <option value="">Select a Program</option>
+                      {availablePrograms.map((program) => (
+                        <option key={program.id} value={program.id}>
+                          {program.program_name} ({program.program_type})
+                        </option>
+                      ))}
+                    </select>
+                    
+                    <button 
+                      className="add-program-btn"
+                      onClick={handleAddProgramFromTemplate}
+                      disabled={!selectedProgramId}
+                    >
+                      <FontAwesomeIcon icon={faPlus} />
+                      Add Program
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                // Custom program form
+                <div className="custom-program-container">
+                  <div className="custom-program-header">
+                    <h4>Create Custom Program</h4>
+                    <button 
+                      className="toggle-custom-btn"
+                      onClick={toggleCustomProgramMode}
+                    >
+                      Use Program Template
+                    </button>
+                  </div>
+                  
+                  <div className="custom-program-form">
+                    <div className="form-group">
+                      <label htmlFor="program_type">Program Type</label>
+                      <select
+                        id="program_type"
+                        name="program_type"
+                        value={customProgramData.program_type}
+                        onChange={handleCustomProgramChange}
+                      >
+                        <option value="major">Major</option>
+                        <option value="minor">Minor</option>
+                        <option value="certificate">Certificate</option>
+                        <option value="concentration">Concentration</option>
+                      </select>
+                    </div>
+                    
+                    <div className="form-group">
+                      <label htmlFor="program_name">Program Name</label>
+                      <input
+                        type="text"
+                        id="program_name"
+                        name="program_name"
+                        value={customProgramData.program_name}
+                        onChange={handleCustomProgramChange}
+                        placeholder="e.g., Computer Science"
+                        required
+                      />
+                    </div>
+                    
+                    <button
+                      className="add-custom-program-btn"
+                      onClick={handleAddCustomProgram}
+                      disabled={!customProgramData.program_name || !customProgramData.program_type}
+                    >
+                      <FontAwesomeIcon icon={faPlus} />
+                      Add Custom Program
+                    </button>
+                  </div>
+                </div>
+              )}
               
-              <h4>Your Majors:</h4>
-              <div className="major-list">
-                {loadingMajors ? (
-                  <div className="no-majors-message">Loading majors...</div>
-                ) : majors.length === 0 ? (
-                  <div className="no-majors-message">You haven't added any majors yet.</div>
+              <h4>Your Academic Programs:</h4>
+              <div className="program-list">
+                {loadingPrograms ? (
+                  <div className="no-programs-message">Loading programs...</div>
+                ) : programs.length === 0 ? (
+                  <div className="no-programs-message">You haven't added any programs yet.</div>
                 ) : (
-                  majors.map(major => (
-                    <MajorItem 
-                      key={major.id}
-                      major={major}
-                      onRemove={handleRemoveMajor}
+                  programs.map(program => (
+                    <ProgramItem 
+                      key={program.id}
+                      program={program}
+                      onRemove={handleRemoveProgram}
                     />
                   ))
                 )}
@@ -369,6 +498,8 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
                         onChange={handleChange}
                       >
                         <option value="">Select Term</option>
+                        <option value="Fall 2024">Fall 2024</option>
+                        <option value="Spring 2024">Spring 2024</option>
                         <option value="Fall 2023">Fall 2023</option>
                         <option value="Spring 2023">Spring 2023</option>
                         <option value="Fall 2022">Fall 2022</option>
@@ -429,4 +560,4 @@ const ClassManagementModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default ClassManagementModal; 
+export default ClassManagementModal;
