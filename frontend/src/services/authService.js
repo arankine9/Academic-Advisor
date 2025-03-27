@@ -1,9 +1,13 @@
+import { auth } from '../firebase/config';
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
+
+// Initialize Firestore
+const db = getFirestore();
+
+// Create axios instance for non-auth API calls
 import axios from 'axios';
 
-// No need for dynamic API_URL - it's always relative in production
 const API_URL = '/api';
-
-// Create axios instance with base URL
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -11,11 +15,12 @@ const api = axios.create({
   },
 });
 
-// Add authorization header to requests if token exists
+// Update interceptor to use Firebase token
 api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
+  async (config) => {
+    const user = auth.currentUser;
+    if (user) {
+      const token = await user.getIdToken();
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
@@ -25,40 +30,34 @@ api.interceptors.request.use(
   }
 );
 
-// Login user
-export const loginUser = async (username, password) => {
-  const formData = new FormData();
-  formData.append('username', username);
-  formData.append('password', password);
-
-  const response = await axios.post(`${API_URL}/token`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
-};
-
-// Register user - Updated to use program_id instead of major
-export const registerUser = async (username, email, password, programId) => {
-  const formData = new FormData();
-  formData.append('username', username);
-  formData.append('email', email);
-  formData.append('password', password);
-  formData.append('program_id', programId); // Changed from 'major' to 'program_id'
-
-  const response = await axios.post(`${API_URL}/register`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
-};
-
-// Get current user
+// Get current user data from Firestore
 export const getCurrentUser = async () => {
-  const response = await api.get('/users/me');
-  return response.data;
+  const user = auth.currentUser;
+  
+  if (!user) {
+    throw new Error('User not authenticated');
+  }
+  
+  try {
+    const userDoc = await getDoc(doc(db, "Users", user.email));
+    
+    if (userDoc.exists()) {
+      return {
+        uid: user.uid,
+        email: user.email,
+        ...userDoc.data()
+      };
+    } else {
+      return {
+        uid: user.uid,
+        email: user.email
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error;
+  }
 };
 
+// For API calls that don't involve authentication
 export default api;

@@ -26,74 +26,6 @@ router = APIRouter()
 # In-memory response cache
 _processing_responses = {}
 
-# Authentication endpoints
-@router.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    logger.debug(f"Login attempt for username: {form_data.username}")
-    
-    user = authenticate_user(db, form_data.username, form_data.password)
-    if not user:
-        logger.warning(f"Failed login attempt for username: {form_data.username}")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    logger.info(f"Successful login for user: {user.username} (ID: {user.id})")
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
-    return {"access_token": access_token, "token_type": "bearer"}
-
-@router.post("/register", response_model=Token)
-async def register(
-    username: str = Form(...),
-    email: str = Form(...), 
-    password: str = Form(...),
-    program_id: str = Form(...),
-    db: Session = Depends(get_db)
-):
-    logger.debug(f"Registration attempt for username: {username}, email: {email}, program_id: {program_id}")
-    
-    # Check if username already exists
-    user = db.query(UserModel).filter(UserModel.username == username).first()
-    if user:
-        logger.warning(f"Registration failed: Username '{username}' already exists")
-        raise HTTPException(status_code=400, detail="Username already registered")
-    
-    # Create new user
-    user_create = UserCreate(username=username, email=email, password=password)
-    try:
-        user = create_user(db, user_create)
-        logger.info(f"User created successfully: {username} (ID: {user.id})")
-    except Exception as e:
-        logger.error(f"Error creating user: {e}")
-        logger.error(traceback.format_exc())
-        raise HTTPException(status_code=500, detail=f"Error creating user: {str(e)}")
-    
-    # Assign program to user
-    try:
-        logger.debug(f"Assigning program {program_id} to user {username}")
-        program = program_service.assign_program_to_user(db, user.id, program_id)
-        logger.info(f"Program '{program.program_name}' assigned to user {username}")
-    except HTTPException as e:
-        logger.error(f"Error assigning program {program_id} to new user {username}: {e.detail}")
-    except Exception as e:
-        logger.error(f"Unexpected error assigning program: {e}")
-        logger.error(traceback.format_exc())
-    
-    # Create access token
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
-    
-    # Return token
-    logger.info(f"Registration successful for user: {username}")
-    return {"access_token": access_token, "token_type": "bearer"}
-
 # User endpoints
 @router.get("/users/me", response_model=UserSchema)
 async def read_users_me(current_user: UserModel = Depends(get_current_active_user)):
@@ -406,7 +338,7 @@ async def check_pending_response(
 @router.get("/programs/available", response_model=List[Dict[str, Any]])
 async def get_available_programs():
     """
-    Get a list of all available program templates.
+    Get a list of all available programs.
     """
     logger.debug("Getting available programs")
     

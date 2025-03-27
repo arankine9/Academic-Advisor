@@ -44,7 +44,6 @@ class CourseRecommendationResponse(BaseModel):
 # User schemas - REMOVED major field
 class UserBase(BaseModel):
     email: EmailStr
-    username: str
 
 class UserCreate(UserBase):
     password: str

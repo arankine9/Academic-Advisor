@@ -2,20 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faLock, faEnvelope, faGraduationCap } from '@fortawesome/free-solid-svg-icons';
-import { getAvailablePrograms } from '../services/programService';
+import { faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
-    password: '',
-    programId: '' // Changed from 'major' to 'programId'
+    password: ''
   });
-  const [availablePrograms, setAvailablePrograms] = useState([]);
   const [registerSuccess, setRegisterSuccess] = useState('');
-  const [loadingPrograms, setLoadingPrograms] = useState(false);
   const { login, register, error, currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -25,33 +20,6 @@ const Login = () => {
       navigate('/dashboard');
     }
   }, [currentUser, navigate]);
-
-  // Fetch available programs on component mount and when switching to register form
-  useEffect(() => {
-    if (!isLogin) {
-      fetchAvailablePrograms();
-    }
-  }, [isLogin]);
-
-  // Fetch available programs
-  const fetchAvailablePrograms = async () => {
-    try {
-      setLoadingPrograms(true);
-      const programs = await getAvailablePrograms();
-      setAvailablePrograms(programs);
-      // Set the first program as default if available
-      if (programs.length > 0 && !formData.programId) {
-        setFormData(prev => ({
-          ...prev,
-          programId: programs[0].id
-        }));
-      }
-    } catch (error) {
-      console.error('Failed to fetch available programs:', error);
-    } finally {
-      setLoadingPrograms(false);
-    }
-  };
 
   // Handle form input change
   const handleChange = (e) => {
@@ -68,27 +36,23 @@ const Login = () => {
     
     if (isLogin) {
       // Handle login
-      const success = await login(formData.username, formData.password);
+      const success = await login(formData.email, formData.password);
       if (success) {
         navigate('/dashboard');
       }
     } else {
       // Handle registration
       const success = await register(
-        formData.username, 
         formData.email, 
-        formData.password, 
-        formData.programId // Changed from formData.major
+        formData.password
       );
       
       if (success) {
         setRegisterSuccess('Registration successful! You can now login.');
         // Reset form
         setFormData({
-          username: '',
           email: '',
-          password: '',
-          programId: availablePrograms.length > 0 ? availablePrograms[0].id : ''
+          password: ''
         });
         
         // Switch to login after 2 seconds
@@ -120,13 +84,13 @@ const Login = () => {
             <h3 className="form-title">Welcome Back</h3>
             <form id="login-form" onSubmit={handleSubmit}>
               <div className="input-wrapper">
-                <FontAwesomeIcon icon={faUser} className="input-icon" />
-                <label htmlFor="login-username">Username</label>
+                <FontAwesomeIcon icon={faEnvelope} className="input-icon" />
+                <label htmlFor="login-email">Email</label>
                 <input 
-                  type="text" 
-                  id="login-username" 
-                  name="username" 
-                  value={formData.username}
+                  type="email" 
+                  id="login-email" 
+                  name="email" 
+                  value={formData.email}
                   onChange={handleChange}
                   required 
                 />
@@ -158,19 +122,6 @@ const Login = () => {
             <h3 className="form-title">Create Account</h3>
             <form id="register-form" onSubmit={handleSubmit}>
               <div className="input-wrapper">
-                <FontAwesomeIcon icon={faUser} className="input-icon" />
-                <label htmlFor="register-username">Username</label>
-                <input 
-                  type="text" 
-                  id="register-username" 
-                  name="username" 
-                  value={formData.username}
-                  onChange={handleChange}
-                  required 
-                />
-              </div>
-              
-              <div className="input-wrapper">
                 <FontAwesomeIcon icon={faEnvelope} className="input-icon" />
                 <label htmlFor="register-email">Email</label>
                 <input 
@@ -194,35 +145,6 @@ const Login = () => {
                   onChange={handleChange}
                   required 
                 />
-              </div>
-              
-              <div className="input-wrapper">
-                <FontAwesomeIcon icon={faGraduationCap} className="input-icon" />
-                <label htmlFor="register-program">Academic Program</label>
-                {loadingPrograms ? (
-                  <select 
-                    id="register-program"
-                    name="programId"
-                    disabled
-                  >
-                    <option>Loading programs...</option>
-                  </select>
-                ) : (
-                  <select 
-                    id="register-program" 
-                    name="programId" 
-                    value={formData.programId}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select a program</option>
-                    {availablePrograms.map(program => (
-                      <option key={program.id} value={program.id}>
-                        {program.program_name} ({program.program_type})
-                      </option>
-                    ))}
-                  </select>
-                )}
               </div>
               
               <button type="submit">Create Account</button>
